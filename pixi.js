@@ -44,7 +44,7 @@ PIXI.Point = function(x, y)
 	 * @default 0
 	 */
 	this.y = y || 0;
-}
+};
 
 /** 
  * @method clone
@@ -53,7 +53,7 @@ PIXI.Point = function(x, y)
 PIXI.Point.clone = function()
 {
 	return new PIXI.Point(this.x, this.y);
-}
+};
 
 // constructor
 PIXI.Point.constructor = PIXI.Point;
@@ -101,7 +101,7 @@ PIXI.Rectangle = function(x, y, width, height)
 	 * @default 0
 	 */
 	this.height = height || 0;
-}
+};
 
 /** 
  * @method clone
@@ -110,7 +110,7 @@ PIXI.Rectangle = function(x, y, width, height)
 PIXI.Rectangle.clone = function()
 {
 	return new PIXI.Rectangle(this.x, this.y, this.width, this.height);
-}
+};
 
 // constructor
 PIXI.Rectangle.constructor = PIXI.Rectangle;
@@ -188,8 +188,8 @@ PIXI.DisplayObject = function()
 	this.worldAlpha = 1;
 	this.color = [];
 	
-	this.worldTransform = PIXI.mat3.create()//mat3.identity();
-	this.localTransform = PIXI.mat3.create()//mat3.identity();
+	this.worldTransform = PIXI.mat3.create();//mat3.identity();
+	this.localTransform = PIXI.mat3.create();//mat3.identity();
 	
 	this.dynamic = true;
 	// chach that puppy!
@@ -274,7 +274,7 @@ PIXI.DisplayObject = function()
 	 * @method touchendoutside
 	 * @param interactionData {InteractionData}
 	 */
-}
+};
 
 // constructor
 PIXI.DisplayObject.constructor = PIXI.DisplayObject;
@@ -290,7 +290,7 @@ PIXI.DisplayObject.prototype.setInteractive = function(interactive)
 	// TODO more to be done here..
 	// need to sort out a re-crawl!
 	if(this.stage)this.stage.dirty = true;
-}
+};
 
 
 /**
@@ -311,7 +311,7 @@ PIXI.DisplayObject.prototype.updateTransform = function()
 	var worldTransform = this.worldTransform;
 	//console.log(localTransform)
 	localTransform[0] = this._cr * this.scale.x;
-	localTransform[1] = -this._sr * this.scale.y
+	localTransform[1] = -this._sr * this.scale.y;
 	localTransform[3] = this._sr * this.scale.x;
 	localTransform[4] = this._cr * this.scale.y;
 	
@@ -337,7 +337,7 @@ PIXI.DisplayObject.prototype.updateTransform = function()
 	// because we are using affine transformation, we can optimise the matrix concatenation process.. wooo!
 	// mat3.multiply(this.localTransform, this.parent.worldTransform, this.worldTransform);
 	this.worldAlpha = this.alpha * this.parent.worldAlpha;		
-}
+};
 
 /**
  * @author Mat Groves http://matgroves.com/ @Doormat23
@@ -361,7 +361,7 @@ PIXI.DisplayObjectContainer = function()
 	this.children = [];
 	//s
 	this.renderable = false;
-}
+};
 
 // constructor
 PIXI.DisplayObjectContainer.constructor = PIXI.DisplayObjectContainer;
@@ -376,7 +376,7 @@ PIXI.DisplayObjectContainer.prototype.addChild = function(child)
 {
 	if(child.parent != undefined)
 	{
-		child.parent.removeChild(child)
+		child.parent.removeChild(child);
 	}
 	
 	child.parent = this;
@@ -387,7 +387,7 @@ PIXI.DisplayObjectContainer.prototype.addChild = function(child)
 	{
 		this.stage.__addChild(child);
 	}
-}
+};
 
 /**
  * Adds a child to the container at a specified index. If the index is out of bounds an error will be thrown
@@ -433,7 +433,7 @@ PIXI.DisplayObjectContainer.prototype.addChildAt = function(child, index)
 		
 		throw new Error(child + " The index "+ index +" supplied is out of bounds " + this.children.length);
 	}
-}
+};
 
 /**
  * Removes a child from the container.
@@ -461,7 +461,7 @@ PIXI.DisplayObjectContainer.prototype.removeChild = function(child)
 	{
 		throw new Error(child + " The supplied DisplayObject must be a child of the caller " + this);
 	}
-}
+};
 
 
 /**
@@ -477,7 +477,7 @@ PIXI.DisplayObjectContainer.prototype.updateTransform = function()
 	{
 		this.children[i].updateTransform();	
 	}
-}
+};
 
 /**
  * @author Mat Groves http://matgroves.com/ @Doormat23
@@ -555,7 +555,7 @@ PIXI.Sprite = function(texture)
 	// thi next bit is here for the docs...
 	
 	
-}
+};
 
 // constructor
 PIXI.Sprite.constructor = PIXI.Sprite;
@@ -577,7 +577,7 @@ PIXI.Sprite.prototype.setTexture = function(texture)
 	this.width   = texture.frame.width;
 	this.height  = texture.frame.height;
 	this.updateFrame = true;
-}
+};
 
 /**
  * @private
@@ -587,7 +587,7 @@ PIXI.Sprite.prototype.onTextureUpdate = function(event)
 	this.width   = this.width || this.texture.frame.width;
 	this.height  = this.height || this.texture.frame.height;
 	this.updateFrame = true;
-}
+};
 
 // some helper functions..
 
@@ -605,7 +605,7 @@ PIXI.Sprite.fromFrame = function(frameId)
 	var texture = PIXI.TextureCache[frameId];
 	if(!texture)throw new Error("The frameId '"+ frameId +"' does not exist in the texture cache" + this);
 	return new PIXI.Sprite(texture);
-}
+};
 
 /**
  * 
@@ -620,7 +620,7 @@ PIXI.Sprite.fromImage = function(imageId)
 {
 	var texture = PIXI.Texture.fromImage(imageId);
 	return new PIXI.Sprite(texture);
-}
+};
 
 
 /**
@@ -665,7 +665,7 @@ PIXI.MovieClip = function(textures)
 	 * @type Boolean
 	 */
 	this.playing;
-}
+};
 
 // constructor
 PIXI.MovieClip.constructor = PIXI.MovieClip;
@@ -678,7 +678,7 @@ PIXI.MovieClip.prototype = Object.create( PIXI.Sprite.prototype );
 PIXI.MovieClip.prototype.stop = function()
 {
 	this.playing = false;
-}
+};
 
 /**
  * Plays the MovieClip
@@ -687,7 +687,7 @@ PIXI.MovieClip.prototype.stop = function()
 PIXI.MovieClip.prototype.play = function()
 {
 	this.playing = true;
-}
+};
 
 /**
  * Stops the MovieClip and goes to a specific frame
@@ -700,7 +700,7 @@ PIXI.MovieClip.prototype.gotoAndStop = function(frameNumber)
 	this.currentFrame = frameNumber;
 	var round = (this.currentFrame + 0.5) | 0;
 	this.setTexture(this.textures[round % this.textures.length]);
-}
+};
 
 /**
  * Goes to a specific frame and begins playing the MovieClip
@@ -711,7 +711,7 @@ PIXI.MovieClip.prototype.gotoAndPlay = function(frameNumber)
 {
 	this.currentFrame = frameNumber;
 	this.playing = true;
-}
+};
 
 PIXI.MovieClip.prototype.updateTransform = function()
 {
@@ -722,7 +722,7 @@ PIXI.MovieClip.prototype.updateTransform = function()
 	this.currentFrame += this.animationSpeed;
 	var round = (this.currentFrame + 0.5) | 0;
 	this.setTexture(this.textures[round % this.textures.length]);
-}
+};
 /**
  * @author Mat Groves http://matgroves.com/ @Doormat23
  */
@@ -772,7 +772,7 @@ PIXI.InteractionManager = function(stage)
 	this.interactiveItems = [];
 
 	this.last = 0;
-}
+};
 
 // constructor
 PIXI.InteractionManager.constructor = PIXI.InteractionManager;
@@ -810,7 +810,7 @@ PIXI.InteractionManager.prototype.collectInteractiveSprite = function(displayObj
 			}
 		}
 	}
-}
+};
 
 PIXI.InteractionManager.prototype.setTarget = function(target)
 {
@@ -818,7 +818,7 @@ PIXI.InteractionManager.prototype.setTarget = function(target)
 	{
 		// time to remove some of that zoom in ja..
 		target.view.style["-ms-content-zooming"] = "none";
-    	target.view.style["-ms-touch-action"] = "none"
+    	target.view.style["-ms-touch-action"] = "none";
     
 		// DO some window specific touch!
 	}
@@ -840,7 +840,7 @@ PIXI.InteractionManager.prototype.setTarget = function(target)
 	
 	
 	
-}
+};
 
 PIXI.InteractionManager.prototype.update = function()
 {
@@ -912,7 +912,7 @@ PIXI.InteractionManager.prototype.update = function()
 		
 		// --->
 	}
-}
+};
 
 PIXI.InteractionManager.prototype.onMouseMove = function(event)
 {
@@ -938,7 +938,7 @@ PIXI.InteractionManager.prototype.onMouseMove = function(event)
 			item.mousemove(this.mouse);
 		}
 	}
-}
+};
 
 PIXI.InteractionManager.prototype.onMouseDown = function(event)
 {
@@ -978,7 +978,7 @@ PIXI.InteractionManager.prototype.onMouseDown = function(event)
 			}
 		}
 	}
-}
+};
 
 PIXI.InteractionManager.prototype.onMouseUp = function(event)
 {
@@ -1022,7 +1022,7 @@ PIXI.InteractionManager.prototype.onMouseUp = function(event)
 			item.__isDown = false;	
 		}
 	}
-}
+};
 
 PIXI.InteractionManager.prototype.hitTest = function(item, interactionData)
 {
@@ -1087,7 +1087,7 @@ PIXI.InteractionManager.prototype.hitTest = function(item, interactionData)
 	}
 		
 	return false;	
-}
+};
 
 
 
@@ -1114,7 +1114,7 @@ PIXI.InteractionManager.prototype.onTouchMove = function(event)
 		var item = this.interactiveItems[i];
 		if(item.touchmove)item.touchmove(touchData);
 	}
-}
+};
 
 PIXI.InteractionManager.prototype.onTouchStart = function(event)
 {
@@ -1156,7 +1156,7 @@ PIXI.InteractionManager.prototype.onTouchStart = function(event)
 		}
 	}
 	
-}
+};
 
 PIXI.InteractionManager.prototype.onTouchEnd = function(event)
 {
@@ -1223,7 +1223,7 @@ PIXI.InteractionManager.prototype.onTouchEnd = function(event)
 		this.pool.push(touchData);
 		this.touchs[touchEvent.identifier] = null;
 	}
-}
+};
 
 /**
 @class InteractionData
@@ -1247,7 +1247,7 @@ PIXI.InteractionData = function()
 	 * @type Sprite
 	 */
 	this.target;
-}
+};
 
 /**
  * This will return the local coords of the specified displayObject for this InteractionData
@@ -1266,8 +1266,8 @@ PIXI.InteractionData.prototype.getLocalPosition = function(displayObject)
         id = 1 / (a00 * a11 + a01 * -a10);
 	// set the mouse coords...
 	return new PIXI.Point(a11 * id * global.x + -a01 * id * global.y + (a12 * a01 - a02 * a11) * id,
-							   a00 * id * global.y + -a10 * id * global.x + (-a12 * a00 + a02 * a10) * id)
-}
+							   a00 * id * global.y + -a10 * id * global.x + (-a12 * a00 + a02 * a10) * id);
+};
 
 // constructor
 PIXI.InteractionData.constructor = PIXI.InteractionData;
@@ -1290,7 +1290,7 @@ PIXI.Stage = function(backgroundColor, interactive)
 {
 	
 	PIXI.DisplayObjectContainer.call( this );
-	this.worldTransform = PIXI.mat3.create()//.//identity();
+	this.worldTransform = PIXI.mat3.create();//.//identity();
 	this.__childrenAdded = [];
 	this.__childrenRemoved = [];
 	this.childIndex = 0;
@@ -1303,7 +1303,7 @@ PIXI.Stage = function(backgroundColor, interactive)
 	this.interactionManager = new PIXI.InteractionManager(this);
 	
 	this.setBackgroundColor(backgroundColor);
-}
+};
 
 // constructor
 PIXI.Stage.constructor = PIXI.Stage;
@@ -1331,7 +1331,7 @@ PIXI.Stage.prototype.updateTransform = function()
 	}
 
 	if(this.interactive)this.interactionManager.update();
-}
+};
 
 /**
  * @method setBackgroundColor
@@ -1342,7 +1342,7 @@ PIXI.Stage.prototype.setBackgroundColor = function(backgroundColor)
 	this.backgroundColor = backgroundColor || 0x000000;
 	this.backgroundColorSplit = HEXtoRGB(this.backgroundColor);
 	this.backgroundColorString =  "#" + this.backgroundColor.toString(16);
-}
+};
 
 PIXI.Stage.prototype.__addChild = function(child)
 {
@@ -1358,7 +1358,7 @@ PIXI.Stage.prototype.__addChild = function(child)
 		};
 	}
 	
-}
+};
 
 
 PIXI.Stage.prototype.__removeChild = function(child)
@@ -1373,10 +1373,10 @@ PIXI.Stage.prototype.__removeChild = function(child)
 	{
 		for(var i=0,j=child.children.length; i<j; i++)
 		{
-		  	this.__removeChild(child.children[i])
+		  	this.__removeChild(child.children[i]);
 		}
 	}
-}
+};
 
 /**
  * Provides requestAnimationFrame in a cross browser way.
@@ -1424,14 +1424,14 @@ if (typeof Function.prototype.bind != 'function') {
 
 var AjaxRequest = function()
 {
-	var activexmodes = ["Msxml2.XMLHTTP", "Microsoft.XMLHTTP"] //activeX versions to check for in IE
+	var activexmodes = ["Msxml2.XMLHTTP", "Microsoft.XMLHTTP"]; //activeX versions to check for in IE
 	
 	if (window.ActiveXObject)
 	{ //Test for support for ActiveXObject in IE first (as XMLHttpRequest in IE7 is broken)
 		for (var i=0; i<activexmodes.length; i++)
 		{
 			try{
-				return new ActiveXObject(activexmodes[i])
+				return new ActiveXObject(activexmodes[i]);
 			}
    			catch(e){
     			//suppress error
@@ -1440,13 +1440,13 @@ var AjaxRequest = function()
 	}
 	else if (window.XMLHttpRequest) // if Mozilla, Safari etc
   	{
-  		return new XMLHttpRequest()
+  		return new XMLHttpRequest();
  	}
  	else
  	{
 		return false;
  	}
-}
+};
 
 
 
@@ -1535,7 +1535,7 @@ PIXI.mat3.create = function()
 	matrix[8] = 1;
 	
 	return matrix;
-}
+};
 
 PIXI.mat4 = {};
 
@@ -1561,7 +1561,7 @@ PIXI.mat4.create = function()
 	matrix[15] = 1;
 	
 	return matrix;
-}
+};
 
 PIXI.mat3.multiply = function (mat, mat2, dest) 
 {
@@ -1589,7 +1589,7 @@ PIXI.mat3.multiply = function (mat, mat2, dest)
 	dest[8] = b20 * a02 + b21 * a12 + b22 * a22;
 	
 	return dest;
-}
+};
 
 
 PIXI.mat3.toMat4 = function (mat, dest) 
@@ -1617,7 +1617,7 @@ PIXI.mat3.toMat4 = function (mat, dest)
 	dest[0] = mat[0];
 	
 	return dest;
-}
+};
 
 
 /////
@@ -1645,7 +1645,7 @@ PIXI.mat4.create = function()
 	matrix[15] = 1;
 	
 	return matrix;
-}
+};
 
 PIXI.mat4.transpose = function (mat, dest) 
 {
@@ -1688,7 +1688,7 @@ PIXI.mat4.transpose = function (mat, dest)
 	dest[14] = mat[11];
 	dest[15] = mat[15];
 	return dest;
-}
+};
 
 PIXI.mat4.multiply = function (mat, mat2, dest) 
 {
@@ -1735,7 +1735,7 @@ PIXI.mat4.multiply = function (mat, mat2, dest)
     dest[15] = b0*a03 + b1*a13 + b2*a23 + b3*a33;
 
     return dest;
-}
+};
 
 /**
  * @author Mat Groves http://matgroves.com/ @Doormat23
@@ -1795,7 +1795,7 @@ PIXI.shaderVertexSrc = [	"attribute vec2 aVertexPosition;",
 							"gl_Position = uMVMatrix * vec4(aVertexPosition, 1.0, 1.0);",
 							"vTextureCoord = aTextureCoord;",
 							"vColor = aColor;",
-	   					 	"}"]
+	   					 	"}"];
 
 PIXI.CompileVertexShader = function(gl, shaderSrc)
 {
@@ -1817,7 +1817,7 @@ PIXI.CompileVertexShader = function(gl, shaderSrc)
     }
     
     return shader;
-}
+};
 
 PIXI.CompileFragmentShader = function(gl, shaderSrc)
 {
@@ -1839,7 +1839,7 @@ PIXI.CompileFragmentShader = function(gl, shaderSrc)
     }
     
     return shader;
-}
+};
 /**
  * @author Mat Groves http://matgroves.com/ @Doormat23
  */
@@ -1874,8 +1874,8 @@ PIXI.WebGLRenderer = function(width, height, view, transparent)
 	
 	// deal with losing context..	
     var scope = this;
-	this.view.addEventListener('webglcontextlost', function(event) { scope.handleContextLost(event); }, false)
-	this.view.addEventListener('webglcontextrestored', function(event) { scope.handleContextRestored(event); }, false)
+	this.view.addEventListener('webglcontextlost', function(event) { scope.handleContextLost(event); }, false);
+	this.view.addEventListener('webglcontextrestored', function(event) { scope.handleContextRestored(event); }, false);
 
 	this.batchs = [];
 	
@@ -1903,9 +1903,9 @@ PIXI.WebGLRenderer = function(width, height, view, transparent)
     gl.colorMask(true, true, true, this.transparent); 
     
     this.projectionMatrix =  PIXI.mat4.create();
-    this.resize(this.width, this.height)
+    this.resize(this.width, this.height);
     this.contextLost = false;
-}
+};
 
 // constructor
 PIXI.WebGLRenderer.constructor = PIXI.WebGLRenderer;
@@ -1947,7 +1947,7 @@ PIXI.WebGLRenderer.prototype.initShaders = function()
     shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
 	
 	PIXI.shaderProgram = this.shaderProgram;
-}
+};
 
 /**
  * @private
@@ -1971,8 +1971,8 @@ PIXI.WebGLRenderer.prototype.checkVisibility = function(displayObject, globalVis
 			child.textureChange = false;
 			if(actualVisibility)
 			{
-				this.removeDisplayObject(child)
-				this.addDisplayObject(child)
+				this.removeDisplayObject(child);
+				this.addDisplayObject(child);
 			}
 			// update texture!!
 		}
@@ -1996,8 +1996,7 @@ PIXI.WebGLRenderer.prototype.checkVisibility = function(displayObject, globalVis
 			this.checkVisibility(child, actualVisibility);
 		}
 	};
-}
-
+};
 
 /**
  * Renders the stage to its webGL view
@@ -2013,7 +2012,7 @@ PIXI.WebGLRenderer.prototype.render = function(stage)
 	// if rendering a new stage clear the batchs..
 	if(this.__stage !== stage)
 	{
-		if(this.__stage)this.checkVisibility(this.__stage, false)
+		if(this.__stage)this.checkVisibility(this.__stage, false);
 		this.__stage = stage;
 	}
 	
@@ -2041,7 +2040,7 @@ PIXI.WebGLRenderer.prototype.render = function(stage)
 	
 	var gl = this.gl;
 	
-	gl.clear(gl.COLOR_BUFFER_BIT)
+	gl.clear(gl.COLOR_BUFFER_BIT);
 
 	gl.clearColor(stage.backgroundColorSplit[0], stage.backgroundColorSplit[1], stage.backgroundColorSplit[2], 0);     
 	
@@ -2078,7 +2077,7 @@ PIXI.WebGLRenderer.prototype.render = function(stage)
 			stage.interactionManager.setTarget(this);
 		}
 	}
-}
+};
 
 /**
  * @private
@@ -2107,7 +2106,7 @@ PIXI.WebGLRenderer.prototype.updateTexture = function(texture)
 	}
 	
 	this.refreshBatchs = true;
-}
+};
 
 /**
  * @private
@@ -2158,7 +2157,7 @@ PIXI.WebGLRenderer.prototype.addDisplayObject = function(displayObject)
 		
 		if(previousSprite == displayObject.stage)break;
 	}
-	while(!previousSprite.renderable || !previousSprite.__inWebGL)
+	while(!previousSprite.renderable || !previousSprite.__inWebGL);
 	//while(!(previousSprite instanceof PIXI.Sprite))
 
 	/*
@@ -2182,7 +2181,7 @@ PIXI.WebGLRenderer.prototype.addDisplayObject = function(displayObject)
 				nextSprite = nextSprite.parent;
 				if(nextSprite == displayObject.stage)
 				{
-					nextSprite = null
+					nextSprite = null;
 					break;
 				}
 			}
@@ -2197,7 +2196,7 @@ PIXI.WebGLRenderer.prototype.addDisplayObject = function(displayObject)
 
 		if(!nextSprite)break;
 	}
-	while(!nextSprite.renderable || !nextSprite.__inWebGL)
+	while(!nextSprite.renderable || !nextSprite.__inWebGL);
 	
 	/*
 	 * so now we have the next renderable and the previous renderable
@@ -2206,8 +2205,8 @@ PIXI.WebGLRenderer.prototype.addDisplayObject = function(displayObject)
 	
 	if(displayObject instanceof PIXI.Sprite)
 	{
-		var previousBatch
-		var nextBatch
+		var previousBatch;
+		var nextBatch;
 		
 		if(previousSprite instanceof PIXI.Sprite)
 		{
@@ -2303,7 +2302,7 @@ PIXI.WebGLRenderer.prototype.addDisplayObject = function(displayObject)
 
 	// if its somthing else... then custom codes!
 	this.batchUpdate = true;
-}
+};
 
 /**
  * @private
@@ -2334,7 +2333,7 @@ PIXI.WebGLRenderer.prototype.removeDisplayObject = function(displayObject)
 		
 		if(batch.size==0)
 		{
-			batchToRemove = batch
+			batchToRemove = batch;
 		}
 	}
 	else
@@ -2381,7 +2380,7 @@ PIXI.WebGLRenderer.prototype.removeDisplayObject = function(displayObject)
 	}
 	
 	
-}
+};
 
 /**
  * resizes the webGL view to the specified width and height
@@ -2405,7 +2404,7 @@ PIXI.WebGLRenderer.prototype.resize = function(width, height)
 	projectionMatrix[5] = -2/this.height;
 	projectionMatrix[12] = -1;
 	projectionMatrix[13] = 1;
-}
+};
 
 /**
  * @private
@@ -2433,7 +2432,7 @@ PIXI.WebGLRenderer.prototype.initStrip = function(strip)
 	
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, strip._indexBuffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, strip.indices, gl.STATIC_DRAW);
-}
+};
 
 /**
  * @private
@@ -2445,7 +2444,7 @@ PIXI.WebGLRenderer.prototype.renderStrip = function(strip)
 //	mat
 	var mat4Real = PIXI.mat3.toMat4(strip.worldTransform);
 	PIXI.mat4.transpose(mat4Real);
-	PIXI.mat4.multiply(this.projectionMatrix, mat4Real, mat4Real )
+	PIXI.mat4.multiply(this.projectionMatrix, mat4Real, mat4Real );
 
 	gl.uniformMatrix4fv(this.shaderProgram.mvMatrixUniform, false, mat4Real);
   
@@ -2462,7 +2461,7 @@ PIXI.WebGLRenderer.prototype.renderStrip = function(strip)
 	{
 		
 		gl.bindBuffer(gl.ARRAY_BUFFER, strip._vertexBuffer);
-		gl.bufferSubData(gl.ARRAY_BUFFER, 0, strip.verticies)
+		gl.bufferSubData(gl.ARRAY_BUFFER, 0, strip.verticies);
 	    gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, 2, gl.FLOAT, false, 0, 0);
 		
 		// update the uvs
@@ -2484,19 +2483,19 @@ PIXI.WebGLRenderer.prototype.renderStrip = function(strip)
 	{
 		strip.dirty = false;
 		gl.bindBuffer(gl.ARRAY_BUFFER, strip._vertexBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, strip.verticies, gl.STATIC_DRAW)
+		gl.bufferData(gl.ARRAY_BUFFER, strip.verticies, gl.STATIC_DRAW);
 	    gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, 2, gl.FLOAT, false, 0, 0);
 		
 		// update the uvs
 	   	gl.bindBuffer(gl.ARRAY_BUFFER, strip._uvBuffer);
-	   	gl.bufferData(gl.ARRAY_BUFFER, strip.uvs, gl.STATIC_DRAW)
+	   	gl.bufferData(gl.ARRAY_BUFFER, strip.uvs, gl.STATIC_DRAW);
 	    gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, 2, gl.FLOAT, false, 0, 0);
 			
 	    gl.activeTexture(gl.TEXTURE0);
 	    gl.bindTexture(gl.TEXTURE_2D, strip.texture.baseTexture._glTexture);
 		
 		gl.bindBuffer(gl.ARRAY_BUFFER, strip._colorBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, strip.colors, gl.STATIC_DRAW)
+		gl.bufferData(gl.ARRAY_BUFFER, strip.colors, gl.STATIC_DRAW);
 	    gl.vertexAttribPointer(shaderProgram.colorAttribute, 1, gl.FLOAT, false, 0, 0);
 		
 		// dont need to upload!
@@ -2510,7 +2509,7 @@ PIXI.WebGLRenderer.prototype.renderStrip = function(strip)
     gl.uniformMatrix4fv(this.shaderProgram.mvMatrixUniform, false, this.projectionMatrix);
   
   //  console.log("!!!")
-}
+};
 
 /**
  * @private
@@ -2519,7 +2518,7 @@ PIXI.WebGLRenderer.prototype.handleContextLost = function(event)
 {
 	event.preventDefault();
 	this.contextLost = true;
-}
+};
 
 /**
  * @private
@@ -2539,14 +2538,14 @@ PIXI.WebGLRenderer.prototype.handleContextRestored = function(event)
 	
 	for (var i=0; i <  this.batchs.length; i++) 
 	{
-		this.batchs[i].restoreLostContext(this.gl)//
+		this.batchs[i].restoreLostContext(this.gl);//
 		this.batchs[i].dirty = true;
 	};
 	
 	PIXI._restoreBatchs(this.gl);
 	
 	this.contextLost = false;
-}
+};
 
 
 /**
@@ -2568,7 +2567,7 @@ PIXI._getBatch = function(gl)
 	{
 		return PIXI._batchs.pop();
 	}
-}
+};
 
 /**
  * @private
@@ -2577,7 +2576,7 @@ PIXI._returnBatch = function(batch)
 {
 	batch.clean();	
 	PIXI._batchs.push(batch);
-}
+};
 
 /**
  * @private
@@ -2588,7 +2587,7 @@ PIXI._restoreBatchs = function(gl)
 	{
 	  PIXI._batchs[i].restoreLostContext(gl);
 	};
-}
+};
 
 /**
  * A WebGLBatch Enables a group of sprites to be drawn using the same settings.
@@ -2609,7 +2608,7 @@ PIXI.WebGLBatch = function(gl)
 	this.colorBuffer =  gl.createBuffer();
 	this.blendMode = PIXI.blendModes.NORMAL;
 	this.dynamicSize = 1;
-}
+};
 
 
 // constructor
@@ -2632,7 +2631,7 @@ PIXI.WebGLBatch.prototype.clean = function()
 	
 	this.head;
 	this.tail;
-}
+};
 
 /*
  * recreates the buffers in the event of a context loss
@@ -2644,7 +2643,7 @@ PIXI.WebGLBatch.prototype.restoreLostContext = function(gl)
 	this.indexBuffer =  gl.createBuffer();
 	this.uvBuffer =  gl.createBuffer();
 	this.colorBuffer =  gl.createBuffer();
-}
+};
 
 /**
  * inits the batch's texture and blend mode based if the supplied sprite
@@ -2663,7 +2662,7 @@ PIXI.WebGLBatch.prototype.init = function(sprite)
 	this.size = 1;
 	
 	this.growBatch();
-}
+};
 
 /**
  * inserts a sprite before the specified sprite
@@ -2691,7 +2690,7 @@ PIXI.WebGLBatch.prototype.insertBefore = function(sprite, nextSprite)
 		this.head = sprite;
 		//this.head.__prev = null
 	}
-}
+};
 
 /**
  * inserts a sprite after the specified sprite
@@ -2718,10 +2717,10 @@ PIXI.WebGLBatch.prototype.insertAfter = function(sprite, previousSprite)
 	}
 	else
 	{
-		this.tail = sprite
+		this.tail = sprite;
 	}
 	
-}
+};
 
 /**
  * removes a sprite from the batch
@@ -2757,14 +2756,14 @@ PIXI.WebGLBatch.prototype.remove = function(sprite)
 	else
 	{
 		this.tail = sprite.__prev;
-		this.tail.__next = null
+		this.tail.__next = null;
 	}
 	
 	sprite.batch = null;
 	sprite.__next = null;
 	sprite.__prev = null;
 	this.dirty = true;
-}
+};
 
 /**
  * Splits the batch into two with the specified sprite being the start of the new batch.
@@ -2782,7 +2781,7 @@ PIXI.WebGLBatch.prototype.split = function(sprite)
 	
 	//var val = (this.tail == this.head)
 	//console.log(val + " SAME?");
-	var batch = new PIXI.WebGLBatch(this.gl)//PIXI._getBatch(this.gl);
+	var batch = new PIXI.WebGLBatch(this.gl);//PIXI._getBatch(this.gl);
 	batch.init(sprite);
 	batch.tail = this.tail;
 	//console.log("id is " +batcheee.id)
@@ -2813,7 +2812,7 @@ PIXI.WebGLBatch.prototype.split = function(sprite)
 	this.size -= tempSize;
 	
 	return batch;
-}
+};
 
 /**
  * Merges two batchs together
@@ -2838,7 +2837,7 @@ PIXI.WebGLBatch.prototype.merge = function(batch)
 		sprite = sprite.__next;
 	}
 	
-}
+};
 
 /**
  * Grows the size of the batch. As the elements in the batch cannot have a dynamic size this function is used to increase the size of the batch. It also creates a little extra room so that the batch does not need to be resized every time a sprite is added
@@ -2853,7 +2852,7 @@ PIXI.WebGLBatch.prototype.growBatch = function()
 	}
 	else
 	{
-		this.dynamicSize = this.size * 1.5
+		this.dynamicSize = this.size * 1.5;
 	}
 	// grow verts
 	this.verticies = new Float32Array(this.dynamicSize * 8);
@@ -2861,13 +2860,13 @@ PIXI.WebGLBatch.prototype.growBatch = function()
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER,this.verticies , gl.DYNAMIC_DRAW);
 	
-	this.uvs  = new Float32Array( this.dynamicSize * 8 )  
+	this.uvs  = new Float32Array( this.dynamicSize * 8 ); 
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.uvBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, this.uvs , gl.DYNAMIC_DRAW);
 	
 	this.dirtyUVS = true;
 	
-	this.colors  = new Float32Array( this.dynamicSize * 4 )  
+	this.colors  = new Float32Array( this.dynamicSize * 4 );  
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, this.colors , gl.DYNAMIC_DRAW);
 	
@@ -2891,7 +2890,7 @@ PIXI.WebGLBatch.prototype.growBatch = function()
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, this.indices, gl.STATIC_DRAW);
 	
-}
+};
 
 /**
  * Refresh's all the data in the batch and sync's it with the webGL buffers
@@ -2907,10 +2906,10 @@ PIXI.WebGLBatch.prototype.refresh = function()
 	}
 
 	var indexRun = 0;
-	var worldTransform, width, height, aX, aY, w0, w1, h0, h1, index
-	var a, b, c, d, tx, ty
+	var worldTransform, width, height, aX, aY, w0, w1, h0, h1, index;
+	var a, b, c, d, tx, ty;
 	
-	var displayObject = this.head
+	var displayObject = this.head;
 
 	while(displayObject)
 	{
@@ -2946,7 +2945,7 @@ PIXI.WebGLBatch.prototype.refresh = function()
 	
 	this.dirtyUVS = true;
 	this.dirtyColors = true;
-}
+};
 
 /**
  * Updates all the relevant geometry and uploads the data to the GPU
@@ -2955,7 +2954,7 @@ PIXI.WebGLBatch.prototype.refresh = function()
 PIXI.WebGLBatch.prototype.update = function()
 {
 	var gl = this.gl;
-	var worldTransform, width, height, aX, aY, w0, w1, h0, h1, index, index2, index3
+	var worldTransform, width, height, aX, aY, w0, w1, h0, h1, index, index2, index3;
 	
 	var a, b, c, d, tx, ty;
 	
@@ -2968,8 +2967,8 @@ PIXI.WebGLBatch.prototype.update = function()
 		width = displayObject.width;
 		height = displayObject.height;
 		
-		aX = displayObject.anchor.x - displayObject.texture.trim.x
-		aY = displayObject.anchor.y - displayObject.texture.trim.y
+		aX = displayObject.anchor.x - displayObject.texture.trim.x;
+		aY = displayObject.anchor.y - displayObject.texture.trim.y;
 		w0 = width * (1-aX);
 		w1 = width * -aX;
 		 
@@ -3037,7 +3036,7 @@ PIXI.WebGLBatch.prototype.update = function()
 		indexRun++;
 		displayObject = displayObject.__next;
    }
-}
+};
 
 /**
  * Draws the batch to the frame buffer
@@ -3071,7 +3070,7 @@ PIXI.WebGLBatch.prototype.render = function()
 	// update the verts..
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
 	// ok..
-	gl.bufferSubData(gl.ARRAY_BUFFER, 0, this.verticies)
+	gl.bufferSubData(gl.ARRAY_BUFFER, 0, this.verticies);
     gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, 2, gl.FLOAT, false, 0, 0);
 	
 	// update the uvs
@@ -3104,7 +3103,7 @@ PIXI.WebGLBatch.prototype.render = function()
 	    
     // DRAW THAT this!
     gl.drawElements(gl.TRIANGLES, this.size * 6, gl.UNSIGNED_SHORT, 0);
-}
+};
 
 
 /**
@@ -3167,7 +3166,7 @@ PIXI.CanvasRenderer = function(width, height, view, transparent)
 	 * @type Canvas 2d Context
 	 */
 	this.context = this.view.getContext("2d");
-}
+};
 
 // constructor
 PIXI.CanvasRenderer.constructor = PIXI.CanvasRenderer;
@@ -3195,7 +3194,7 @@ PIXI.CanvasRenderer.prototype.render = function(stage)
 	// update the background color
 	if(this.view.style.backgroundColor!=stage.backgroundColorString && !this.transparent)this.view.style.backgroundColor = stage.backgroundColorString;
 
-	this.context.clearRect(0, 0, this.width, this.height)
+	this.context.clearRect(0, 0, this.width, this.height);
     this.renderDisplayObject(stage);
     //as
    
@@ -3209,7 +3208,7 @@ PIXI.CanvasRenderer.prototype.render = function(stage)
 			stage.interactionManager.setTarget(this);
 		}
 	}
-}
+};
 
 /**
  * resizes the canvas view to the specified width and height
@@ -3223,7 +3222,7 @@ PIXI.CanvasRenderer.prototype.resize = function(width, height)
 	
 	this.view.width = width;
 	this.view.height = height;
-}
+};
 
 /**
  * @private
@@ -3232,7 +3231,7 @@ PIXI.CanvasRenderer.prototype.renderDisplayObject = function(displayObject)
 {
 	var transform = displayObject.worldTransform;
 	var context = this.context;
-	context.globalCompositeOperation = "source-over"
+	context.globalCompositeOperation = "source-over";
 	var blit = false;
 	
 	if(!displayObject.visible)return;
@@ -3269,7 +3268,7 @@ PIXI.CanvasRenderer.prototype.renderDisplayObject = function(displayObject)
 			else
 			{*/
 				blit = false;
-				context.setTransform(transform[0], transform[3], transform[1], transform[4], transform[2], transform[5])
+				context.setTransform(transform[0], transform[3], transform[1], transform[4], transform[2], transform[5]);
 				context.drawImage(displayObject.texture.baseTexture.source, 
 								   frame.x,
 								   frame.y,
@@ -3284,7 +3283,7 @@ PIXI.CanvasRenderer.prototype.renderDisplayObject = function(displayObject)
    	}
    	else if(displayObject instanceof PIXI.Strip)
 	{
-		context.setTransform(transform[0], transform[3], transform[1], transform[4], transform[2], transform[5])
+		context.setTransform(transform[0], transform[3], transform[1], transform[4], transform[2], transform[5]);
 		this.renderStrip(displayObject);
 	}
 	
@@ -3293,7 +3292,7 @@ PIXI.CanvasRenderer.prototype.renderDisplayObject = function(displayObject)
 	{
 		this.renderDisplayObject(displayObject.children[i]);
 	}
-}
+};
 
 /**
  * @private
@@ -3328,7 +3327,7 @@ PIXI.CanvasRenderer.prototype.renderStripFlat = function(strip)
 	context.fill();
 	context.closePath();
 	//context.globalCompositeOperation = 'source-over';	
-}
+};
 
 /**
  * @private
@@ -3389,7 +3388,7 @@ PIXI.CanvasRenderer.prototype.renderStrip = function(strip)
 	};
 	
 //	context.globalCompositeOperation = 'source-over';	
-}
+};
 
 
 
@@ -3464,7 +3463,7 @@ PIXI.Strip = function(texture, width, height)
 	}
 	
 	this.renderable = true;
-}
+};
 
 // constructor
 PIXI.Strip.constructor = PIXI.Strip;
@@ -3480,12 +3479,12 @@ PIXI.Strip.prototype.setTexture = function(texture)
 	this.width   = texture.frame.width;
 	this.height  = texture.frame.height;
 	this.updateFrame = true;
-}
+};
 
 PIXI.Strip.prototype.onTextureUpdate = function(event)
 {
 	this.updateFrame = true;
-}
+};
 // some helper functions..
 
 
@@ -3508,15 +3507,15 @@ PIXI.Rope = function(texture, points)
 	}
 	catch(error)
 	{
-		this.verticies = verticies
+		this.verticies = verticies;
 		
-		this.uvs = uvs
-		this.colors = colors
-		this.indices = indices
+		this.uvs = uvs;
+		this.colors = colors;
+		this.indices = indices;
 	}
 	
 	this.refresh();
-}
+};
 
 
 // constructor
@@ -3528,7 +3527,7 @@ PIXI.Rope.prototype.refresh = function()
 	var points = this.points;
 	if(points.length < 1)return;
 	
-	var uvs = this.uvs
+	var uvs = this.uvs;
 	var indices = this.indices;
 	var colors = this.colors;
 	
@@ -3540,10 +3539,10 @@ PIXI.Rope.prototype.refresh = function()
 	this.count-=0.2;
 	
 	
-	uvs[0] = 0
-	uvs[1] = 1
-	uvs[2] = 0
-	uvs[3] = 1
+	uvs[0] = 0;
+	uvs[1] = 1;
+	uvs[2] = 0;
+	uvs[3] = 1;
 	
 	colors[0] = 1;
 	colors[1] = 1;
@@ -3559,24 +3558,24 @@ PIXI.Rope.prototype.refresh = function()
 		var point = points[i];
 		var index = i * 4;
 		// time to do some smart drawing!
-		var amount = i/(total-1)
+		var amount = i/(total-1);
 		
 		if(i%2)
 		{
 			uvs[index] = amount;
 			uvs[index+1] = 0;
 			
-			uvs[index+2] = amount
-			uvs[index+3] = 1
+			uvs[index+2] = amount;
+			uvs[index+3] = 1;
 		
 		}
 		else
 		{
-			uvs[index] = amount
-			uvs[index+1] = 0
+			uvs[index] = amount;
+			uvs[index+1] = 0;
 			
-			uvs[index+2] = amount
-			uvs[index+3] = 1
+			uvs[index+2] = amount;
+			uvs[index+3] = 1;
 		}
 		
 		index = i * 2;
@@ -3589,7 +3588,7 @@ PIXI.Rope.prototype.refresh = function()
 		
 		lastPoint = point;
 	}
-}
+};
 
 PIXI.Rope.prototype.updateTransform = function()
 {
@@ -3597,7 +3596,7 @@ PIXI.Rope.prototype.updateTransform = function()
 	var points = this.points;
 	if(points.length < 1)return;
 	
-	var verticies = this.verticies 
+	var verticies = this.verticies;
 	
 	var lastPoint = points[0];
 	var nextPoint;
@@ -3606,10 +3605,10 @@ PIXI.Rope.prototype.updateTransform = function()
 	
 	this.count-=0.2;
 	
-	verticies[0] = point.x + perp.x 
-	verticies[1] = point.y + perp.y //+ 200
-	verticies[2] = point.x - perp.x 
-	verticies[3] = point.y - perp.y//+200
+	verticies[0] = point.x + perp.x;
+	verticies[1] = point.y + perp.y; //+ 200
+	verticies[2] = point.x - perp.x; 
+	verticies[3] = point.y - perp.y;//+200
 	// time to do some smart drawing!
 	
 	var total = points.length;
@@ -3626,7 +3625,7 @@ PIXI.Rope.prototype.updateTransform = function()
 		}
 		else
 		{
-			nextPoint = point
+			nextPoint = point;
 		}
 		
 		perp.y = -(nextPoint.x - lastPoint.x);
@@ -3636,30 +3635,30 @@ PIXI.Rope.prototype.updateTransform = function()
 				if(ratio > 1)ratio = 1;
 				
 		var perpLength = Math.sqrt(perp.x * perp.x + perp.y * perp.y);
-		var num = this.texture.height/2//(20 + Math.abs(Math.sin((i + this.count) * 0.3) * 50) )* ratio;
+		var num = this.texture.height/2;//(20 + Math.abs(Math.sin((i + this.count) * 0.3) * 50) )* ratio;
 		perp.x /= perpLength;
 		perp.y /= perpLength;
 	
 		perp.x *= num;
 		perp.y *= num;
 		
-		verticies[index] = point.x + perp.x 
-		verticies[index+1] = point.y + perp.y
-		verticies[index+2] = point.x - perp.x 
-		verticies[index+3] = point.y - perp.y
+		verticies[index] = point.x + perp.x; 
+		verticies[index+1] = point.y + perp.y;
+		verticies[index+2] = point.x - perp.x; 
+		verticies[index+3] = point.y - perp.y;
 
 		lastPoint = point;
 	}
 	
 	PIXI.DisplayObjectContainer.prototype.updateTransform.call( this );
-}
+};
 
 PIXI.Rope.prototype.setTexture = function(texture)
 {
 	// stop current texture 
 	this.texture = texture;
 	this.updateFrame = true;
-}
+};
 
 
 
@@ -3708,7 +3707,7 @@ PIXI.BaseTexture = function(source)
 	 * @property source
 	 * @type Image
 	 */
-	this.source = source//new Image();
+	this.source = source;//new Image();
 	
 	if(this.source instanceof Image)
 	{
@@ -3733,7 +3732,7 @@ PIXI.BaseTexture = function(source)
 				// add it to somewhere...
 				PIXI.texturesToUpdate.push(scope);
 				scope.dispatchEvent( { type: 'loaded', content: scope } );
-			}
+			};
 			//	this.image.src = imageUrl;
 		}
 	}
@@ -3749,14 +3748,14 @@ PIXI.BaseTexture = function(source)
 	
 	
 	
-}
+};
 
 PIXI.BaseTexture.constructor = PIXI.BaseTexture;
 
 PIXI.BaseTexture.prototype.fromImage = function(imageUrl)
 {
 
-}
+};
 
 /**
  * @author Mat Groves http://matgroves.com/ @Doormat23
@@ -3813,9 +3812,9 @@ PIXI.Texture = function(baseTexture, frame)
 	else
 	{
 		var scope = this;
-		baseTexture.addEventListener( 'loaded', function(){ scope.onBaseTextureLoaded()} );
+		baseTexture.addEventListener( 'loaded', function(){ scope.onBaseTextureLoaded();} );
 	}
-}
+};
 
 PIXI.Texture.constructor = PIXI.Texture;
 
@@ -3830,7 +3829,7 @@ PIXI.Texture.prototype.onBaseTextureLoaded = function(event)
 	this.height = this.frame.height;
 	
 	this.scope.dispatchEvent( { type: 'update', content: this } );
-}
+};
 
 /**
  * Specifies the rectangle region of the baseTexture
@@ -3848,7 +3847,7 @@ PIXI.Texture.prototype.setFrame = function(frame)
 		throw new Error("Texture Error: frame does not fit inside the base Texture dimensions " + this);
 	}
 	//this.updateFrame = true;
-}
+};
 
 /**
  * 
@@ -3886,7 +3885,7 @@ PIXI.Texture.fromImage = function(imageUrl, crossorigin)
 	}
 	
 	return texture;
-}
+};
 
 /**
  * 
@@ -3901,7 +3900,7 @@ PIXI.Texture.fromFrame = function(frameId)
 	var texture = PIXI.TextureCache[frameId];
 	if(!texture)throw new Error("The frameId '"+ frameId +"' does not exist in the texture cache " + this);
 	return texture;
-}
+};
 
 /**
  * 
@@ -3916,7 +3915,7 @@ PIXI.Texture.fromCanvas = function(canvas)
 {
 	var	baseTexture = new PIXI.BaseTexture(canvas);
 	return new PIXI.Texture(baseTexture);
-}
+};
 
 
 /**
@@ -3929,7 +3928,7 @@ PIXI.Texture.fromCanvas = function(canvas)
 PIXI.Texture.addTextureToCache = function(texture, id)
 {
 	PIXI.TextureCache[id] = texture;
-}
+};
 
 /**
  * 
@@ -3940,10 +3939,10 @@ PIXI.Texture.addTextureToCache = function(texture, id)
  */
 PIXI.Texture.removeTextureFromCache = function(id)
 {
-	var texture = PIXI.TextureCache[id]
+	var texture = PIXI.TextureCache[id];
 	PIXI.TextureCache[id] = null;
 	return texture;
-}
+};
 
 
 /**
@@ -3977,7 +3976,7 @@ PIXI.SpriteSheetLoader = function(url)
 	this.texture;
 	this.frames = {};
 	this.crossorigin = false;
-}
+};
 
 // constructor
 PIXI.SpriteSheetLoader.constructor = PIXI.SpriteSheetLoader;
@@ -3992,12 +3991,12 @@ PIXI.SpriteSheetLoader.prototype.load = function()
 	this.ajaxRequest.onreadystatechange=function()
 	{
 		scope.onLoaded();
-	}
+	};
 		
-	this.ajaxRequest.open("GET", this.url, true)
+	this.ajaxRequest.open("GET", this.url, true);
 	if (this.ajaxRequest.overrideMimeType) this.ajaxRequest.overrideMimeType("application/json");
-	this.ajaxRequest.send(null)
-}
+	this.ajaxRequest.send(null);
+};
 
 PIXI.SpriteSheetLoader.prototype.onLoaded = function()
 {
@@ -4025,7 +4024,7 @@ PIXI.SpriteSheetLoader.prototype.onLoaded = function()
 					{
 						//var realSize = frameData[i].spriteSourceSize;
 						PIXI.TextureCache[i].realSize = frameData[i].spriteSourceSize;
-						PIXI.TextureCache[i].trim.x = 0// (realSize.x / rect.w)
+						PIXI.TextureCache[i].trim.x = 0;// (realSize.x / rect.w)
 						// calculate the offset!
 					}
 	//				this.frames[i] = ;
@@ -4049,7 +4048,7 @@ PIXI.SpriteSheetLoader.prototype.onLoaded = function()
 	 	}
 	}
 	
-}
+};
 
 
 /**
@@ -4079,7 +4078,7 @@ PIXI.AssetLoader = function(assetURLs)
 	this.assets = [];
 
 	this.crossorigin = false;
-}
+};
 
 /**
 Fired when an item has loaded
@@ -4184,7 +4183,7 @@ PIXI.AssetLoader.prototype.load = function()
 		
 		//this.assets[i].load();
 	};
-}
+};
 
 PIXI.AssetLoader.prototype.onAssetLoaded = function()
 {
@@ -4197,5 +4196,5 @@ PIXI.AssetLoader.prototype.onAssetLoaded = function()
 		this.dispatchEvent( { type: 'onComplete', content: this } );
 		if(this.onComplete)this.onComplete();
 	}
-}
+};
 
