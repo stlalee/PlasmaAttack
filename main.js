@@ -5,12 +5,14 @@ var bunny;
 var stage;
 var renderer;
 
+var map;
+
 function initGame(){
 	// create an new instance of a pixi stage
 	stage = new PIXI.Stage(0xFFFFFF);
 
 	// create a renderer instance
-	renderer = new PIXI.WebGLRenderer(400, 300);//autoDetectRenderer(400, 300);
+	renderer = new PIXI.WebGLRenderer(700, 700);//autoDetectRenderer(400, 300);
 
 	// add the renderer view element to the DOM
 	document.body.appendChild(renderer.view);
@@ -19,6 +21,7 @@ function initGame(){
 
 	// create a texture from an image path
 	var texture = PIXI.Texture.fromImage("images/Ultramarineblue.jpg");
+
 	// create a new Sprite using the texture
 	bunny = new PIXI.Sprite(texture);
 
@@ -31,6 +34,8 @@ function initGame(){
 	bunny.position.y = 150;
 
 	stage.addChild(bunny);
+	
+	map = new Map();
 }
 
 function update(){
