@@ -1,11 +1,16 @@
 /**
  * @author Max Kerscher-Santelli
  */
-var bunny;
+
 var stage;
 var renderer;
 
 var map;
+
+var left = false;
+var right = false;
+var up = false;
+var down = false;
 
 function initGame(){
 	// create an new instance of a pixi stage
@@ -19,32 +24,12 @@ function initGame(){
 
 	requestAnimFrame( update );
 
-	// create a texture from an image path
-	var texture = PIXI.Texture.fromImage("images/Ultramarineblue.jpg");
-
-	// create a new Sprite using the texture
-	bunny = new PIXI.Sprite(texture);
-
-	// center the sprites anchor point
-	bunny.anchor.x = 0.5;
-	bunny.anchor.y = 0.5;
-
-	// move the sprite t the center of the screen
-	bunny.position.x = 200;
-	bunny.position.y = 150;
-
-	stage.addChild(bunny);
-	
-	map = new Map();
+	map = new Map(20,20);
 }
 
 function update(){
 	requestAnimFrame( update );
-
-	// just for fun, lets rotate mr rabbit a little
-	bunny.rotation += 0.1;
-
-	// render the stage
+	map.update(up, down, left, right);
 	renderer.render(stage);
 	console.log("update");
 	
@@ -60,3 +45,47 @@ function newGame(){
 function gameOver(){
 	return false;
 }
+
+window.addEventListener('keydown', function(event) {
+  	if(event.keyCode == 37) {
+      left = true;
+      console.log("left");
+    }
+    
+	if(event.keyCode == 38) {
+      up = true;
+      console.log("up");
+    }
+
+    if(event.keyCode == 39) {
+      right = true;
+      console.log("right");
+    }
+
+    if(event.keyCode == 40) {
+      down = true;
+      console.log("down");
+    }
+}, false);
+
+window.addEventListener('keyup', function(event) {
+  	if(event.keyCode == 37) {
+      left = false;
+      console.log("left");
+    }
+    
+	if(event.keyCode == 38) {
+      up = false;
+      console.log("up");
+    }
+
+    if(event.keyCode == 39) {
+      right = false;
+      console.log("right");
+    }
+
+    if(event.keyCode == 40) {
+      down = false;
+      console.log("down");
+    }
+}, false);
