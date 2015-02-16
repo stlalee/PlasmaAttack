@@ -1,6 +1,7 @@
 /**
  * @author Max Kerscher-Santelli
  */
+/*
 var speed = 5;
 
 var Tile = function(x, y){
@@ -35,4 +36,4 @@ Tile.prototype.update = function(up, down, left, right){
 	}else{
 		this.sp.visible = true;
 	}
-};
+};*/

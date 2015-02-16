@@ -12,6 +12,8 @@ var right = false;
 var up = false;
 var down = false;
 
+//var test;
+
 function initGame(){
 	// create an new instance of a pixi stage
 	stage = new PIXI.Stage(0xFFFFFF);
@@ -25,13 +27,19 @@ function initGame(){
 	requestAnimFrame( update );
 
 	map = new Map(20,20);
+	
+	//test = new PIXI.Sprite(PIXI.Texture.fromImage("OldWoman.png"));
+	//Object.defineProperty(test, 'testValue', {value: "testjahsdflkjhasdflkjashdflkjashdflkajsdhflkasjdhfslakdjfh"});
+	
 }
 
 function update(){
 	requestAnimFrame( update );
 	map.update(up, down, left, right);
 	renderer.render(stage);
-	console.log("update");
+	//console.log("update");
+	//console.log(test.testValue);
+	
 	
 	if(gameOver()){
 		newGame();
