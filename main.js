@@ -6,6 +6,7 @@ var stage;
 var renderer;
 
 var map;
+var player;
 
 var left = false;
 var right = false;
@@ -26,10 +27,8 @@ function initGame(){
 
 	requestAnimFrame( update );
 
-	map = new Map(20,20);
-	
-	//test = new PIXI.Sprite(PIXI.Texture.fromImage("OldWoman.png"));
-	//Object.defineProperty(test, 'testValue', {value: "testjahsdflkjhasdflkjashdflkjashdflkajsdhflkasjdhfslakdjfh"});
+	map = new Map(15,15);
+	player = new Player();
 	
 }
 
@@ -38,8 +37,6 @@ function update(){
 	map.update(up, down, left, right);
 	renderer.render(stage);
 	//console.log("update");
-	//console.log(test.testValue);
-	
 	
 	if(gameOver()){
 		newGame();
