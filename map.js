@@ -46,19 +46,19 @@ Map.prototype.test = function(){
 
 Map.prototype.update = function(up, down, left, right){
 	for(var i = pLocation.x -1; i <= pLocation.x +1; i++){
-		if(this.mapA[i][pLocation.y - 1].collision){
+		if(this.mapA[i][pLocation.y - 1].collision && collide(this.mapA[i][pLocation.y - 1], player.sp)){
 			up = false;
 		}
-		if(this.mapA[i][pLocation.y + 1].collision){
+		if(this.mapA[i][pLocation.y + 1].collision && collide(this.mapA[i][pLocation.y + 1], player.sp)){
 			down = false;
 		}
 	}
 
 	for(var i = pLocation.y -1; i <= pLocation.y +1; i++){
-		if(this.mapA[pLocation.x - 1][i].collision){
+		if(this.mapA[pLocation.x - 1][i].collision && collide(this.mapA[pLocation.x - 1][i], player.sp)){
 			left = false;
 		}
-		if(this.mapA[pLocation.x +1][i].collision){
+		if(this.mapA[pLocation.x + 1][i].collision && collide(this.mapA[pLocation.x +1 ][i], player.sp)){
 			right = false;
 		}
 	}
@@ -97,7 +97,7 @@ Map.prototype.update = function(up, down, left, right){
 
 function collide(sp1, sp2){
 	var d = sp1.width/2 + sp2.width/2;
-	var dist = Math.sqrt((sp1.position.x - sp2.position.x)^2 + (sp1.position.y - sp2.position.y)^2);
+	var dist = Math.sqrt(Math.pow((sp1.position.x - sp2.position.x),2) + Math.pow((sp1.position.y - sp2.position.y), 2));
 	return(dist < d);
 };
 
