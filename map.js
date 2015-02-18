@@ -1,39 +1,34 @@
 /**
  * @author Max Kerscher-Santelli
  */
-var x;
-var y;
+
 var spriteWidth = 75;
 var pLocation;
 
-var Map = function(width, height){
+//creates new map based on level given
+var Map = function(level){
 	this.mapA = [];
-	this.width = width;
-	this.height = height;
-	for(i = 0; i < width; i++){
+
+	for(i = 0; i < level.length; i++){
 		this.mapA[i] = [];
 	}
-	x = 0;
-	y = 0;
 	
-	for(i = 0; i < width; i++){
-		x = i * spriteWidth;
-		for(j = 0; j < height; j++){
-			y = j * spriteWidth;
-			this.mapA[i].push(new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg")));
-			this.mapA[i][j].position.x = x;
-			this.mapA[i][j].position.y = y;
-			if(x <= (renderer.width/2) && x >= ((renderer.width/2) - spriteWidth) 
-												&& y <= (renderer.height/2) && y >= ((renderer.height/2) - spriteWidth)){
-				pLocation = {x: i, y: j};
-				this.mapA[i][j].visible = false;
-			}
-			if(i == 0 || i == width - 1 || j == 0 || j == height -1){
-				Object.defineProperty(this.mapA[i][j], 'collision', {value: true});
-			}else if(i == 7 && j == 7){
+	for(i = 0; i < level.length; i++){
+		for(j = 0; j < level[0].length; j++){
+			if(level[i][j] == 1){
+				this.mapA[i].push(new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg")));
 				Object.defineProperty(this.mapA[i][j], 'collision', {value: true});
 			}else{
+				this.mapA[i].push(new PIXI.Sprite(PIXI.Texture.fromImage("images/assets/PNGs/broken tile.png")));
 				Object.defineProperty(this.mapA[i][j], 'collision', {value: false});
+			}
+			
+			this.mapA[i][j].position.x = i * spriteWidth;
+			this.mapA[i][j].position.y = j * spriteWidth;
+			
+			if((i * spriteWidth) <= (renderer.width/2) && (i * spriteWidth) >= ((renderer.width/2) - spriteWidth) 
+											&& (j * spriteWidth) <= (renderer.height/2) && (j * spriteWidth) >= ((renderer.height/2) - spriteWidth)){
+				pLocation = {x: i, y: j};
 			}
 			
 			stage.addChild(this.mapA[i][j]);
@@ -46,7 +41,9 @@ Map.prototype.test = function(){
 	console.log("map.test");
 };
 
+//runs everytime we cal update
 Map.prototype.update = function(up, down, left, right){
+	//check up and down for collision
 	for(var i = pLocation.x - 1; i <= pLocation.x + 1; i++){
 		if(this.mapA[i][pLocation.y - 1].collision && scCollide(this.mapA[i][pLocation.y - 1], player.sp)){
 			up = false;
@@ -55,7 +52,7 @@ Map.prototype.update = function(up, down, left, right){
 			down = false;
 		}
 	}
-
+	//checks left and right for collision
 	for(var i = pLocation.y - 1; i <= pLocation.y + 1; i++){
 		if(this.mapA[pLocation.x - 1][i].collision && scCollide(this.mapA[pLocation.x - 1][i], player.sp)){
 			console.log("left");
@@ -66,8 +63,9 @@ Map.prototype.update = function(up, down, left, right){
 		}
 	}
 	
-	for(i = 0; i < this.width; i++){
-		for(j = 0; j < this.height; j++){
+	//moves tiles
+	for(i = 0; i < this.mapA.length; i++){
+		for(j = 0; j < this.mapA[i].length; j++){
 			if(up){
 				this.mapA[i][j].position.y += 7;
 			}
@@ -80,7 +78,7 @@ Map.prototype.update = function(up, down, left, right){
 			if(left){
 				this.mapA[i][j].position.x += 7;
 			}
-	
+			//stops onscreen tiles from being drawn
 			if(this.mapA[i][j].position.x < -70 || this.mapA[i][j].position.x > 700 || 
 											this.mapA[i][j].position.y < -70 || this.mapA[i][j].position.y > 700){
 				this.mapA[i][j].visible = false;
@@ -88,6 +86,7 @@ Map.prototype.update = function(up, down, left, right){
 				this.mapA[i][j].visible = true;
 			}
 			
+			//updates player location
 			if(this.mapA[i][j].position.x <= (renderer.width/2) && this.mapA[i][j].position.x > ((renderer.width/2) - spriteWidth) 
 							&& this.mapA[i][j].position.y <= (renderer.height/2) && this.mapA[i][j].position.y > ((renderer.height/2) - spriteWidth)){
 				pLocation = {x: i, y: j};
@@ -98,23 +97,20 @@ Map.prototype.update = function(up, down, left, right){
 	console.log("map update");
 };
 
+//takes 2 sprites, assuming their circles, and checks for collision
 function cCollide(sp1, sp2){
 	var d = sp1.width/2 + sp2.width/2;
 	var dist = Math.sqrt(Math.pow((sp1.position.x - sp2.position.x),2) + Math.pow((sp1.position.y - sp2.position.y), 2));
 	return(dist < d);
 };
 
+//takes two sprites, assumes one is a square and one is a circle and checks for collision
 function scCollide(square, circle){
 	var radius = circle.width/2;
 	var midPoint = {x: circle.position.x + (radius), y: circle.position.y + (radius)};
 	console.log("start new col");
-	if((midPoint.x >= square.position.x && midPoint.x <= square.position.x + square.width) 
-								&& (midPoint.y >= square.position.y && midPoint.x <= square.position.y + square.height)){
-		console.log("midpoint inside");
-		return true;
-	}
 	
-	
+	//checks if circle overlaps top or bottom edge of square
 	if(midPoint.x >= square.position.x && midPoint.x <= square.position.x + square.width){
 		if(midPoint.y - (square.position.y + square.height) < radius && midPoint.y - (square.position.y + square.height) > 0){
 			console.log("line col top or bottom");
@@ -126,7 +122,7 @@ function scCollide(square, circle){
 		}
 	}
 	
-	
+	//check is circle is overlaps sides of square
 	if(midPoint.y >= square.position.y && midPoint.y <= square.position.y + square.height){
 		if(midPoint.x - (square.position.x + square.width) < radius && midPoint.x - (square.position.x + square.width) > 0){
 			console.log("line col left or right");
@@ -138,23 +134,31 @@ function scCollide(square, circle){
 		}
 	}
 	
+	//checks if circle overlaps a corner
+	if(Math.sqrt(Math.pow((square.position.x - midPoint.x),2) + Math.pow((square.position.y - midPoint.y), 2)) < radius -7){
+		console.log("point col");
+		return true;
+	}else if(Math.sqrt(Math.pow((square.position.x + square.width - midPoint.x),2) + Math.pow((square.position.y - midPoint.y), 2)) < radius -7){
+		console.log("point col");
+		return true;
+	}else if(Math.sqrt(Math.pow((square.position.x - midPoint.x),2) + Math.pow((square.position.y + square.height - midPoint.y), 2)) < radius -7){
+		console.log("point col");
+		return true;
+	}else if(Math.sqrt(Math.pow((square.position.x + square.width - midPoint.x),2) + Math.pow((square.position.y + square.height - midPoint.y), 2)) 
+											< radius -7){
+		console.log("point col");
+		return true;
+	}
 	
-	if(Math.sqrt(Math.pow((square.position.x - midPoint.x),2) + Math.pow((square.position.y - midPoint.y), 2)) < radius -4){
-		console.log("point col");
-		return true;
-	}else if(Math.sqrt(Math.pow((square.position.x + square.width - midPoint.x),2) + Math.pow((square.position.y - midPoint.y), 2)) < radius -4){
-		console.log("point col");
-		return true;
-	}else if(Math.sqrt(Math.pow((square.position.x - midPoint.x),2) + Math.pow((square.position.y + square.height - midPoint.y), 2)) < radius -4){
-		console.log("point col");
-		return true;
-	}else if(Math.sqrt(Math.pow((square.position.x + square.width - midPoint.x),2) + Math.pow((square.position.y + square.height - midPoint.y), 2)) < radius -4){
-		console.log("point col");
+	//checks midpoint of circle doesnt overlap square
+	if((midPoint.x >= square.position.x && midPoint.x <= square.position.x + square.width) 
+								&& (midPoint.y >= square.position.y && midPoint.x <= square.position.y + square.height)){
+		console.log("midpoint inside");
 		return true;
 	}
 	
 	console.log("false");
 	return false;
-	
 }
+
 

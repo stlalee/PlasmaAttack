@@ -13,25 +13,21 @@ var right = false;
 var up = false;
 var down = false;
 
-//var test;
-
+//first function called
 function initGame(){
-	// create an new instance of a pixi stage
 	stage = new PIXI.Stage(0xFFFFFF);
 
-	// create a renderer instance
 	renderer = new PIXI.WebGLRenderer(700, 700);//autoDetectRenderer(400, 300);
 
-	// add the renderer view element to the DOM
 	document.body.appendChild(renderer.view);
 
 	requestAnimFrame( update );
 
-	map = new Map(15,15);
-	player = new Player();
-	
+	map = new Map(levelChoice(1));
+	player = new Player();	
 }
 
+//called every frame
 function update(){
 	requestAnimFrame( update );
 	map.update(up, down, left, right);
@@ -94,3 +90,31 @@ window.addEventListener('keyup', function(event) {
       console.log("down");
     }
 }, false);
+
+function levelChoice(x){
+	var map = [];
+	if(x == 1){
+		for(var i = 0; i < 15; i++){
+			map.push([]);
+			for(var j = 0; j < 15; j++){
+				map[i][j] = 0;
+			}
+		}
+		for(var i = 0; i < 15; i++){
+			map[0][i] = 1;
+			map[14][i] = 1;
+			map[i][0] = 1;
+			map[i][14] = 1;
+		}
+		map[10][1] = 1;
+		map[10][2] = 1;
+		map[10][5] = 1;
+		map[10][6] = 1;
+		map[11][6] = 1;
+		map[12][6] = 1;
+		map[13][6] = 1;
+		
+	}
+	
+	return map;
+}
