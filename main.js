@@ -10,7 +10,7 @@ var player;
 var enemy;
 
 var healthMeter;
-var params = {font:"bold 50px Arial", fill: "#444444"};
+//var params = {font:"bold 4px Arial", fill: "#444444"};
 
 var left = false;
 var right = false;
@@ -29,7 +29,8 @@ function initGame(){
 	enemy = new Enemy(400,400);
 	map.agents.push(enemy);
 	
-	healthMeter = new PIXI.Text(player.health, params);
+	healthMeter = new PIXI.Text(player.health);
+	
 	healthMeter.anchor.x = 0.5;
 	healthMeter.position.x = 50;
 	healthMeter.position.y = 50;

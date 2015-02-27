@@ -23,7 +23,7 @@ Player.shootPlasma = function(){
 };
 
 
-Player.takeHit = function(x){
+Player.prototype.takeHit = function(x){
 	this.health -= x;
-	console.log(health);
+	console.log(this.health);
 };

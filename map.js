@@ -36,6 +36,7 @@ var Map = function(level){
 			stage.addChild(this.mapA[i][j]);
 		}	
 	}
+	
 	console.log("new map created");
 };
 
@@ -65,17 +66,14 @@ Map.prototype.update = function(up, down, left, right){
 		}
 	}
 	//naive collision check with enemies, take hit if colliding
-	/*for(var i = 0; i < this.agents.length; i++){
-		if(cCollide(player.sp, this.agents[i].sp)){
+	for(var i = 0; i < this.agents.length; i++){
+		if(!this.agents[i].resting && cCollide(player.sp, this.agents[i].sp)){
 			//I know this is dumb but it'll do for now
-			this.agents[i].interval = 
-				setInterval(function(){player.takeHit(5);},
-							this.agents[i].attackDelay);
-		} else {
-			clearInterval(this.agents[i].interval);
+			player.takeHit(5);
+			this.agents[i].rest();
 		}
 		
-	}*/
+	}
 	console.log(this.agents);
 	//moves agents with the map (currently just enemies, but in the future might also be allies?)
 	for(i = 0; i < this.agents.length; i++){
@@ -127,6 +125,7 @@ Map.prototype.update = function(up, down, left, right){
 		
 		
 	}
+	//this.healthMeter.setText(player.health);
 	console.log("map update");
 };
 
