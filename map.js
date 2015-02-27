@@ -4,9 +4,11 @@
 
 var spriteWidth = 75;
 var pLocation;
+//var agents;
 
 //creates new map based on level given
 var Map = function(level){
+	this.agents = [];
 	this.mapA = [];
 
 	for(i = 0; i < level.length; i++){
@@ -62,6 +64,34 @@ Map.prototype.update = function(up, down, left, right){
 			right = false;
 		}
 	}
+	//naive collision check with enemies, take hit if colliding
+	/*for(var i = 0; i < this.agents.length; i++){
+		if(cCollide(player.sp, this.agents[i].sp)){
+			//I know this is dumb but it'll do for now
+			this.agents[i].interval = 
+				setInterval(function(){player.takeHit(5);},
+							this.agents[i].attackDelay);
+		} else {
+			clearInterval(this.agents[i].interval);
+		}
+		
+	}*/
+	console.log(this.agents);
+	//moves agents with the map (currently just enemies, but in the future might also be allies?)
+	for(i = 0; i < this.agents.length; i++){
+		if(up){
+			this.agents[i].sp.position.y += 7;
+		}
+		if(down){
+			this.agents[i].sp.position.y -= 7;
+		}
+		if(right){
+			this.agents[i].sp.position.x -= 7;
+		}
+		if(left){
+			this.agents[i].sp.position.x += 7;
+		}
+	}
 	
 	//moves tiles
 	for(i = 0; i < this.mapA.length; i++){
@@ -78,6 +108,7 @@ Map.prototype.update = function(up, down, left, right){
 			if(left){
 				this.mapA[i][j].position.x += 7;
 			}
+			
 			//stops onscreen tiles from being drawn
 			if(this.mapA[i][j].position.x < -70 || this.mapA[i][j].position.x > 700 || 
 											this.mapA[i][j].position.y < -70 || this.mapA[i][j].position.y > 700){
@@ -90,12 +121,21 @@ Map.prototype.update = function(up, down, left, right){
 			if(this.mapA[i][j].position.x <= (renderer.width/2) && this.mapA[i][j].position.x > ((renderer.width/2) - spriteWidth) 
 							&& this.mapA[i][j].position.y <= (renderer.height/2) && this.mapA[i][j].position.y > ((renderer.height/2) - spriteWidth)){
 				pLocation = {x: i, y: j};
-				this.mapA[i][j].visible = false;
+				//this.mapA[i][j].visible = false;
 			}
 		}
+		
+		
 	}
 	console.log("map update");
 };
+
+//returns array of tile i,j
+function getTile(x, y){
+	var i = Math.floor(x/spriteWidth);
+	var j = Math.floor(y/spriteWidth);
+	return [i, j];
+}
 
 //takes 2 sprites, assuming their circles, and checks for collision
 function cCollide(sp1, sp2){
