@@ -19,7 +19,7 @@ var Map = function(level){
 				this.mapA[i].push(new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg")));
 				Object.defineProperty(this.mapA[i][j], 'collision', {value: true});
 			}else{
-				this.mapA[i].push(new PIXI.Sprite(PIXI.Texture.fromImage("images/assets/PNGs/broken tile.png")));
+				this.mapA[i].push(new PIXI.Sprite(PIXI.Texture.fromImage("images/assets/ground.png")));
 				Object.defineProperty(this.mapA[i][j], 'collision', {value: false});
 			}
 			
