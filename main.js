@@ -7,6 +7,10 @@ var renderer;
 
 var map;
 var player;
+var enemy;
+
+var healthMeter;
+//var params = {font:"bold 4px Arial", fill: "#444444"};
 
 var left = false;
 var right = false;
@@ -16,27 +20,34 @@ var down = false;
 //first function called
 function initGame(){
 	stage = new PIXI.Stage(0xFFFFFF);
-
 	renderer = new PIXI.WebGLRenderer(700, 700);//autoDetectRenderer(400, 300);
-
 	document.body.appendChild(renderer.view);
-
 	requestAnimFrame( update );
-
+	
 	map = new Map(levelChoice(1));
-	player = new Player();	
+	player = new Player();
+	enemy = new Enemy(400,400);
+	map.agents.push(enemy);
+	
+	healthMeter = new PIXI.Text(player.health);
+	
+	healthMeter.anchor.x = 0.5;
+	healthMeter.position.x = 50;
+	healthMeter.position.y = 50;
+	stage.addChild(healthMeter);
 }
 
 //called every frame
 function update(){
 	requestAnimFrame( update );
 	map.update(up, down, left, right);
+	healthMeter.setText(player.health);
 	renderer.render(stage);
 	//console.log("update");
 	
-	if(gameOver()){
+	/*if(gameOver()){
 		newGame();
-	}
+	}*/
 }
 
 function newGame(){
@@ -44,6 +55,7 @@ function newGame(){
 }
 
 function gameOver(){
+	console.log("game over");
 	return false;
 }
 
