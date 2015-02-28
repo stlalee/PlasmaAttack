@@ -49,14 +49,14 @@ Map.prototype.test = function(){
 Map.prototype.update = function(up, down, left, right, space){
 	if(space){
 		player.shootPlasma();
-		var plasma = new Plasma(this.sp.position.x, this.sp.position.y, this.facing);
+		var plasma = new Plasma(player.sp.position.x, player.sp.position.y, player.facing);
 		this.projectiles.push(plasma);
 	}
 	for(i=0;i<this.projectiles.length;i++){
 		var pro = this.projectiles[i];
 		//check collision with agents
 		for(j=0;j<this.agents.length;j++){
-			if(!this.agents.ally && cCollide(pro.sp, this.agents[j])){
+			if(!this.agents.ally && cCollide(pro.sp, this.agents[j].sp)){
 				this.agents[j].takeHit(6);
 				stage.removeChild(this.projectiles[i].sp);
 				this.projectiles.splice(i,1);
