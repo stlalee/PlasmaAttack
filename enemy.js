@@ -9,7 +9,7 @@ var Enemy = function(x, y){
 	this.attackedLast = 0;
 	this.interval;
 	this.health = 10;
-	this.sp = new PIXI.Sprite(PIXI.Texture.fromImage("images/circle.png"));
+	this.sp = new PIXI.Sprite(PIXI.Texture.fromImage("images/oldMan.png"));
 	this.sp.position.x = x;
 	this.sp.position.y = y;
 	this.currentPath = null;
