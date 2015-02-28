@@ -41,7 +41,7 @@ function initGame(){
 //called every frame
 function update(){
 	requestAnimFrame( update );
-	map.update(up, down, left, right);
+	map.update(up, down, left, right, space);
 	healthMeter.setText(player.health);
 	renderer.render(stage);
 	//console.log("update");
@@ -63,7 +63,7 @@ function gameOver(){
 window.addEventListener('keydown', function(event) {
   	if(event.keyCode == 37) {
       left = true;
-      console.log("left");
+      console.log("lefty");
     }
     
 	if(event.keyCode == 38) {

@@ -46,8 +46,9 @@ Map.prototype.test = function(){
 };
 
 //runs everytime we cal update
-Map.prototype.update = function(up, down, left, right){
+Map.prototype.update = function(up, down, left, right, space){
 	if(space){
+		player.shootPlasma();
 		var plasma = new Plasma(this.sp.position.x, this.sp.position.y, this.facing);
 		this.projectiles.push(plasma);
 	}
@@ -57,6 +58,21 @@ Map.prototype.update = function(up, down, left, right){
 		for(j=0;j<this.agents.length;j++){
 			if(!this.agents.ally && cCollide(pro.sp, this.agents[j])){
 				this.agents[j].takeHit(6);
+				stage.removeChild(this.projectiles[i].sp);
+				this.projectiles.splice(i,1);
+			} else {
+				if(pro.dir == "up"){
+					pro.sp.position.y -= 3;
+				}
+				if(pro.dir == "down"){
+					pro.sp.position.y += 3;
+				}
+				if(pro.dir == "left"){
+					pro.sp.position.x -= 3;
+				}
+				if(pro.dir == "right"){
+					pro.sp.position.x += 3;
+				}
 			}
 		}
 	}
