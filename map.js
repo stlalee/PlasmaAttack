@@ -51,6 +51,15 @@ Map.prototype.update = function(up, down, left, right){
 		var plasma = new Plasma(this.sp.position.x, this.sp.position.y, this.facing);
 		this.projectiles.push(plasma);
 	}
+	for(i=0;i<this.projectiles.length;i++){
+		var pro = this.projectiles[i];
+		//check collision with agents
+		for(j=0;j<this.agents.length;j++){
+			if(!this.agents.ally && cCollide(pro.sp, this.agents[j])){
+				this.agents[j].takeHit(6);
+			}
+		}
+	}
 	//check up and down for collision
 	for(var i = pLocation.x - 1; i <= pLocation.x + 1; i++){
 		if(this.mapA[i][pLocation.y - 1].collision && scCollide(this.mapA[i][pLocation.y - 1], player.sp)){
