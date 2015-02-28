@@ -16,6 +16,7 @@ var left = false;
 var right = false;
 var up = false;
 var down = false;
+var space = false;
 
 //first function called
 function initGame(){
@@ -79,6 +80,11 @@ window.addEventListener('keydown', function(event) {
       down = true;
       console.log("down");
     }
+    
+    if(event.keyCode == 32){
+    	space = true;
+    	console.log("space");
+    }
 }, false);
 
 window.addEventListener('keyup', function(event) {
@@ -100,6 +106,11 @@ window.addEventListener('keyup', function(event) {
     if(event.keyCode == 40) {
       down = false;
       console.log("down");
+    }
+    
+    if(event.keyCode == 32){
+    	space = false;
+    	console.log("space");
     }
 }, false);
 

@@ -10,6 +10,7 @@ var pLocation;
 var Map = function(level){
 	this.agents = [];
 	this.mapA = [];
+	this.projectiles = [];
 
 	for(i = 0; i < level.length; i++){
 		this.mapA[i] = [];
@@ -46,6 +47,10 @@ Map.prototype.test = function(){
 
 //runs everytime we cal update
 Map.prototype.update = function(up, down, left, right){
+	if(space){
+		var plasma = new Plasma(this.sp.position.x, this.sp.position.y, this.facing);
+		this.projectiles.push(plasma);
+	}
 	//check up and down for collision
 	for(var i = pLocation.x - 1; i <= pLocation.x + 1; i++){
 		if(this.mapA[i][pLocation.y - 1].collision && scCollide(this.mapA[i][pLocation.y - 1], player.sp)){
@@ -211,7 +216,7 @@ function canWalkHere(mapA, x,y){
 			(mapA[x][y] != null) &&
 			!mapA[x,y].collision);
 }
-
+//WIP AStar algorithm
 function findPath(mapy, begin, end){
 	mapHeight = mapy.length;
 	mapWidth = mapy[0].length;
