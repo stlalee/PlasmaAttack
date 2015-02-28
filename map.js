@@ -53,8 +53,9 @@ Map.prototype.test = function(){
 
 //runs everytime we cal update
 Map.prototype.update = function(up, down, left, right, space){
-	if(scCollide(this.items[0], player.sp)){
+	if(this.items.length == 1 && scCollide(this.items[0], player.sp)){
 		stage.removeChild(this.items[0]);
+		this.items.shift();
 		player.health += 50;
 	}
 	if(space){
@@ -114,9 +115,10 @@ Map.prototype.update = function(up, down, left, right, space){
 		}
 	}
 	console.log(this.agents);
-	if(up){
-		this.items[0].position.y += 7;
-	}
+	if(this.items.length == 1){
+		if(up){
+			this.items[0].position.y += 7;
+		}
 		if(down){
 			this.items[0].position.y -= 7;
 		}
@@ -126,7 +128,7 @@ Map.prototype.update = function(up, down, left, right, space){
 		if(left){
 			this.items[0].position.x += 7;
 		}
-		
+	}
 	//moves agents with(in) the map (currently just enemies, but in the future might also be allies?)
 	for(i = 0; i < this.agents.length; i++){
 		if(up){
