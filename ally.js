@@ -1,9 +1,12 @@
 /**
  * @author Connor McNeill
+ * 
+ * in the future we should merge enemy and ally into a single object, 
+ * or at least have them both inherit shared properties from an ancestor
  */
 
-var Enemy = function(x, y){
-	this.ally = false;
+var Ally = function(x,y){
+	this.ally = true;
 	this.resting = false;
 	this.attackDelay = 1000; //in milliseconds
 	this.attackedLast = 0;
@@ -15,17 +18,8 @@ var Enemy = function(x, y){
 	this.currentPath = null;
 	stage.addChild(this.sp);
 };
-/*
-Map.prototype.Enemy = function(){
-	console.log("enemy test");
-};
-*/
-/*
-Enemy.update = function(time){
-	this.attackedLast += time;
-};*/
 
-Enemy.prototype.rest = function(){
+Ally.prototype.rest = function(){
 	var self = this;
 	this.resting = true;
 	console.log("wait for " + this.attackDelay);
@@ -36,17 +30,3 @@ Enemy.prototype.rest = function(){
 	setTimeout(fire, this.attackDelay);
 };
 
-Enemy.attack = function(){
-	//animation?
-	if(this.attackDelay - this.attackedLast < 0){
-		//we're not spamming
-		this.attackedLast = 0;
-		
-	}
-};
-
-Enemy.prototype.followPath = function(path){
-	//path should be a list of nodes
-	
-	this.currentPath = path;
-};

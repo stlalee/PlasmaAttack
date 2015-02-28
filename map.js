@@ -75,7 +75,7 @@ Map.prototype.update = function(up, down, left, right){
 		
 	}
 	console.log(this.agents);
-	//moves agents with the map (currently just enemies, but in the future might also be allies?)
+	//moves agents with(in) the map (currently just enemies, but in the future might also be allies?)
 	for(i = 0; i < this.agents.length; i++){
 		if(up){
 			this.agents[i].sp.position.y += 7;
@@ -88,6 +88,68 @@ Map.prototype.update = function(up, down, left, right){
 		}
 		if(left){
 			this.agents[i].sp.position.x += 7;
+		}
+		
+		if(distance(player.sp.position, this.agents[i].sp.position) < 250){
+			/*
+			if(this.agents[i].currentPath == null){
+				this.agents[i].followPath(
+		   			findPath(this.mapA,
+		   					getTile(this.agents[i].sp.position.x,
+		   							 this.agents[i].sp.position.y), 
+		   				 	 getTile(player.sp.position.x,
+		   				 			 player.sp.position.y)));
+			} else {
+				//currentPath exists, try to follow it
+				if(this.agents[i].currentPath.length > 0){
+					var nextPoint = this.agents[i].currentPath[0];
+					nextPoint.x *= spriteWidth;
+					nextPoint.y *= spriteWidth;
+					var curPos = this.agents[i].sp.position;
+					if(distance(nextPoint, curPos) < 20){
+						//close enough
+						this.agents[i].currentPath.shift();
+					} else {
+						if(nextPoint.x - curPos.x > 0){
+							this.agents[i].sp.position.x += 3;
+						}
+						if(nextPoint.x - curPos.x < 0){
+							this.agents[i].sp.position.x -= 3;
+						}
+						if(nextPoint.y - curPos.y > 0){
+							this.agents[i].sp.position.y += 3;
+						}
+						if(nextPoint.y - curPos.y < 0){
+							this.agents[i].sp.position.y -= 3;
+						}
+					}
+				}
+			}*/
+			//if(this.agents[i].currentPath.length > 0){
+				var nextPoint = player.sp.position;
+				//nextPoint.x *= spriteWidth;
+				//nextPoint.y *= spriteWidth;
+				var curPos = this.agents[i].sp.position;
+				if(distance(nextPoint, curPos) < 20){
+					//close enough
+					//this.agents[i].currentPath.shift();
+				} else {
+					if(nextPoint.x - curPos.x > 0){
+						this.agents[i].sp.position.x += 3;
+					}
+					if(nextPoint.x - curPos.x < 0){
+						this.agents[i].sp.position.x -= 3;
+					}
+					if(nextPoint.y - curPos.y > 0){
+						this.agents[i].sp.position.y += 3;
+					}
+					if(nextPoint.y - curPos.y < 0){
+						this.agents[i].sp.position.y -= 3;
+					}
+				}
+			//}
+		} else {
+			this.agents[i].currentPath = null;
 		}
 	}
 	
@@ -122,18 +184,142 @@ Map.prototype.update = function(up, down, left, right){
 				//this.mapA[i][j].visible = false;
 			}
 		}
-		
-		
+	
 	}
 	//this.healthMeter.setText(player.health);
 	console.log("map update");
 };
 
-//returns array of tile i,j
+function distance(p1, p2){
+	return Math.sqrt(Math.pow(p1.x - p2.x, 2)+Math.pow(p1.y - p2.y,2));
+}
+
+//returns tile i,j
 function getTile(x, y){
 	var i = Math.floor(x/spriteWidth);
 	var j = Math.floor(y/spriteWidth);
 	return [i, j];
+}
+
+function canWalkHere(mapA, x,y){
+	//return !(getTile(x,y).collision);
+	return ((mapA[x] != null) &&
+			(mapA[x][y] != null) &&
+			!mapA[x,y].collision);
+}
+
+function findPath(mapy, begin, end){
+	mapHeight = mapy.length;
+	mapWidth = mapy[0].length;
+	mapSize = mapy[0].length * mapy.length;
+	
+	function Neighbors(x,y){
+		var up = y - 1;
+		var down = y + 1;
+		var right = x - 1;
+		var left = x + 1;
+		
+		var blah = new Object;
+		blah.up = up > -1 && canWalkHere(mapy,x,up);
+		blah.down = down < mapHeight && canWalkHere(mapy,x, down);
+		blah.right = right < mapWidth && canWalkHere(mapy,right, y);
+		blah.left = left > -1 && canWalkHere(mapy,left, y);
+		
+		result = [];
+		if(blah.up){
+			result.push({x:x, y:up});
+		}
+		if(blah.down){
+			result.push({x:x, y:down});
+		}
+		if(blah.right){
+			result.push({x:right, y:y});
+		}
+		if(blah.left){
+			result.push({x:left, y:y});
+		}
+		//findNeighbors(blah, up, down, right, left, result);
+		blah.up = up > -1;
+		blah.down = down < mapHeight;
+		blah.right = right < mapWidth;
+		blah.left = left > -1;
+		
+		if(blah.right){
+			if(blah.up && canWalkHere(mapy,right, up)) result.push({x:right, y:up});
+			if(blah.down && canWalkHere(mapy,right, down)) result.push({x:right, y:down});
+		}
+		if(blah.left){
+			if(up && canWalkHere(mapy,left, up)) result.push({x:left, y:up});
+			if(down && canWalkHere(mapy,left, down)) result.push({x:left, y:down});
+		}
+		
+		return result;
+	}
+	
+	function Node(Parent, Point){
+		var newNode = {
+			Parent:Parent,
+			value:Point.x + (Point.y * mapWidth),
+			x:Point.x,
+			y:Point.y,
+			f:0,
+			g:0
+		};
+		return newNode;
+	}
+	
+	function calcPath(){
+		var pathStart = Node(null, {x:begin[0], y:begin[1]});
+		var pathEnd = Node(null, {x:end[0], y:end[1]});
+		
+		var AStar = new Array(mapSize);
+		var Open = [pathStart];
+		var Closed = [];
+		var result = [];
+		var myNeighbors;
+		var myNode;
+		var myPath;
+		var length,max,min,i,j;
+		
+		while(length = Open.length){
+			max = mapSize;
+			min = -1;
+			for(i=0;i<length;i++){
+				if(Open[i].f < max){
+					max = Open[i].f;
+					min = i;
+				}
+				myNode = Open.splice(min, 1)[0];
+				if(myNode.value === pathEnd.value){
+					myPath = Closed[Closed.push(myNode) -1];
+					do{
+						result.push([myPath.x,myPath,y]);
+					} while(myPath = myPath.Parent);
+					AStar = Closed = Open = [];
+					result.reverse();
+				} else {
+					myNeighbors = Neighbors(myNode.x, myNode.y);
+					for(i=0, j=myNeighbors.length;i<j;i++){
+						myPath = Node(myNode,myNeighbors[i]);
+						if(!AStar[myPath.value]){
+							myPath.g = myNode.g + distance(myNeighbors[i],myNode);
+							// estimated cost of entire guessed route to the destination
+							myPath.f = myPath.g + distance(myNeighbors[i], pathEnd);
+							// remember this new path for testing above
+							Open.push(myPath);
+							// mark this node in the world graph as visited
+							AStar[myPath.value] = true;
+						}
+					}
+					// remember this route as having no more untested options
+					Closed.push(myNode);
+				}
+			} // keep iterating until until the Open list is empty
+			return result;
+		}
+	}
+	
+	return calcPath();
 }
 
 //takes 2 sprites, assuming their circles, and checks for collision
