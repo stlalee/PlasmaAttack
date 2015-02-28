@@ -25,6 +25,13 @@ Enemy.update = function(time){
 	this.attackedLast += time;
 };*/
 
+Enemy.prototype.takeHit = function(x){
+	this.health -= x;
+	if (this.health < 1){
+		stage.removeChild(this.sp);
+	}
+};
+
 Enemy.prototype.rest = function(){
 	var self = this;
 	this.resting = true;

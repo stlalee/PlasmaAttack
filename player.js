@@ -16,11 +16,11 @@ Map.prototype.Player = function(){
 	console.log("player test");
 };
 
-Player.shootPlasma = function(){
+Player.prototype.shootPlasma = function(){
 	
 	this.health -= 10;
-	
 	if(this.health <= 0) gameOver();
+	
 };
 
 
