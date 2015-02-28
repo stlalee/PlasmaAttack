@@ -157,15 +157,19 @@ Map.prototype.update = function(up, down, left, right){
 	for(i = 0; i < this.mapA.length; i++){
 		for(j = 0; j < this.mapA[i].length; j++){
 			if(up){
+				player.facing = "up";
 				this.mapA[i][j].position.y += 7;
 			}
 			if(down){
+				player.facing = "down";
 				this.mapA[i][j].position.y -= 7;
 			}
 			if(right){
+				player.facing = "right";
 				this.mapA[i][j].position.x -= 7;
 			}
 			if(left){
+				player.facing = "left";
 				this.mapA[i][j].position.x += 7;
 			}
 			

@@ -8,6 +8,7 @@ var Player = function(){
 	this.sp.position.x = 315;
 	this.sp.position.y = 315;
 	this.health = 100;
+	this.facing = "right";
 	stage.addChild(this.sp);
 };
 
