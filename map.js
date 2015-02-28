@@ -13,6 +13,7 @@ var Map = function(level){
 	this.projectiles = [];
 	this.items = [];
 	
+	
 	for(i = 0; i < level.length; i++){
 		this.mapA[i] = [];
 	}
@@ -39,6 +40,10 @@ var Map = function(level){
 		}	
 	}
 	
+	this.items.push(new PIXI.Sprite(PIXI.Texture.fromImage("images/health pack.png")));
+	this.items[0].position.x = 200;
+	this.items[0].position.y = 400;
+	stage.addChild(this.items[0]);
 	console.log("new map created");
 };
 
@@ -48,6 +53,10 @@ Map.prototype.test = function(){
 
 //runs everytime we cal update
 Map.prototype.update = function(up, down, left, right, space){
+	if(scCollide(this.items[0], player.sp)){
+		stage.removeChild(this.items[0]);
+		player.health += 50;
+	}
 	if(space){
 		player.shootPlasma();
 		var plasma = new Plasma(player.sp.position.x, player.sp.position.y, player.facing);
@@ -103,9 +112,21 @@ Map.prototype.update = function(up, down, left, right, space){
 			player.takeHit(5);
 			this.agents[i].rest();
 		}
-		
 	}
 	console.log(this.agents);
+	if(up){
+		this.items[0].position.y += 7;
+	}
+		if(down){
+			this.items[0].position.y -= 7;
+		}
+		if(right){
+			this.items[0].position.x -= 7;
+		}
+		if(left){
+			this.items[0].position.x += 7;
+		}
+		
 	//moves agents with(in) the map (currently just enemies, but in the future might also be allies?)
 	for(i = 0; i < this.agents.length; i++){
 		if(up){
