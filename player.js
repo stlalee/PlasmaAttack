@@ -4,7 +4,7 @@
 
 
 var Player = function(){
-	this.sp = new PIXI.Sprite(PIXI.Texture.fromImage("images/circle.png"));
+	this.sp = new PIXI.Sprite(PIXI.Texture.fromImage("images/kenta.png"));
 	this.sp.position.x = 315;
 	this.sp.position.y = 315;
 	this.health = 100;
