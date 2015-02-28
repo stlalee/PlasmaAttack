@@ -29,6 +29,7 @@ Enemy.prototype.takeHit = function(x){
 	this.health -= x;
 	if (this.health < 1){
 		stage.removeChild(this.sp);
+		
 	}
 };
 

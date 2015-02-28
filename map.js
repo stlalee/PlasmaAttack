@@ -11,7 +11,8 @@ var Map = function(level){
 	this.agents = [];
 	this.mapA = [];
 	this.projectiles = [];
-
+	this.items = [];
+	
 	for(i = 0; i < level.length; i++){
 		this.mapA[i] = [];
 	}
