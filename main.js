@@ -41,7 +41,9 @@ function initGame(){
 //called every frame
 function update(){
 	requestAnimFrame( update );
+	player.update(space);
 	map.update(up, down, left, right, space);
+	space = false;
 	healthMeter.setText(player.health);
 	renderer.render(stage);
 	//console.log("update");
@@ -81,10 +83,7 @@ window.addEventListener('keydown', function(event) {
       console.log("down");
     }
     
-    if(event.keyCode == 32){
-    	space = true;
-    	console.log("space");
-    }
+    
 }, false);
 
 window.addEventListener('keyup', function(event) {
@@ -109,7 +108,7 @@ window.addEventListener('keyup', function(event) {
     }
     
     if(event.keyCode == 32){
-    	space = false;
+    	space = true;
     	console.log("space");
     }
 }, false);

@@ -2,12 +2,15 @@
  * @author Connor McNeill
  */
 
+var projectileSpeed = 10;
+var projectileLife = 10;
 
 var Player = function(){
 	this.sp = new PIXI.Sprite(PIXI.Texture.fromImage("images/kenta.png"));
 	this.sp.position.x = 315;
 	this.sp.position.y = 315;
 	this.health = 100;
+	this.projectiles = [];
 	this.facing = "right";
 	stage.addChild(this.sp);
 };
@@ -17,10 +20,38 @@ Map.prototype.Player = function(){
 };
 
 Player.prototype.shootPlasma = function(){
-	
+	var temp = new PIXI.Sprite(PIXI.Texture.fromImage("images/plasma.png"));
+	Object.defineProperty(temp, 'direction', {value: this.facing});
+	Object.defineProperty(temp, 'time', {value: projectileLife});
+	temp.position.x = this.sp.position.x;
+	temp.position.y = this.sp.position.y;
+	stage.addChild(temp);
+	this.projectiles.push(temp);
 	this.health -= 10;
 	if(this.health <= 0) gameOver();
-	
+};
+
+Player.prototype.update = function(space){
+	if(space){
+		this.shootPlasma();
+	}
+	for(var i = 0; i < this.projectiles.length; i ++){
+		if(this.projectiles[i].time == 0){
+			stage.removeChild(this.projectiles[i]);
+			this.projectiles.splice(i,1);
+		}else{
+			this.projectiles[i].time -= 1;
+		}
+		if(this.projectiles[i].direction == "up"){
+			this.projectiles[i].position.y -= projectileSpeed;
+		}else if(this.projectiles[i].direction == "down"){
+			this.projectiles[i].position.y += projectileSpeed;
+		}else if(this.projectiles[i].direction == "left"){
+			this.projectiles[i].position.x -= projectileSpeed;
+		}else{
+			this.projectiles[i].position.x += projectileSpeed;
+		}
+	}
 };
 
 

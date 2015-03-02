@@ -4,13 +4,13 @@
 
 var spriteWidth = 75;
 var pLocation;
+var playerSpeed = 7;
 //var agents;
 
 //creates new map based on level given
 var Map = function(level){
 	this.agents = [];
 	this.mapA = [];
-	this.projectiles = [];
 	this.items = [];
 	
 	
@@ -51,42 +51,18 @@ Map.prototype.test = function(){
 	console.log("map.test");
 };
 
-//runs everytime we cal update
+//runs everytime we call update
 Map.prototype.update = function(up, down, left, right, space){
-	if(this.items.length == 1 && scCollide(this.items[0], player.sp)){
-		stage.removeChild(this.items[0]);
-		this.items.shift();
-		player.health += 50;
-	}
-	if(space){
-		player.shootPlasma();
-		var plasma = new Plasma(player.sp.position.x, player.sp.position.y, player.facing);
-		this.projectiles.push(plasma);
-	}
-	for(i=0;i<this.projectiles.length;i++){
-		var pro = this.projectiles[i];
-		//check collision with agents
-		for(j=0;j<this.agents.length;j++){
-			if(!this.agents.ally && cCollide(pro.sp, this.agents[j].sp)){
-				this.agents[j].takeHit(6);
-				stage.removeChild(this.projectiles[i].sp);
-				this.projectiles.splice(i,1);
-			} else {
-				if(pro.dir == "up"){
-					pro.sp.position.y -= 3;
-				}
-				if(pro.dir == "down"){
-					pro.sp.position.y += 3;
-				}
-				if(pro.dir == "left"){
-					pro.sp.position.x -= 3;
-				}
-				if(pro.dir == "right"){
-					pro.sp.position.x += 3;
-				}
-			}
+	
+	for(var i = 0; i < this.items.length; i++){
+		if(scCollide(this.items[i], player.sp)){
+			stage.removeChild(this.items[i]);
+			this.items.splice(i,1);
+			player.health += 50;
 		}
 	}
+	
+	
 	//check up and down for collision
 	for(var i = pLocation.x - 1; i <= pLocation.x + 1; i++){
 		if(this.mapA[i][pLocation.y - 1].collision && scCollide(this.mapA[i][pLocation.y - 1], player.sp)){
@@ -212,19 +188,19 @@ Map.prototype.update = function(up, down, left, right, space){
 		for(j = 0; j < this.mapA[i].length; j++){
 			if(up){
 				player.facing = "up";
-				this.mapA[i][j].position.y += 7;
+				this.mapA[i][j].position.y += playerSpeed;
 			}
 			if(down){
 				player.facing = "down";
-				this.mapA[i][j].position.y -= 7;
+				this.mapA[i][j].position.y -= playerSpeed;
 			}
 			if(right){
 				player.facing = "right";
-				this.mapA[i][j].position.x -= 7;
+				this.mapA[i][j].position.x -= playerSpeed;
 			}
 			if(left){
 				player.facing = "left";
-				this.mapA[i][j].position.x += 7;
+				this.mapA[i][j].position.x += playerSpeed;
 			}
 			
 			//stops onscreen tiles from being drawn
@@ -242,10 +218,34 @@ Map.prototype.update = function(up, down, left, right, space){
 				//this.mapA[i][j].visible = false;
 			}
 		}
-	
 	}
+	
+	for(var i = 0; i < player.projectiles.length; i++){
+		//check collision with agents
+		for(var j = 0; j < this.agents.length; j++){
+			if(!this.agents.ally && cCollide(player.projectiles[i], this.agents[j].sp)){
+				this.agents[j].takeHit(6);
+				stage.removeChild(player.projectiles[i]);
+				player.projectiles.splice(i,1);
+			}else{
+				if(left){
+					player.projectiles[i].position.x += 7; 
+				}
+				if(right){
+					player.projectiles[i].position.x -= 7;
+				}
+				if(up){
+					player.projectiles[i].position.y += 7;
+				}
+				if(down){
+					player.projectiles[i].position.y -= 7;
+				}
+			}
+		}
+	}
+	
 	//this.healthMeter.setText(player.health);
-	console.log("map update");
+	//console.log("map update");
 };
 
 function distance(p1, p2){
@@ -391,16 +391,16 @@ function cCollide(sp1, sp2){
 function scCollide(square, circle){
 	var radius = circle.width/2;
 	var midPoint = {x: circle.position.x + (radius), y: circle.position.y + (radius)};
-	console.log("start new col");
+	//console.log("start new col");
 	
 	//checks if circle overlaps top or bottom edge of square
 	if(midPoint.x >= square.position.x && midPoint.x <= square.position.x + square.width){
 		if(midPoint.y - (square.position.y + square.height) < radius && midPoint.y - (square.position.y + square.height) > 0){
-			console.log("line col top or bottom");
+			//console.log("line col top or bottom");
 			return true;
 		}
 		if(square.position.y - midPoint.y < radius && square.position.y - midPoint.y > 0){
-			console.log("line col top or bottom");
+			//console.log("line col top or bottom");
 			return true;
 		}
 	}
@@ -408,39 +408,39 @@ function scCollide(square, circle){
 	//check is circle is overlaps sides of square
 	if(midPoint.y >= square.position.y && midPoint.y <= square.position.y + square.height){
 		if(midPoint.x - (square.position.x + square.width) < radius && midPoint.x - (square.position.x + square.width) > 0){
-			console.log("line col left or right");
+			//console.log("line col left or right");
 			return true;
 		}
 		if(square.position.x - midPoint.x < radius && square.position.x - midPoint.x > 0){
-			console.log("line col left or right");
+			//console.log("line col left or right");
 			return true;
 		}
 	}
 	
 	//checks if circle overlaps a corner
 	if(Math.sqrt(Math.pow((square.position.x - midPoint.x),2) + Math.pow((square.position.y - midPoint.y), 2)) < radius -7){
-		console.log("point col");
+		//console.log("point col");
 		return true;
 	}else if(Math.sqrt(Math.pow((square.position.x + square.width - midPoint.x),2) + Math.pow((square.position.y - midPoint.y), 2)) < radius -7){
-		console.log("point col");
+		//console.log("point col");
 		return true;
 	}else if(Math.sqrt(Math.pow((square.position.x - midPoint.x),2) + Math.pow((square.position.y + square.height - midPoint.y), 2)) < radius -7){
-		console.log("point col");
+		//console.log("point col");
 		return true;
 	}else if(Math.sqrt(Math.pow((square.position.x + square.width - midPoint.x),2) + Math.pow((square.position.y + square.height - midPoint.y), 2)) 
 											< radius -7){
-		console.log("point col");
+		//console.log("point col");
 		return true;
 	}
 	
 	//checks midpoint of circle doesnt overlap square
 	if((midPoint.x >= square.position.x && midPoint.x <= square.position.x + square.width) 
 								&& (midPoint.y >= square.position.y && midPoint.x <= square.position.y + square.height)){
-		console.log("midpoint inside");
+		//console.log("midpoint inside");
 		return true;
 	}
 	
-	console.log("false");
+	//console.log("false");
 	return false;
 }
 
