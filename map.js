@@ -5,6 +5,7 @@
 var spriteWidth = 75;
 var pLocation;
 var playerSpeed = 7;
+var healthPackValue = 25;
 //var agents;
 
 //creates new map based on level given
@@ -52,15 +53,7 @@ Map.prototype.test = function(){
 };
 
 //runs everytime we call update
-Map.prototype.update = function(up, down, left, right, space){
-	
-	for(var i = 0; i < this.items.length; i++){
-		if(scCollide(this.items[i], player.sp)){
-			stage.removeChild(this.items[i]);
-			this.items.splice(i,1);
-			player.health += 50;
-		}
-	}
+Map.prototype.update = function(up, down, left, right){
 	
 	
 	//check up and down for collision
@@ -82,29 +75,44 @@ Map.prototype.update = function(up, down, left, right, space){
 			right = false;
 		}
 	}
-	//naive collision check with enemies, take hit if colliding
-	for(var i = 0; i < this.agents.length; i++){
-		if(!this.agents[i].resting && cCollide(player.sp, this.agents[i].sp)){
-			//I know this is dumb but it'll do for now
-			player.takeHit(5);
-			this.agents[i].rest();
+	
+	//moves tiles
+	for(i = 0; i < this.mapA.length; i++){
+		for(j = 0; j < this.mapA[i].length; j++){
+			if(up){
+				player.facing = "up";
+				this.mapA[i][j].position.y += playerSpeed;
+			}
+			if(down){
+				player.facing = "down";
+				this.mapA[i][j].position.y -= playerSpeed;
+			}
+			if(right){
+				player.facing = "right";
+				this.mapA[i][j].position.x -= playerSpeed;
+			}
+			if(left){
+				player.facing = "left";
+				this.mapA[i][j].position.x += playerSpeed;
+			}
+			
+			//stops onscreen tiles from being drawn
+			if(this.mapA[i][j].position.x < -70 || this.mapA[i][j].position.x > 700 || 
+											this.mapA[i][j].position.y < -70 || this.mapA[i][j].position.y > 700){
+				this.mapA[i][j].visible = false;
+			}else{
+				this.mapA[i][j].visible = true;
+			}
+			
+			//updates player location
+			if(this.mapA[i][j].position.x <= (renderer.width/2) && this.mapA[i][j].position.x > ((renderer.width/2) - spriteWidth) 
+							&& this.mapA[i][j].position.y <= (renderer.height/2) && this.mapA[i][j].position.y > ((renderer.height/2) - spriteWidth)){
+				pLocation = {x: i, y: j};
+				//this.mapA[i][j].visible = false;
+			}
 		}
 	}
-	//console.log(this.agents);
-	if(this.items.length == 1){
-		if(up){
-			this.items[0].position.y += 7;
-		}
-		if(down){
-			this.items[0].position.y -= 7;
-		}
-		if(right){
-			this.items[0].position.x -= 7;
-		}
-		if(left){
-			this.items[0].position.x += 7;
-		}
-	}
+	
 	//moves agents with(in) the map (currently just enemies, but in the future might also be allies?)
 	for(i = 0; i < this.agents.length; i++){
 		if(up){
@@ -183,40 +191,12 @@ Map.prototype.update = function(up, down, left, right, space){
 		}
 	}
 	
-	//moves tiles
-	for(i = 0; i < this.mapA.length; i++){
-		for(j = 0; j < this.mapA[i].length; j++){
-			if(up){
-				player.facing = "up";
-				this.mapA[i][j].position.y += playerSpeed;
-			}
-			if(down){
-				player.facing = "down";
-				this.mapA[i][j].position.y -= playerSpeed;
-			}
-			if(right){
-				player.facing = "right";
-				this.mapA[i][j].position.x -= playerSpeed;
-			}
-			if(left){
-				player.facing = "left";
-				this.mapA[i][j].position.x += playerSpeed;
-			}
-			
-			//stops onscreen tiles from being drawn
-			if(this.mapA[i][j].position.x < -70 || this.mapA[i][j].position.x > 700 || 
-											this.mapA[i][j].position.y < -70 || this.mapA[i][j].position.y > 700){
-				this.mapA[i][j].visible = false;
-			}else{
-				this.mapA[i][j].visible = true;
-			}
-			
-			//updates player location
-			if(this.mapA[i][j].position.x <= (renderer.width/2) && this.mapA[i][j].position.x > ((renderer.width/2) - spriteWidth) 
-							&& this.mapA[i][j].position.y <= (renderer.height/2) && this.mapA[i][j].position.y > ((renderer.height/2) - spriteWidth)){
-				pLocation = {x: i, y: j};
-				//this.mapA[i][j].visible = false;
-			}
+	//naive collision check with enemies, take hit if colliding
+	for(var i = 0; i < this.agents.length; i++){
+		if(!this.agents[i].resting && cCollide(player.sp, this.agents[i].sp)){
+			//I know this is dumb but it'll do for now
+			player.takeHit(5);
+			this.agents[i].rest();
 		}
 	}
 	
@@ -229,18 +209,40 @@ Map.prototype.update = function(up, down, left, right, space){
 				player.projectiles.splice(i,1);
 			}else{
 				if(left){
-					player.projectiles[i].position.x += 7; 
+					player.projectiles[i].position.x += playerSpeed; 
 				}
 				if(right){
-					player.projectiles[i].position.x -= 7;
+					player.projectiles[i].position.x -= playerSpeed;
 				}
 				if(up){
-					player.projectiles[i].position.y += 7;
+					player.projectiles[i].position.y += playerSpeed;
 				}
 				if(down){
-					player.projectiles[i].position.y -= 7;
+					player.projectiles[i].position.y -= playerSpeed;
 				}
 			}
+		}
+	}
+	
+	for(var i = 0; i < this.items.length; i++){
+		if(cCollide(this.items[i], player.sp)){
+			stage.removeChild(this.items[i]);
+			this.items.splice(i,1);
+			player.gainHealth(healthPackValue);
+			continue;
+		}
+		
+		if(left){
+			this.items[i].position.x += playerSpeed; 
+		}
+		if(right){
+			this.items[i].position.x -= playerSpeed;
+		}
+		if(up){
+			this.items[i].position.y += playerSpeed;
+		}
+		if(down){
+			this.items[i].position.y -= playerSpeed;
 		}
 	}
 	

@@ -69,3 +69,8 @@ Player.prototype.takeHit = function(x){
 	this.health -= x;
 	//console.log(this.health);
 };
+
+Player.prototype.gainHealth = function(x){
+	this.health += x;
+	//console.log(this.health);
+};

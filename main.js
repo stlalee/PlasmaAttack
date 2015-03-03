@@ -42,7 +42,7 @@ function initGame(){
 function update(){
 	requestAnimFrame( update );
 	player.update(space);
-	map.update(up, down, left, right, space);
+	map.update(up, down, left, right);
 	space = false;
 	healthMeter.setText(player.health);
 	renderer.render(stage);
