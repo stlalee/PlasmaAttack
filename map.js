@@ -75,7 +75,7 @@ Map.prototype.update = function(up, down, left, right, space){
 	//checks left and right for collision
 	for(var i = pLocation.y - 1; i <= pLocation.y + 1; i++){
 		if(this.mapA[pLocation.x - 1][i].collision && scCollide(this.mapA[pLocation.x - 1][i], player.sp)){
-			console.log("left");
+			//console.log("left");
 			left = false;
 		}
 		if(this.mapA[pLocation.x + 1][i].collision && scCollide(this.mapA[pLocation.x + 1][i], player.sp)){
@@ -90,7 +90,7 @@ Map.prototype.update = function(up, down, left, right, space){
 			this.agents[i].rest();
 		}
 	}
-	console.log(this.agents);
+	//console.log(this.agents);
 	if(this.items.length == 1){
 		if(up){
 			this.items[0].position.y += 7;

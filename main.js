@@ -81,9 +81,7 @@ window.addEventListener('keydown', function(event) {
     if(event.keyCode == 40) {
       down = true;
       console.log("down");
-    }
-    
-    
+    } 
 }, false);
 
 window.addEventListener('keyup', function(event) {

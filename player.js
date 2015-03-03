@@ -22,7 +22,7 @@ Map.prototype.Player = function(){
 Player.prototype.shootPlasma = function(){
 	var temp = new PIXI.Sprite(PIXI.Texture.fromImage("images/plasma.png"));
 	Object.defineProperty(temp, 'direction', {value: this.facing});
-	Object.defineProperty(temp, 'time', {value: projectileLife});
+	Object.defineProperty(temp, 'time', {value: projectileLife, writable: true});
 	temp.position.x = this.sp.position.x;
 	temp.position.y = this.sp.position.y;
 	stage.addChild(temp);
@@ -35,12 +35,22 @@ Player.prototype.update = function(space){
 	if(space){
 		this.shootPlasma();
 	}
-	for(var i = 0; i < this.projectiles.length; i ++){
+	for(var i = 0; i < this.projectiles.length; i++){
+		if(!(canWalkHere(map.mapA, getTile(this.projectiles[i].position.x, this.projectiles[i].position.y)[0], 
+									getTile(this.projectiles[i].position.x, this.projectiles[i].position.y)[1]))){
+			stage.removeChild(this.projectiles[i]);
+			this.projectiles.splice(i,1);
+			console.log("collided");
+			continue;
+		}
 		if(this.projectiles[i].time == 0){
 			stage.removeChild(this.projectiles[i]);
 			this.projectiles.splice(i,1);
+			console.log("out of time");
+			continue;
 		}else{
-			this.projectiles[i].time -= 1;
+			this.projectiles[i].time = this.projectiles[i].time - 1;
+			//console.log(this.projectiles[i].time);
 		}
 		if(this.projectiles[i].direction == "up"){
 			this.projectiles[i].position.y -= projectileSpeed;
@@ -57,5 +67,5 @@ Player.prototype.update = function(space){
 
 Player.prototype.takeHit = function(x){
 	this.health -= x;
-	console.log(this.health);
+	//console.log(this.health);
 };
