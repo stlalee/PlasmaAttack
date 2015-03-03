@@ -3,7 +3,7 @@
  */
 
 var projectileSpeed = 10;
-var projectileLife = 10;
+var projectileLife = 20;
 
 var Player = function(){
 	this.sp = new PIXI.Sprite(PIXI.Texture.fromImage("images/kenta.png"));

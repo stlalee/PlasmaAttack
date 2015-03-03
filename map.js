@@ -254,8 +254,10 @@ function distance(p1, p2){
 
 //returns tile i,j
 function getTile(x, y){
-	var i = Math.floor(x/spriteWidth);
-	var j = Math.floor(y/spriteWidth);
+	var i = x - map.mapA[0][0].position.x;
+	i = Math.floor(i/spriteWidth);
+	var j = y - map.mapA[0][0].position.y;
+	j = Math.floor(j/spriteWidth);
 	return [i, j];
 }
 
@@ -263,7 +265,7 @@ function canWalkHere(mapA, x,y){
 	//return !(getTile(x,y).collision);
 	return ((mapA[x] != null) &&
 			(mapA[x][y] != null) &&
-			!mapA[x,y].collision);
+			!mapA[x][y].collision);
 }
 //WIP AStar algorithm
 function findPath(mapy, begin, end){
