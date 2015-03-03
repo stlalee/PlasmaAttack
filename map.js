@@ -97,7 +97,7 @@ Map.prototype.update = function(up, down, left, right){
 			}
 			
 			//stops onscreen tiles from being drawn
-			if(this.mapA[i][j].position.x < -70 || this.mapA[i][j].position.x > 700 || 
+			if(this.mapA[i][j].position.x < - spriteWidth || this.mapA[i][j].position.x > 700 || 
 											this.mapA[i][j].position.y < -70 || this.mapA[i][j].position.y > 700){
 				this.mapA[i][j].visible = false;
 			}else{
@@ -127,6 +127,13 @@ Map.prototype.update = function(up, down, left, right){
 		if(left){
 			this.allies[i].sp.position.x += playerSpeed;
 		}
+		//stops offscreen allies from being drawn
+		if(this.allies[i].sp.position.x < - spriteWidth || this.allies[i].sp.position.x > 700 || 
+									 	this.allies[i].sp.position.y < -spriteWidth || this.allies[i].sp.position.y > 700){
+			this.allies[i].sp.visible = false;
+		}else{
+			this.allies[i].sp.visible = true;
+		}
 	}
 	
 	//moves agents with(in) the map (currently just enemies, but in the future might also be allies?)
@@ -142,6 +149,14 @@ Map.prototype.update = function(up, down, left, right){
 		}
 		if(left){
 			this.agents[i].sp.position.x += playerSpeed;
+		}
+		
+		//stops offscreen enemies from being drawn
+		if(this.agents[i].sp.position.x < - spriteWidth || this.agents[i].sp.position.x > 700 || 
+									 	this.agents[i].sp.position.y < -spriteWidth || this.agents[i].sp.position.y > 700){
+			this.agents[i].sp.visible = false;
+		}else{
+			this.agents[i].sp.visible = true;
 		}
 		
 		if(distance(player.sp.position, this.agents[i].sp.position) < 250){
@@ -262,6 +277,13 @@ Map.prototype.update = function(up, down, left, right){
 		}
 		if(down){
 			this.items[i].position.y -= playerSpeed;
+		}
+		//stops offscreen health pack from being drawn
+		if(this.items[i].position.x < - spriteWidth || this.items[i].position.x > 700 || 
+									 	this.items[i].position.y < -spriteWidth || this.items[i].position.y > 700){
+			this.items[i].visible = false;
+		}else{
+			this.items[i].visible = true;
 		}
 	}
 	
