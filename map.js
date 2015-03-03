@@ -11,6 +11,7 @@ var healthPackValue = 25;
 //creates new map based on level given
 var Map = function(level){
 	this.agents = [];
+	this.allies = [];
 	this.mapA = [];
 	this.items = [];
 	
@@ -54,7 +55,6 @@ Map.prototype.test = function(){
 
 //runs everytime we call update
 Map.prototype.update = function(up, down, left, right){
-	
 	
 	//check up and down for collision
 	for(var i = pLocation.x - 1; i <= pLocation.x + 1; i++){
@@ -113,19 +113,35 @@ Map.prototype.update = function(up, down, left, right){
 		}
 	}
 	
+	//move allies
+	for(var i = 0; i < this.allies.length; i++){
+		if(up){
+			this.allies[i].sp.position.y += playerSpeed;
+		}
+		if(down){
+			this.allies[i].sp.position.y -= playerSpeed;
+		}
+		if(right){
+			this.allies[i].sp.position.x -= playerSpeed;
+		}
+		if(left){
+			this.allies[i].sp.position.x += playerSpeed;
+		}
+	}
+	
 	//moves agents with(in) the map (currently just enemies, but in the future might also be allies?)
 	for(i = 0; i < this.agents.length; i++){
 		if(up){
-			this.agents[i].sp.position.y += 7;
+			this.agents[i].sp.position.y += playerSpeed;
 		}
 		if(down){
-			this.agents[i].sp.position.y -= 7;
+			this.agents[i].sp.position.y -= playerSpeed;
 		}
 		if(right){
-			this.agents[i].sp.position.x -= 7;
+			this.agents[i].sp.position.x -= playerSpeed;
 		}
 		if(left){
-			this.agents[i].sp.position.x += 7;
+			this.agents[i].sp.position.x += playerSpeed;
 		}
 		
 		if(distance(player.sp.position, this.agents[i].sp.position) < 250){
@@ -204,7 +220,10 @@ Map.prototype.update = function(up, down, left, right){
 		//check collision with agents
 		for(var j = 0; j < this.agents.length; j++){
 			if(!this.agents.ally && cCollide(player.projectiles[i], this.agents[j].sp)){
-				this.agents[j].takeHit(6);
+				this.allies.push(new Ally(this.agents[j].sp.position.x,this.agents[j].sp.position.y));
+				stage.addChild(this.allies[this.allies.length - 1].sp);
+				this.agents[j].takeHit(10);
+				this.agents.splice(j, 1);
 				stage.removeChild(player.projectiles[i]);
 				player.projectiles.splice(i,1);
 			}else{
