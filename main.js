@@ -44,8 +44,6 @@ function startGame(){
 	
 	map = new Map(levelChoice(level));
 	player = new Player();
-	enemy = new Enemy(400,400);
-	map.agents.push(enemy);
 	
 	healthMeter = new PIXI.Text(player.health);
 	
@@ -75,61 +73,63 @@ function update(){
 }
 
 function youWon(){
-	return (map.enemyCount < 1);
+	return (map.enemiesToKill < 1);
 }
 
 function youLost(){
 	return (player.health < 1);
 }
 
-function resetGame(){}
+function resetGame(){
+	console.log("resetGame");
+}
 
 window.addEventListener('keydown', function(event) {
   	if(event.keyCode == 37) {
       left = true;
-      console.log("lefty");
+      //console.log("lefty");
     }
     
 	if(event.keyCode == 38) {
       up = true;
-      console.log("up");
+      //console.log("up");
     }
 
     if(event.keyCode == 39) {
       right = true;
-      console.log("right");
+      //console.log("right");
     }
 
     if(event.keyCode == 40) {
       down = true;
-      console.log("down");
+      //console.log("down");
     } 
 }, false);
 
 window.addEventListener('keyup', function(event) {
   	if(event.keyCode == 37) {
       left = false;
-      console.log("left");
+      //console.log("left");
     }
     
 	if(event.keyCode == 38) {
       up = false;
-      console.log("up");
+      //console.log("up");
     }
 
     if(event.keyCode == 39) {
       right = false;
-      console.log("right");
+      //console.log("right");
     }
 
     if(event.keyCode == 40) {
       down = false;
-      console.log("down");
+      //console.log("down");
     }
     
     if(event.keyCode == 32){
     	space = true;
-    	console.log("space");
+    	//console.log("space");
     }
 }, false);
 
@@ -139,7 +139,7 @@ function levelChoice(x){
 		for(var i = 0; i < 15; i++){
 			map.push([]);
 			for(var j = 0; j < 15; j++){
-				map[i][j] = 0;
+				map[i][j] = 2;
 			}
 		}
 		for(var i = 0; i < 15; i++){
@@ -156,6 +156,8 @@ function levelChoice(x){
 		map[12][6] = 1;
 		map[13][6] = 1;
 		
+		map[2][2] = 0;
+		map[2][12] = 0;
 	}
 	
 	return map;

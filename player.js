@@ -4,6 +4,7 @@
 
 var projectileSpeed = 10;
 var projectileLife = 20;
+var costToShoot = 10;
 
 var Player = function(){
 	this.sp = new PIXI.Sprite(PIXI.Texture.fromImage("images/circle.png"));
@@ -20,15 +21,17 @@ Map.prototype.Player = function(){
 };
 
 Player.prototype.shootPlasma = function(){
-	var temp = new PIXI.Sprite(PIXI.Texture.fromImage("images/plasma.png"));
-	Object.defineProperty(temp, 'direction', {value: this.facing});
-	Object.defineProperty(temp, 'time', {value: projectileLife, writable: true});
-	temp.position.x = this.sp.position.x;
-	temp.position.y = this.sp.position.y;
-	stage.addChild(temp);
-	this.projectiles.push(temp);
-	this.health -= 10;
-	if(this.health <= 0) gameOver();
+	if(this.health > costToShoot){
+		var temp = new PIXI.Sprite(PIXI.Texture.fromImage("images/plasma.png"));
+		Object.defineProperty(temp, 'direction', {value: this.facing});
+		Object.defineProperty(temp, 'time', {value: projectileLife, writable: true});
+		temp.position.x = this.sp.position.x;
+		temp.position.y = this.sp.position.y;
+		stage.addChild(temp);
+		this.projectiles.push(temp);
+		this.health -= costToShoot;
+	}
+	
 };
 
 Player.prototype.update = function(space){

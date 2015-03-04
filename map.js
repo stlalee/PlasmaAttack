@@ -14,7 +14,10 @@ var Map = function(level){
 	this.allies = [];
 	this.mapA = [];
 	this.items = [];
-	this.enemyCount = 10;
+	this.spawners = [];
+	this.enemiesToKill = 5;
+	this.enemiesToSpawn = 5;
+	this.maxEnemies = 2;
 	
 	
 	for(i = 0; i < level.length; i++){
@@ -26,9 +29,13 @@ var Map = function(level){
 			if(level[i][j] == 1){
 				this.mapA[i].push(new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg")));
 				Object.defineProperty(this.mapA[i][j], 'collision', {value: true});
+			}else if(level[i][j] == 2){
+				this.mapA[i].push(new PIXI.Sprite(PIXI.Texture.fromImage("images/assets/ground.png")));
+				Object.defineProperty(this.mapA[i][j], 'collision', {value: false});
 			}else{
 				this.mapA[i].push(new PIXI.Sprite(PIXI.Texture.fromImage("images/assets/ground.png")));
 				Object.defineProperty(this.mapA[i][j], 'collision', {value: false});
+				this.spawners.push(this.mapA[i][j]);
 			}
 			
 			this.mapA[i][j].position.x = i * spriteWidth;
@@ -111,6 +118,14 @@ Map.prototype.update = function(up, down, left, right){
 				pLocation = {x: i, y: j};
 				//this.mapA[i][j].visible = false;
 			}
+		}
+	}
+	
+	for(var i = 0; i < this.spawners.length; i++){
+		if(distance(player.sp.position, this.spawners[i].position) > 250 && this.agents.length < this.maxEnemies && this.enemiesToSpawn > 0){
+			this.agents.push(new Enemy(this.spawners[i].position.x, this.spawners[i].position.y));
+			this.enemiesToSpawn -= 1;
+			console.log(this.enemiesToSpawn);
 		}
 	}
 	
@@ -242,7 +257,8 @@ Map.prototype.update = function(up, down, left, right){
 				this.agents.splice(j, 1);
 				stage.removeChild(player.projectiles[i]);
 				player.projectiles.splice(i,1);
-				this.enemyCount -= 1;
+				this.enemiesToKill -= 1;
+				console.log(this.enemiesToKill);
 			}else{
 				if(left){
 					player.projectiles[i].position.x += playerSpeed; 
