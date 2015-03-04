@@ -20,9 +20,25 @@ var space = false;
 
 //first function called
 function initGame(){
-	stage = new PIXI.Stage(0xFFFFFF);
+	var interactive = true;
+	stage = new PIXI.Stage(0xFFFFFF, interactive);
 	renderer = new PIXI.WebGLRenderer(700, 700);//autoDetectRenderer(400, 300);
 	document.body.appendChild(renderer.view);
+	var startButton = new PIXI.Sprite(PIXI.Texture.fromImage("images/oldMan.png"));
+	startButton.position.x = 30;
+	startButton.position.y = 30;
+	startButton.interactive = true;
+	stage.addChild(startButton);
+	renderer.render(stage);
+	
+	startButton.mousedown = function(data){
+		stage.removeChild(startButton);
+		startGame();
+	};
+}
+	
+function startGame(){
+	console.log("gamestarted");
 	requestAnimFrame( update );
 	
 	map = new Map(levelChoice(1));
@@ -54,7 +70,7 @@ function update(){
 }
 
 function newGame(){
-	
+	console.log("poop");
 }
 
 function gameOver(){
