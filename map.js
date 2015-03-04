@@ -14,6 +14,7 @@ var Map = function(level){
 	this.allies = [];
 	this.mapA = [];
 	this.items = [];
+	this.enemyCount = 10;
 	
 	
 	for(i = 0; i < level.length; i++){
@@ -241,6 +242,7 @@ Map.prototype.update = function(up, down, left, right){
 				this.agents.splice(j, 1);
 				stage.removeChild(player.projectiles[i]);
 				player.projectiles.splice(i,1);
+				this.enemyCount -= 1;
 			}else{
 				if(left){
 					player.projectiles[i].position.x += playerSpeed; 

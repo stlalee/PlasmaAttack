@@ -6,6 +6,7 @@ var stage;
 var renderer;
 
 var map;
+var level = 1;
 var player;
 var enemy;
 
@@ -41,7 +42,7 @@ function startGame(){
 	console.log("gamestarted");
 	requestAnimFrame( update );
 	
-	map = new Map(levelChoice(1));
+	map = new Map(levelChoice(level));
 	player = new Player();
 	enemy = new Enemy(400,400);
 	map.agents.push(enemy);
@@ -64,19 +65,24 @@ function update(){
 	renderer.render(stage);
 	//console.log("update");
 	
-	/*if(gameOver()){
-		newGame();
-	}*/
+	if(youLost()){
+		resetGame();
+	}
+	if(youWon()){
+		level += 1;
+		resetGame();
+	}
 }
 
-function newGame(){
-	console.log("poop");
+function youWon(){
+	return (map.enemyCount < 1);
 }
 
-function gameOver(){
-	console.log("game over");
-	return false;
+function youLost(){
+	return (player.health < 1);
 }
+
+function resetGame(){}
 
 window.addEventListener('keydown', function(event) {
   	if(event.keyCode == 37) {
