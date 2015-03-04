@@ -10,51 +10,127 @@ var healthPackValue = 25;
 
 //creates new map based on level given
 var Map = function(level){
-	this.agents = [];
-	this.allies = [];
-	this.mapA = [];
-	this.items = [];
-	this.spawners = [];
-	this.enemiesToKill = 5;
-	this.enemiesToSpawn = 5;
-	this.maxEnemies = 2;
-	
-	
-	for(i = 0; i < level.length; i++){
-		this.mapA[i] = [];
-	}
-	
-	for(i = 0; i < level.length; i++){
-		for(j = 0; j < level[0].length; j++){
-			if(level[i][j] == 1){
-				this.mapA[i].push(new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg")));
-				Object.defineProperty(this.mapA[i][j], 'collision', {value: true});
-			}else if(level[i][j] == 2){
+	if(level == 1){
+		this.agents = [];
+		this.allies = [];
+		this.mapA = [];
+		this.items = [];
+		this.spawners = [];
+		this.enemiesToKill = 5;
+		this.enemiesToSpawn = 5;
+		this.maxEnemies = 2;
+		
+		for(var i = 0; i < 15; i++){
+			this.mapA.push([]);
+			for(var j = 0; j < 15; j++){
 				this.mapA[i].push(new PIXI.Sprite(PIXI.Texture.fromImage("images/assets/ground.png")));
 				Object.defineProperty(this.mapA[i][j], 'collision', {value: false});
-			}else{
-				this.mapA[i].push(new PIXI.Sprite(PIXI.Texture.fromImage("images/assets/ground.png")));
-				Object.defineProperty(this.mapA[i][j], 'collision', {value: false});
-				this.spawners.push(this.mapA[i][j]);
 			}
+		}
+		for(var i = 0; i < 15; i++){
+			this.mapA[0][i] = new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg"));
+			Object.defineProperty(this.mapA[0][i], 'collision', {value: true});
 			
-			this.mapA[i][j].position.x = i * spriteWidth;
-			this.mapA[i][j].position.y = j * spriteWidth;
+			this.mapA[14][i] = new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg"));
+			Object.defineProperty(this.mapA[14][i], 'collision', {value: true});
 			
-			if((i * spriteWidth) <= (renderer.width/2) && (i * spriteWidth) >= ((renderer.width/2) - spriteWidth) 
+			this.mapA[i][0] = new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg"));
+			Object.defineProperty(this.mapA[i][0], 'collision', {value: true});
+			
+			this.mapA[i][14] = new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg"));
+			Object.defineProperty(this.mapA[i][14], 'collision', {value: true});
+		}
+		//mapA[10][1] = 1;
+		this.mapA[10][1] = new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg"));
+		Object.defineProperty(this.mapA[10][1], 'collision', {value: true});
+		//mapA[10][2] = 1;
+		this.mapA[10][2] = new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg"));
+		Object.defineProperty(this.mapA[10][2], 'collision', {value: true});
+		//mapA[10][5] = 1;
+		this.mapA[10][5] = new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg"));
+		Object.defineProperty(this.mapA[10][5], 'collision', {value: true});
+		//mapA[10][6] = 1;
+		this.mapA[10][6] = new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg"));
+		Object.defineProperty(this.mapA[10][6], 'collision', {value: true});
+		//mapA[11][6] = 1;
+		this.mapA[11][6] = new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg"));
+		Object.defineProperty(this.mapA[11][6], 'collision', {value: true});
+		//mapA[12][6] = 1;
+		this.mapA[12][6] = new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg"));
+		Object.defineProperty(this.mapA[12][6], 'collision', {value: true});
+		//map[13][6] = 1;
+		this.mapA[13][6] = new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg"));
+		Object.defineProperty(this.mapA[13][6], 'collision', {value: true});
+		
+		//map[2][2] = 0;
+		this.mapA[2][2] = new PIXI.Sprite(PIXI.Texture.fromImage("images/assets/ground.png"));
+		Object.defineProperty(this.mapA[2][2], 'collision', {value: false});
+		this.spawners.push(this.mapA[2][2]);
+		//map[2][12] = 0;
+		this.mapA[2][12] = new PIXI.Sprite(PIXI.Texture.fromImage("images/assets/ground.png"));
+		Object.defineProperty(this.mapA[2][12], 'collision', {value: false});
+		this.spawners.push(this.mapA[2][12]);
+		
+		for(var i = 0; i < 15; i++){
+			for(var j = 0; j < 15; j++){
+				this.mapA[i][j].position.x = i * spriteWidth;
+				this.mapA[i][j].position.y = j * spriteWidth;
+				stage.addChild(this.mapA[i][j]);
+				if((i * spriteWidth) <= (renderer.width/2) && (i * spriteWidth) >= ((renderer.width/2) - spriteWidth) 
 											&& (j * spriteWidth) <= (renderer.height/2) && (j * spriteWidth) >= ((renderer.height/2) - spriteWidth)){
-				pLocation = {x: i, y: j};
+					pLocation = {x: i, y: j};
+				}
 			}
+		}
+		
+		this.items.push(new PIXI.Sprite(PIXI.Texture.fromImage("images/health pack.png")));
+		this.items[0].position.x = 200;
+		this.items[0].position.y = 400;
+		stage.addChild(this.items[0]);
+	}else if(level == 2){
+		this.agents = [];
+		this.allies = [];
+		this.mapA = [];
+		this.items = [];
+		this.spawners = [];
+		this.enemiesToKill = 1;
+		this.enemiesToSpawn = 1;
+		this.maxEnemies = 2;
+		
+		for(var i = 0; i < 5; i++){
+			this.mapA.push([]);
+			for(var j = 0; j < 5; j++){
+				this.mapA[i].push(new PIXI.Sprite(PIXI.Texture.fromImage("images/assets/ground.png")));
+				Object.defineProperty(this.mapA[i][j], 'collision', {value: false});
+			}
+		}
+		
+		for(var i = 0; i < 5; i++){
+			this.mapA[0][i] = new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg"));
+			Object.defineProperty(this.mapA[0][i], 'collision', {value: true});
 			
-			stage.addChild(this.mapA[i][j]);
-		}	
+			this.mapA[14][i] = new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg"));
+			Object.defineProperty(this.mapA[14][i], 'collision', {value: true});
+			
+			this.mapA[i][0] = new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg"));
+			Object.defineProperty(this.mapA[i][0], 'collision', {value: true});
+			
+			this.mapA[i][14] = new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg"));
+			Object.defineProperty(this.mapA[i][14], 'collision', {value: true});
+		}
+		
+		for(var i = 0; i < 5; i++){
+			for(var j = 0; j < 5; j++){
+				this.mapA[i][j].position.x = i * spriteWidth;
+				this.mapA[i][j].position.y = j * spriteWidth;
+				stage.addChild(this.mapA[i][j]);
+				if((i * spriteWidth) <= (renderer.width/2) && (i * spriteWidth) >= ((renderer.width/2) - spriteWidth) 
+											&& (j * spriteWidth) <= (renderer.height/2) && (j * spriteWidth) >= ((renderer.height/2) - spriteWidth)){
+					pLocation = {x: i, y: j};
+				}
+			}
+		}
 	}
-	
-	this.items.push(new PIXI.Sprite(PIXI.Texture.fromImage("images/health pack.png")));
-	this.items[0].position.x = 200;
-	this.items[0].position.y = 400;
-	stage.addChild(this.items[0]);
-	console.log("new map created");
 };
 
 Map.prototype.test = function(){

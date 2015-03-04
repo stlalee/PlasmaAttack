@@ -7,6 +7,7 @@ var renderer;
 
 var map;
 var level = 1;
+var numOfLvls = 2;
 var player;
 var enemy;
 
@@ -42,7 +43,7 @@ function startGame(){
 	console.log("gamestarted");
 	requestAnimFrame( update );
 	
-	map = new Map(levelChoice(level));
+	map = new Map(level);
 	player = new Player();
 	
 	healthMeter = new PIXI.Text(player.health);
@@ -64,11 +65,10 @@ function update(){
 	//console.log("update");
 	
 	if(youLost()){
-		resetGame();
+		looseScreen();
 	}
 	if(youWon()){
-		level += 1;
-		resetGame();
+		winScreen();
 	}
 }
 
@@ -83,6 +83,42 @@ function youLost(){
 function resetGame(){
 	console.log("resetGame");
 }
+
+function looseScreen(){
+	var resetButton = new PIXI.Sprite(PIXI.Texture.fromImage("images/oldMan.png"));
+	resetButton.position.x = 30;
+	resetButton.position.y = 30;
+	resetButton.interactive = true;
+	stage.addChild(resetButton);
+	
+	resetButton.mousedown = function(data){
+		stage.removeChild(resetButton);
+		resetGame();
+	};
+	
+}
+
+function winScreen(){
+	var resetButton = new PIXI.Sprite(PIXI.Texture.fromImage("images/oldMan.png"));
+	resetButton.position.x = 30;
+	resetButton.position.y = 30;
+	resetButton.interactive = true;
+	stage.addChild(resetButton);
+	
+	resetButton.mousedown = function(data){
+		stage.removeChild(resetButton);
+		if(level == numOfLvls){
+			winGame();
+		}else{
+			level += 1;
+			resetGame();
+		}
+	};
+}
+
+function winGame(){
+	console.log("winGame");
+};
 
 window.addEventListener('keydown', function(event) {
   	if(event.keyCode == 37) {
@@ -132,33 +168,3 @@ window.addEventListener('keyup', function(event) {
     	//console.log("space");
     }
 }, false);
-
-function levelChoice(x){
-	var map = [];
-	if(x == 1){
-		for(var i = 0; i < 15; i++){
-			map.push([]);
-			for(var j = 0; j < 15; j++){
-				map[i][j] = 2;
-			}
-		}
-		for(var i = 0; i < 15; i++){
-			map[0][i] = 1;
-			map[14][i] = 1;
-			map[i][0] = 1;
-			map[i][14] = 1;
-		}
-		map[10][1] = 1;
-		map[10][2] = 1;
-		map[10][5] = 1;
-		map[10][6] = 1;
-		map[11][6] = 1;
-		map[12][6] = 1;
-		map[13][6] = 1;
-		
-		map[2][2] = 0;
-		map[2][12] = 0;
-	}
-	
-	return map;
-}
