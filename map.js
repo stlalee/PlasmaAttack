@@ -97,30 +97,30 @@ var Map = function(level){
 		this.enemiesToSpawn = 1;
 		this.maxEnemies = 2;
 		
-		for(var i = 0; i < 5; i++){
+		for(var i = 0; i < 10; i++){
 			this.mapA.push([]);
-			for(var j = 0; j < 5; j++){
+			for(var j = 0; j < 10; j++){
 				this.mapA[i].push(new PIXI.Sprite(PIXI.Texture.fromImage("images/assets/ground.png")));
 				Object.defineProperty(this.mapA[i][j], 'collision', {value: false});
 			}
 		}
 		
-		for(var i = 0; i < 5; i++){
+		for(var i = 0; i < 10; i++){
 			this.mapA[0][i] = new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg"));
 			Object.defineProperty(this.mapA[0][i], 'collision', {value: true});
 			
-			this.mapA[14][i] = new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg"));
-			Object.defineProperty(this.mapA[14][i], 'collision', {value: true});
+			this.mapA[9][i] = new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg"));
+			Object.defineProperty(this.mapA[9][i], 'collision', {value: true});
 			
 			this.mapA[i][0] = new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg"));
 			Object.defineProperty(this.mapA[i][0], 'collision', {value: true});
 			
-			this.mapA[i][14] = new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg"));
-			Object.defineProperty(this.mapA[i][14], 'collision', {value: true});
+			this.mapA[i][9] = new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg"));
+			Object.defineProperty(this.mapA[i][9], 'collision', {value: true});
 		}
 		
-		for(var i = 0; i < 5; i++){
-			for(var j = 0; j < 5; j++){
+		for(var i = 0; i < 10; i++){
+			for(var j = 0; j < 10; j++){
 				this.mapA[i][j].position.x = i * spriteWidth;
 				this.mapA[i][j].position.y = j * spriteWidth;
 				stage.addChild(this.mapA[i][j]);
