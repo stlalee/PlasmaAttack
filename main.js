@@ -11,6 +11,8 @@ var numOfLvls = 2;
 var player;
 var enemy;
 
+var inMenu = true;
+
 var healthMeter;
 //var params = {font:"bold 4px Arial", fill: "#444444"};
 
@@ -52,6 +54,8 @@ function startGame(){
 	healthMeter.position.x = 50;
 	healthMeter.position.y = 50;
 	stage.addChild(healthMeter);
+	
+	inMenu = false;
 }
 
 //called every frame
@@ -64,10 +68,12 @@ function update(){
 	renderer.render(stage);
 	//console.log("update");
 	
-	if(youLost()){
+	if(youLost() && !(inMenu)){
+		inMenu = true;
 		looseScreen();
 	}
-	if(youWon()){
+	if(youWon() && !(inMenu)){
+		inMenu = true;
 		winScreen();
 	}
 }
@@ -83,7 +89,7 @@ function youLost(){
 function resetGame(){
 	map.removeMap();
 	map = new Map(level);
-	player = new Player()
+	player = new Player();
 	console.log("resetGame");
 }
 

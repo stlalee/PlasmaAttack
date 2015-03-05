@@ -93,8 +93,8 @@ var Map = function(level){
 		this.mapA = [];
 		this.items = [];
 		this.spawners = [];
-		this.enemiesToKill = 1;
-		this.enemiesToSpawn = 1;
+		this.enemiesToKill = 10;
+		this.enemiesToSpawn = 10;
 		this.maxEnemies = 2;
 		
 		for(var i = 0; i < 10; i++){
