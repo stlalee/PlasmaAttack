@@ -81,6 +81,9 @@ function youLost(){
 }
 
 function resetGame(){
+	map.removeMap();
+	map = new Map(level);
+	player = new Player()
 	console.log("resetGame");
 }
 
@@ -95,7 +98,6 @@ function looseScreen(){
 		stage.removeChild(resetButton);
 		resetGame();
 	};
-	
 }
 
 function winScreen(){

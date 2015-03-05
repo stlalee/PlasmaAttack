@@ -133,6 +133,24 @@ var Map = function(level){
 	}
 };
 
+Map.prototype.removeMap = function(){
+	for(var i = 0; i < this.items.length; i++){
+		stage.removeChild(this.items[i]);
+	}
+	for(var i = 0; i < this.agents.length; i++){
+		stage.removeChild(this.agents[i]);
+	}
+	for(var i = 0; i < this.allies.length; i++){
+		stage.removeChild(this.allies[i].sp);
+	}
+	for(var i = 0; i < this.mapA.length; i++){
+		for(var j = 0; j < this.mapA[i].length; j++){
+			stage.removeChild(this.mapA[i][j]);
+		}
+	}
+	console.log("remove map");
+}
+
 Map.prototype.test = function(){
 	console.log("map.test");
 };
@@ -201,7 +219,7 @@ Map.prototype.update = function(up, down, left, right){
 		if(distance(player.sp.position, this.spawners[i].position) > 250 && this.agents.length < this.maxEnemies && this.enemiesToSpawn > 0){
 			this.agents.push(new Enemy(this.spawners[i].position.x, this.spawners[i].position.y));
 			this.enemiesToSpawn -= 1;
-			console.log(this.enemiesToSpawn);
+			//console.log(this.enemiesToSpawn);
 		}
 	}
 	
@@ -334,7 +352,7 @@ Map.prototype.update = function(up, down, left, right){
 				stage.removeChild(player.projectiles[i]);
 				player.projectiles.splice(i,1);
 				this.enemiesToKill -= 1;
-				console.log(this.enemiesToKill);
+				//console.log(this.enemiesToKill);
 			}else{
 				if(left){
 					player.projectiles[i].position.x += playerSpeed; 
