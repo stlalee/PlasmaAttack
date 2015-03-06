@@ -97,50 +97,56 @@ var astar = {
         var d2 = Math.abs (pos1.y - pos0.y);
         return d1 + d2;
     },
+    canWalkHere: function(mapA, x, y){
+	//return !(getTile(x,y).collision);
+	return ((mapA[x] != null) &&
+			(mapA[x][y] != null) &&
+			!mapA[x][y].collision);
+	},
     neighbors: function(grid, node, diagonals) {
         var ret = [];
         var x = node.x;
         var y = node.y;
  
         // West
-        if(grid[x-1] && grid[x-1][y]) {
+        if(canWalkHere(grid,x-1,y)) {
             ret.push(grid[x-1][y]);
         }
  
         // East
-        if(grid[x+1] && grid[x+1][y]) {
+        if(canWalkHere(grid,x+1,y)) {
             ret.push(grid[x+1][y]);
         }
  
         // South
-        if(grid[x] && grid[x][y-1]) {
+        if(canWalkHere(grid,x,y-1)) {
             ret.push(grid[x][y-1]);
         }
  
         // North
-        if(grid[x] && grid[x][y+1]) {
+        if(canWalkHere(grid,x,y+1)) {
             ret.push(grid[x][y+1]);
         }
  
         if (diagonals) {
  
             // Southwest
-            if(grid[x-1] && grid[x-1][y-1]) {
+            if(canWalkHere(grid,x-1,y-1)) {
                 ret.push(grid[x-1][y-1]);
             }
  
             // Southeast
-            if(grid[x+1] && grid[x+1][y-1]) {
+            if(canWalkHere(grid,x+1,y-1)) {
                 ret.push(grid[x+1][y-1]);
             }
  
             // Northwest
-            if(grid[x-1] && grid[x-1][y+1]) {
+            if(canWalkHere(grid,x-1,y+1)) {
                 ret.push(grid[x-1][y+1]);
             }
  
             // Northeast
-            if(grid[x+1] && grid[x+1][y+1]) {
+            if(canWalkHere(grid,x+1,y+1)) {
                 ret.push(grid[x+1][y+1]);
             }
  
