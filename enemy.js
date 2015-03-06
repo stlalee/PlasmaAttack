@@ -57,4 +57,7 @@ Enemy.prototype.followPath = function(path){
 	//path should be a list of nodes
 	
 	this.currentPath = path;
+	if(path.length > 0){
+		console.log("real path!");
+	}
 };

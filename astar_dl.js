@@ -197,48 +197,47 @@ Graph.prototype.neighbors = function(node) {
         grid = this.grid;
 
     // West
-    if(canWalkHere(grid,x-1,y)) {
+    if(grid[x-1] && grid[x-1][y]) {
         ret.push(grid[x-1][y]);
     }
- 
+
     // East
-    if(canWalkHere(grid,x+1,y)) {
+    if(grid[x+1] && grid[x+1][y]) {
         ret.push(grid[x+1][y]);
     }
- 
+
     // South
-    if(canWalkHere(grid,x,y-1)) {
+    if(grid[x] && grid[x][y-1]) {
         ret.push(grid[x][y-1]);
     }
- 
+
     // North
-    if(canWalkHere(grid,x,y+1)) {
+    if(grid[x] && grid[x][y+1]) {
         ret.push(grid[x][y+1]);
     }
- 
+
     if (this.diagonal) {
- 
-            // Southwest
-        if(canWalkHere(grid,x-1,y-1)) {
+        // Southwest
+        if(grid[x-1] && grid[x-1][y-1]) {
             ret.push(grid[x-1][y-1]);
         }
-	 
+
         // Southeast
-	    if(canWalkHere(grid,x+1,y-1)) {
-	        ret.push(grid[x+1][y-1]);
-	    }
- 
+        if(grid[x+1] && grid[x+1][y-1]) {
+            ret.push(grid[x+1][y-1]);
+        }
+
         // Northwest
-        if(canWalkHere(grid,x-1,y+1)) {
+        if(grid[x-1] && grid[x-1][y+1]) {
             ret.push(grid[x-1][y+1]);
         }
- 
+
         // Northeast
-        if(canWalkHere(grid,x+1,y+1)) {
+        if(grid[x+1] && grid[x+1][y+1]) {
             ret.push(grid[x+1][y+1]);
         }
- 
     }
+
     return ret;
 };
 

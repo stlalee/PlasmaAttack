@@ -339,20 +339,19 @@ Map.prototype.update = function(up, down, left, right){
 		}
 		
 		//player is in enemy sight/earshot/whatever
-		if(distance(player.sp.position, this.agents[i].sp.position) < 1500){
+		if(distance(player.sp.position, this.agents[i].sp.position) < 2000){
 			//does the enemy already have a path?
+			var blah = new Graph(this.mapA);
 			if(this.agents[i].currentPath.length == 0){
 				//no, so give it one
-				var path = astar.search(this.mapA,
+				var path = astar.search(blah,
 		   						 getTile(this.mapA, this.agents[i].sp.position.x,
 		   							 this.agents[i].sp.position.y), 
 		   				 	 	 getTile(this.mapA, player.sp.position.x,
 		   				 			 player.sp.position.y),
-		   				     	 true,
-		   				     	 distance);
-		   				     	 
-				this.agents[i].followPath(path);
-				console.log(this.agents[i] + "should be following" + path);
+		   				     	 {heuristic: astar.heuristics.diagonal});
+		   		if(path.length > 0) this.agents[i].followPath(path);
+				//console.log(this.agents[i]);
 			} else {
 				//agent has a path, try to follow it
 				var nextPoint = this.agents[i].currentPath[0];
