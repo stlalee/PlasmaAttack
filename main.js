@@ -50,6 +50,7 @@ function startGame(){
 	console.log("gamestarted");
 	requestAnimFrame( update );
 	
+	console.log(level);
 	map = new Map(level);
 	console.log("map loaded");
 	player = new Player();

@@ -343,7 +343,6 @@ Map.prototype.update = function(up, down, left, right){
 			//does the enemy already have a path?
 			if(this.agents[i].currentPath.length == 0){
 				//no, so give it one
-<<<<<<< Updated upstream
 				var path = astar.search(this.mapA,
 		   						 getTile(this.mapA, this.agents[i].sp.position.x,
 		   							 this.agents[i].sp.position.y), 
@@ -351,13 +350,7 @@ Map.prototype.update = function(up, down, left, right){
 		   				 			 player.sp.position.y),
 		   				     	 true,
 		   				     	 distance);
-=======
-				var path = findPath(this.mapA,
-		   					getTile(this.agents[i].sp.position.x,
-		   							 this.agents[i].sp.position.y), 
-		   				 	 getTile(player.sp.position.x,
-		   				 			 player.sp.position.y));
->>>>>>> Stashed changes
+		   				     	 
 				this.agents[i].followPath(path);
 				console.log(this.agents[i] + "should be following" + path);
 			} else {
