@@ -149,7 +149,7 @@ Map.prototype.removeMap = function(){
 		}
 	}
 	console.log("remove map");
-}
+};
 
 Map.prototype.test = function(){
 	console.log("map.test");
@@ -167,6 +167,7 @@ Map.prototype.update = function(up, down, left, right){
 			down = false;
 		}
 	}
+	
 	//checks left and right for collision
 	for(var i = pLocation.y - 1; i <= pLocation.y + 1; i++){
 		if(this.mapA[pLocation.x - 1][i].collision && scCollide(this.mapA[pLocation.x - 1][i], player.sp)){
@@ -215,8 +216,9 @@ Map.prototype.update = function(up, down, left, right){
 		}
 	}
 	
+	//spawn enemies
 	for(var i = 0; i < this.spawners.length; i++){
-		if(distance(player.sp.position, this.spawners[i].position) > 250 && this.agents.length < this.maxEnemies && this.enemiesToSpawn > 0){
+		if(/*distance(player.sp.position, this.spawners[i].position) > 250 &&*/ this.agents.length < this.maxEnemies && this.enemiesToSpawn > 0){
 			this.agents.push(new Enemy(this.spawners[i].position.x, this.spawners[i].position.y));
 			this.enemiesToSpawn -= 1;
 			//console.log(this.enemiesToSpawn);
@@ -341,8 +343,9 @@ Map.prototype.update = function(up, down, left, right){
 		}
 	}
 	
+	//check projectile collision with agents
 	for(var i = 0; i < player.projectiles.length; i++){
-		//check collision with agents
+		
 		for(var j = 0; j < this.agents.length; j++){
 			if(!this.agents.ally && cCollide(player.projectiles[i], this.agents[j].sp)){
 				this.allies.push(new Ally(this.agents[j].sp.position.x,this.agents[j].sp.position.y));
@@ -369,7 +372,8 @@ Map.prototype.update = function(up, down, left, right){
 			}
 		}
 	}
-	
+
+	//healthpack logic	
 	for(var i = 0; i < this.items.length; i++){
 		if(cCollide(this.items[i], player.sp)){
 			stage.removeChild(this.items[i]);
@@ -600,5 +604,4 @@ function scCollide(square, circle){
 	//console.log("false");
 	return false;
 }
-
 

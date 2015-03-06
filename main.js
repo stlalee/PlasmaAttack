@@ -2,6 +2,7 @@
  * @author Max Kerscher-Santelli
  */
 
+var interactive = true;
 var stage;
 var renderer;
 
@@ -24,21 +25,26 @@ var space = false;
 
 //first function called
 function initGame(){
-	var interactive = true;
+	console.log("initializing...");
 	stage = new PIXI.Stage(0xFFFFFF, interactive);
 	renderer = new PIXI.WebGLRenderer(700, 700);//autoDetectRenderer(400, 300);
 	document.body.appendChild(renderer.view);
+	
 	var startButton = new PIXI.Sprite(PIXI.Texture.fromImage("images/oldMan.png"));
+	
 	startButton.position.x = 30;
 	startButton.position.y = 30;
 	startButton.interactive = true;
 	stage.addChild(startButton);
+	
 	renderer.render(stage);
 	
 	startButton.mousedown = function(data){
+		console.log("mouse clicked");
 		stage.removeChild(startButton);
 		startGame();
 	};
+	console.log("stage should be rendered");
 }
 	
 function startGame(){
@@ -46,10 +52,11 @@ function startGame(){
 	requestAnimFrame( update );
 	
 	map = new Map(level);
+	console.log("map loaded");
 	player = new Player();
+	console.log("player loaded");
 	
 	healthMeter = new PIXI.Text(player.health);
-	
 	healthMeter.anchor.x = 0.5;
 	healthMeter.position.x = 50;
 	healthMeter.position.y = 50;
@@ -70,7 +77,7 @@ function update(){
 	
 	if(youLost() && !(inMenu)){
 		inMenu = true;
-		looseScreen();
+		loseScreen();
 	}
 	if(youWon() && !(inMenu)){
 		inMenu = true;
@@ -79,7 +86,11 @@ function update(){
 }
 
 function youWon(){
-	return (map.enemiesToKill < 1);
+	if(map.enemiesToKill < 1) {
+		console.log("you win");
+		return true;	
+	}
+	return false;
 }
 
 function youLost(){
@@ -93,7 +104,7 @@ function resetGame(){
 	console.log("resetGame");
 }
 
-function looseScreen(){
+function loseScreen(){
 	var resetButton = new PIXI.Sprite(PIXI.Texture.fromImage("images/oldMan.png"));
 	resetButton.position.x = 30;
 	resetButton.position.y = 30;
