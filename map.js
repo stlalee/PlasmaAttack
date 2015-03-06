@@ -250,6 +250,7 @@ Map.prototype.update = function(up, down, left, right){
 	
 	//moves agents with(in) the map (currently just enemies, but in the future might also be allies?)
 	for(i = 0; i < this.agents.length; i++){
+		//move agents with the tiles
 		if(up){
 			this.agents[i].sp.position.y += playerSpeed;
 		}
@@ -264,13 +265,17 @@ Map.prototype.update = function(up, down, left, right){
 		}
 		
 		//stops offscreen enemies from being drawn
-		if(this.agents[i].sp.position.x < - spriteWidth || this.agents[i].sp.position.x > 700 || 
-									 	this.agents[i].sp.position.y < -spriteWidth || this.agents[i].sp.position.y > 700){
+		if(this.agents[i].sp.position.x < - spriteWidth 
+			|| this.agents[i].sp.position.x > 700 
+			|| this.agents[i].sp.position.y < -spriteWidth 
+			|| this.agents[i].sp.position.y > 700){
 			this.agents[i].sp.visible = false;
-		}else{
+		}
+		else {
 			this.agents[i].sp.visible = true;
 		}
 		
+		//player is in enemy sight
 		if(distance(player.sp.position, this.agents[i].sp.position) < 250){
 			/*
 			if(this.agents[i].currentPath == null){

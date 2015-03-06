@@ -31,9 +31,8 @@ function initGame(){
 	document.body.appendChild(renderer.view);
 	
 	var startButton = new PIXI.Sprite(PIXI.Texture.fromImage("images/oldMan.png"));
-	
-	startButton.position.x = 30;
-	startButton.position.y = 30;
+	startButton.position.x = 50;
+	startButton.position.y = 50;
 	startButton.interactive = true;
 	stage.addChild(startButton);
 	
@@ -68,21 +67,29 @@ function startGame(){
 //called every frame
 function update(){
 	requestAnimFrame( update );
-	player.update(space);
-	map.update(up, down, left, right);
-	space = false;
-	healthMeter.setText(player.health);
+	
+	if(!inMenu){
+		if(youLost()){
+			inMenu = true;
+			loseScreen();
+		}
+		if(youWon()){
+			inMenu = true;
+			winScreen();
+		}
+		
+		player.update(space);
+		map.update(up, down, left, right);
+		space = false;
+		healthMeter.setText(player.health);
+		
+	} else {
+		//in menu
+	}
 	renderer.render(stage);
 	//console.log("update");
 	
-	if(youLost() && !(inMenu)){
-		inMenu = true;
-		loseScreen();
-	}
-	if(youWon() && !(inMenu)){
-		inMenu = true;
-		winScreen();
-	}
+	
 }
 
 function youWon(){
@@ -102,6 +109,7 @@ function resetGame(){
 	map = new Map(level);
 	player = new Player();
 	console.log("resetGame");
+	inMenu = false;
 }
 
 function loseScreen(){
