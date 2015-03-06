@@ -12,7 +12,7 @@ var Enemy = function(x, y){
 	this.sp = new PIXI.Sprite(PIXI.Texture.fromImage("images/oldMan.png"));
 	this.sp.position.x = x;
 	this.sp.position.y = y;
-	this.currentPath = null;
+	this.currentPath = [];
 	stage.addChild(this.sp);
 };
 /*
