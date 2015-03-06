@@ -2,8 +2,8 @@
  * @author Connor McNeill
  */
 
-var projectileSpeed = 10;
-var projectileLife = 20;
+var projectileSpeed = 14;
+var projectileLife = 30;
 var costToShoot = 10;
 
 var Player = function(){
