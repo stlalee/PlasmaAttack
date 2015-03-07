@@ -6,10 +6,10 @@ var projectileSpeed = 14;
 var projectileLife = 30;
 var costToShoot = 10;
 
-var Player = function(){
+var Player = function(x, y){
 	this.sp = new PIXI.Sprite(PIXI.Texture.fromImage("images/circle.png"));
-	this.sp.position.x = 315;
-	this.sp.position.y = 315;
+	this.sp.position.x = x;
+	this.sp.position.y = y;
 	this.health = 100;
 	this.projectiles = [];
 	this.facing = "right";
@@ -39,8 +39,8 @@ Player.prototype.update = function(space){
 		this.shootPlasma();
 	}
 	for(var i = 0; i < this.projectiles.length; i++){
-		if(!(canWalkHere(map.mapA, getTile(this.projectiles[i].position.x, this.projectiles[i].position.y)[0], 
-									getTile(this.projectiles[i].position.x, this.projectiles[i].position.y)[1]))){
+		if(!(canWalkHere(map.mapA, getTile(map.mapA, this.projectiles[i].position.x, this.projectiles[i].position.y)[0], 
+									getTile(map.mapA, this.projectiles[i].position.x, this.projectiles[i].position.y)[1]))){
 			stage.removeChild(this.projectiles[i]);
 			this.projectiles.splice(i,1);
 			console.log("collided");

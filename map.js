@@ -2,7 +2,7 @@
  * @author Max Kerscher-Santelli
  */
 
-var spriteWidth = 150;
+var spriteWidth = 75;
 var pLocation;
 var playerSpeed = 10;
 var healthPackValue = 25;
@@ -20,118 +20,150 @@ var Map = function(level){
 		this.enemiesToSpawn = 5;
 		this.maxEnemies = 2;
 		
+		var map1 = [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+					[0,1,1,1,1,1,0,1,1,0,1,1,1,1,0],
+					[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+					[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+					[0,1,1,1,1,1,0,1,1,0,1,1,1,1,0],
+					[0,1,1,1,1,1,0,1,1,0,1,1,1,1,0],
+					[0,0,0,0,0,0,0,1,1,0,0,0,0,0,0],
+					[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+					[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+					[0,1,1,1,1,1,1,1,1,0,0,0,0,0,0],
+					[0,1,1,1,1,1,1,1,1,0,1,1,1,1,0],
+					[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+					[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+					[0,1,1,1,1,1,1,1,1,0,1,1,1,1,0],
+					[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]];
+					
+		for(var i=0; i<map1.length; i++){
+			this.mapA.push([]);
+			for(j=0; j<map1[i].length; j++){
+				if(map1[i][j] == 0){
+					//wall
+					var sp = new PIXI.Sprite(PIXI.Texture.fromImage("images/assets/ground tile.png"));
+					this.mapA[i].push(sp);
+					Object.defineProperty(this.mapA[i][j], 'isWall', {value: true});
+				} else {
+					var sp = new PIXI.Sprite(PIXI.Texture.fromImage("images/assets/ground.png"));
+					this.mapA[i].push(sp);
+					Object.defineProperty(this.mapA[i][j], 'isWall', {value: false});
+				}
+			}
+		}
+		/*			
 		for(var i = 0; i < 15; i++){
 			this.mapA.push([]);
 			for(var j = 0; j < 15; j++){
 				this.mapA[i].push(new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/purple/purple mid.png")));
-				Object.defineProperty(this.mapA[i][j], 'collision', {value: false});
+				Object.defineProperty(this.mapA[i][j], 'isWall', {value: false});
 			}
 		}
 		for(var i = 0; i < 15; i++){
 			this.mapA[0][i] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-			Object.defineProperty(this.mapA[0][i], 'collision', {value: true});
+			Object.defineProperty(this.mapA[0][i], 'isWall', {value: true});
 			
 			this.mapA[14][i] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-			Object.defineProperty(this.mapA[14][i], 'collision', {value: true});
+			Object.defineProperty(this.mapA[14][i], 'isWall', {value: true});
 			
 			this.mapA[i][0] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-			Object.defineProperty(this.mapA[i][0], 'collision', {value: true});
+			Object.defineProperty(this.mapA[i][0], 'isWall', {value: true});
 			
 			this.mapA[i][14] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-			Object.defineProperty(this.mapA[i][14], 'collision', {value: true});
+			Object.defineProperty(this.mapA[i][14], 'isWall', {value: true});
 		}
 		//top right room
 		this.mapA[8][1] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[8][1], 'collision', {value: true});
+		Object.defineProperty(this.mapA[8][1], 'isWall', {value: true});
 		//mapA[10][2] = 1;
 		this.mapA[8][2] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[8][2], 'collision', {value: true});
+		Object.defineProperty(this.mapA[8][2], 'isWall', {value: true});
 		//mapA[10][5] = 1;
 		this.mapA[8][5] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[8][5], 'collision', {value: true});
+		Object.defineProperty(this.mapA[8][5], 'isWall', {value: true});
 		//mapA[10][6] = 1;
 		this.mapA[8][6] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[8][6], 'collision', {value: true});
+		Object.defineProperty(this.mapA[8][6], 'isWall', {value: true});
 		//mapA[11][6] = 1;
 		this.mapA[9][6] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[9][6], 'collision', {value: true});
+		Object.defineProperty(this.mapA[9][6], 'isWall', {value: true});
 		//mapA[12][6] = 1;
 		this.mapA[10][6] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[10][6], 'collision', {value: true});
+		Object.defineProperty(this.mapA[10][6], 'isWall', {value: true});
 		//map[13][6] = 1;
 		this.mapA[11][6] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[11][6], 'collision', {value: true});
+		Object.defineProperty(this.mapA[11][6], 'isWall', {value: true});
 		this.mapA[12][6] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[12][6], 'collision', {value: true});
+		Object.defineProperty(this.mapA[12][6], 'isWall', {value: true});
 		this.mapA[13][6] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[13][6], 'collision', {value: true});
+		Object.defineProperty(this.mapA[13][6], 'isWall', {value: true});
 		
 		//bottom right
 		this.mapA[13][9] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[13][9], 'collision', {value: true});
+		Object.defineProperty(this.mapA[13][9], 'isWall', {value: true});
 		//mapA[10][2] = 1;
 		this.mapA[12][9] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[12][9], 'collision', {value: true});
+		Object.defineProperty(this.mapA[12][9], 'isWall', {value: true});
 		//mapA[10][2] = 1;
 		this.mapA[11][9] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[11][9], 'collision', {value: true});
+		Object.defineProperty(this.mapA[11][9], 'isWall', {value: true});
 		//mapA[10][2] = 1;
 		this.mapA[10][9] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[10][9], 'collision', {value: true});
+		Object.defineProperty(this.mapA[10][9], 'isWall', {value: true});
 		//mapA[10][2] = 1;
 		this.mapA[9][9] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[9][9], 'collision', {value: true});
+		Object.defineProperty(this.mapA[9][9], 'isWall', {value: true});
 		//mapA[10][2] = 1;
 		this.mapA[6][9] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[6][9], 'collision', {value: true});
+		Object.defineProperty(this.mapA[6][9], 'isWall', {value: true});
 		//mapA[10][2] = 1;
 		this.mapA[6][10] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[6][10], 'collision', {value: true});
+		Object.defineProperty(this.mapA[6][10], 'isWall', {value: true});
 		//mapA[10][2] = 1;
 		this.mapA[6][11] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[6][11], 'collision', {value: true});
+		Object.defineProperty(this.mapA[6][11], 'isWall', {value: true});
 		//mapA[10][2] = 1;
 		this.mapA[6][12] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[6][12], 'collision', {value: true});
+		Object.defineProperty(this.mapA[6][12], 'isWall', {value: true});
 		//mapA[10][2] = 1;
 		this.mapA[6][13] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[6][13], 'collision', {value: true});
+		Object.defineProperty(this.mapA[6][13], 'isWall', {value: true});
 		
 		//top left
 		this.mapA[5][1] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[5][1], 'collision', {value: true});
+		Object.defineProperty(this.mapA[5][1], 'isWall', {value: true});
 		//mapA[10][2] = 1;
 		this.mapA[5][2] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[5][2], 'collision', {value: true});
+		Object.defineProperty(this.mapA[5][2], 'isWall', {value: true});
 		//mapA[10][5] = 1;
 		this.mapA[5][5] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[5][5], 'collision', {value: true});
+		Object.defineProperty(this.mapA[5][5], 'isWall', {value: true});
 		//mapA[10][6] = 1;
 		this.mapA[5][6] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[5][6], 'collision', {value: true});
+		Object.defineProperty(this.mapA[5][6], 'isWall', {value: true});
 		//mapA[11][6] = 1;
 		this.mapA[4][6] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[4][6], 'collision', {value: true});
+		Object.defineProperty(this.mapA[4][6], 'isWall', {value: true});
 		//mapA[12][6] = 1;
 		this.mapA[3][6] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[3][6], 'collision', {value: true});
+		Object.defineProperty(this.mapA[3][6], 'isWall', {value: true});
 		//map[13][6] = 1;
 		this.mapA[2][6] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[2][6], 'collision', {value: true});
+		Object.defineProperty(this.mapA[2][6], 'isWall', {value: true});
 		this.mapA[1][6] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[1][6], 'collision', {value: true});
-		
+		Object.defineProperty(this.mapA[1][6], 'isWall', {value: true});
+		*/
 		//map[2][2] = 0;
-		this.mapA[12][12] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/purple/purple mid.png"));
-		Object.defineProperty(this.mapA[12][12], 'collision', {value: false});
+		this.mapA[12][12] = new PIXI.Sprite(PIXI.Texture.fromImage("images/assets/wooden tile copy.png"));
+		Object.defineProperty(this.mapA[12][12], 'isWall', {value: false});
 		this.spawners.push(this.mapA[12][12]);
 		//map[2][12] = 0;
-		this.mapA[2][12] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/purple/purple mid.png"));
-		Object.defineProperty(this.mapA[2][12], 'collision', {value: false});
+		this.mapA[2][12] = new PIXI.Sprite(PIXI.Texture.fromImage("images/assets/wooden tile copy.png"));
+		Object.defineProperty(this.mapA[2][12], 'isWall', {value: false});
 		this.spawners.push(this.mapA[2][12]);
 		//map[2][12] = 0;
-		this.mapA[12][3] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/purple/purple mid.png"));
-		Object.defineProperty(this.mapA[12][3], 'collision', {value: false});
+		this.mapA[12][3] = new PIXI.Sprite(PIXI.Texture.fromImage("images/assets/wooden tile copy.png"));
+		Object.defineProperty(this.mapA[12][3], 'isWall', {value: false});
 		this.spawners.push(this.mapA[12][3]);
 		
 		for(var i = 0; i < 15; i++){
@@ -164,22 +196,22 @@ var Map = function(level){
 			this.mapA.push([]);
 			for(var j = 0; j < 10; j++){
 				this.mapA[i].push(new PIXI.Sprite(PIXI.Texture.fromImage("images/assets/ground.png")));
-				Object.defineProperty(this.mapA[i][j], 'collision', {value: false});
+				Object.defineProperty(this.mapA[i][j], 'isWall', {value: false});
 			}
 		}
 		
 		for(var i = 0; i < 10; i++){
 			this.mapA[0][i] = new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg"));
-			Object.defineProperty(this.mapA[0][i], 'collision', {value: true});
+			Object.defineProperty(this.mapA[0][i], 'isWall', {value: true});
 			
 			this.mapA[9][i] = new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg"));
-			Object.defineProperty(this.mapA[9][i], 'collision', {value: true});
+			Object.defineProperty(this.mapA[9][i], 'isWall', {value: true});
 			
 			this.mapA[i][0] = new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg"));
-			Object.defineProperty(this.mapA[i][0], 'collision', {value: true});
+			Object.defineProperty(this.mapA[i][0], 'isWall', {value: true});
 			
 			this.mapA[i][9] = new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg"));
-			Object.defineProperty(this.mapA[i][9], 'collision', {value: true});
+			Object.defineProperty(this.mapA[i][9], 'isWall', {value: true});
 		}
 		
 		for(var i = 0; i < 10; i++){
@@ -194,6 +226,7 @@ var Map = function(level){
 			}
 		}
 	}
+	console.log(this.mapA);
 };
 
 Map.prototype.removeMap = function(){
@@ -223,21 +256,21 @@ Map.prototype.update = function(up, down, left, right){
 	
 	//check up and down for collision
 	for(var i = pLocation.x - 1; i <= pLocation.x + 1; i++){
-		if(this.mapA[i][pLocation.y - 1].collision && scCollide(this.mapA[i][pLocation.y - 1], player.sp)){
+		if(this.mapA[i][pLocation.y - 1].isWall && scCollide(this.mapA[i][pLocation.y - 1], player.sp)){
 			up = false;
 		}
-		if(this.mapA[i][pLocation.y + 1].collision && scCollide(this.mapA[i][pLocation.y + 1], player.sp)){
+		if(this.mapA[i][pLocation.y + 1].isWall && scCollide(this.mapA[i][pLocation.y + 1], player.sp)){
 			down = false;
 		}
 	}
 	
 	//checks left and right for collision
 	for(var i = pLocation.y - 1; i <= pLocation.y + 1; i++){
-		if(this.mapA[pLocation.x - 1][i].collision && scCollide(this.mapA[pLocation.x - 1][i], player.sp)){
+		if(this.mapA[pLocation.x - 1][i].isWall && scCollide(this.mapA[pLocation.x - 1][i], player.sp)){
 			//console.log("left");
 			left = false;
 		}
-		if(this.mapA[pLocation.x + 1][i].collision && scCollide(this.mapA[pLocation.x + 1][i], player.sp)){
+		if(this.mapA[pLocation.x + 1][i].isWall && scCollide(this.mapA[pLocation.x + 1][i], player.sp)){
 			right = false;
 		}
 	}
@@ -262,7 +295,7 @@ Map.prototype.update = function(up, down, left, right){
 				this.mapA[i][j].position.x += playerSpeed;
 			}
 			
-			//stops onscreen tiles from being drawn
+			//stops offscreen tiles from being drawn
 			if(this.mapA[i][j].position.x < - spriteWidth || this.mapA[i][j].position.x > 700 || 
 											this.mapA[i][j].position.y < - spriteWidth || this.mapA[i][j].position.y > 700){
 				this.mapA[i][j].visible = false;
@@ -339,30 +372,37 @@ Map.prototype.update = function(up, down, left, right){
 		}
 		
 		//player is in enemy sight/earshot/whatever
-		if(distance(player.sp.position, this.agents[i].sp.position) < 2000){
+		if(distance(player.sp.position, this.agents[i].sp.position) < 700){
 			//does the enemy already have a path?
 			var blah = new Graph(this.mapA);
+			//console.log(blah);
 			if(this.agents[i].currentPath.length == 0){
 				//no, so give it one
-				var path = astar.search(blah,
-		   						 getTile(this.mapA, this.agents[i].sp.position.x,
-		   							 this.agents[i].sp.position.y), 
-		   				 	 	 getTile(this.mapA, player.sp.position.x,
-		   				 			 player.sp.position.y),
-		   				     	 {heuristic: astar.heuristics.diagonal});
-		   		if(path.length > 0) this.agents[i].followPath(path);
-				//console.log(this.agents[i]);
+				updatePath(this.mapA, player, this.agents[i], blah);
 			} else {
 				//agent has a path, try to follow it
-				var nextPoint = this.agents[i].currentPath[0];
-				nextPoint.x *= spriteWidth;
-				nextPoint.y *= spriteWidth;
+				console.log(this.agents[i].currentPath);
+				var pth = this.agents[i].currentPath;
+				//path is not updated enough
+				if(distance(pth[pth.length-1], getTile(this.mapA, player.sp.position.x, player.sp.position.y)) > spriteWidth/2){
+					updatePath(this.mapA, player, this.agents[i], blah);
+				}
+				
+				
+				var nextX = this.agents[i].currentPath[0].x * spriteWidth;
+				var nextY = this.agents[i].currentPath[0].y * spriteWidth;
+				var nextPoint = new Object();
+				nextPoint.x = nextX;
+				nextPoint.y = nextY;
 				var curPos = this.agents[i].sp.position;
-				if(distance(nextPoint, curPos) < spriteWidth*1.5){
+				
+				console.log(nextPoint, curPos, distance(nextPoint, curPos));
+				if(distance(nextPoint, curPos) < spriteWidth){
 					//close enough
 					console.log("removing " + nextPoint);
 					this.agents[i].currentPath.shift();
 				} else {
+					console.log("moving towards" + nextPoint);
 					if(nextPoint.x - curPos.x > 0){
 						this.agents[i].sp.position.x += 3;
 					}
@@ -383,6 +423,7 @@ Map.prototype.update = function(up, down, left, right){
 			this.agents[i].currentPath = [];
 		}
 	}
+	console.log(this.agents);
 	
 	//naive collision check with enemies, take hit if colliding
 	for(var i = 0; i < this.agents.length; i++){
@@ -474,7 +515,7 @@ function canWalkHere(mapA, x, y){
 	//return !(getTile(x,y).collision);
 	return ((mapA[x] != null) &&
 			(mapA[x][y] != null) &&
-			!mapA[x][y].collision);
+			!mapA[x][y].isWall);
 }
 
 //takes 2 sprites, assuming their circles, and checks for collision
@@ -539,4 +580,21 @@ function scCollide(square, circle){
 	
 	//console.log("false");
 	return false;
+}
+
+function updatePath(mapy, player, agent, graph){
+	var start = getTile(mapy, agent.sp.position.x,
+		   						   agent.sp.position.y);
+	start = graph.grid[start[0]][start[1]];
+	console.log(start);
+	var end = getTile(mapy, player.sp.position.x,
+			 			 player.sp.position.y);
+	end = graph.grid[end[0]][end[1]];
+	console.log(end);
+		   		
+	var path = astar.search(graph, start, end);
+	if(path.length > 0) {
+		agent.followPath(path);
+		console.log(path);
+	}
 }

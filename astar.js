@@ -60,10 +60,10 @@ var astar = {
         openHeap.push(start);
 
         while(openHeap.size() > 0) {
-
+			//console.log(openHeap);
             // Grab the lowest f(x) to process next.  Heap keeps this sorted for us.
             var currentNode = openHeap.pop();
-
+			
             // End case -- result has been found, return the traced path.
             if(currentNode === end) {
                 return pathTo(currentNode);
@@ -164,12 +164,13 @@ function Graph(gridIn, options) {
         this.grid[x] = [];
 
         for (var y = 0, row = gridIn[x]; y < row.length; y++) {
-            var node = new GridNode(x, y, row[y]);
+            var node = new GridNode(x, y, row[y].isWall);
             this.grid[x][y] = node;
             this.nodes.push(node);
         }
     }
     this.init();
+    //console.log(this.grid);
 }
 
 Graph.prototype.init = function() {
@@ -195,50 +196,49 @@ Graph.prototype.neighbors = function(node) {
         x = node.x,
         y = node.y,
         grid = this.grid;
-
     // West
-    if(canWalkHere(grid,x-1,y)) {
+    if(grid[x-1] && grid[x-1][y]) {
+    	//console.log(grid[x-1]);
         ret.push(grid[x-1][y]);
     }
- 
+
     // East
-    if(canWalkHere(grid,x+1,y)) {
+    if(grid[x+1] && grid[x+1][y]) {
         ret.push(grid[x+1][y]);
     }
- 
+
     // South
-    if(canWalkHere(grid,x,y-1)) {
+    if(grid[x] && grid[x][y-1]) {
         ret.push(grid[x][y-1]);
     }
- 
+
     // North
-    if(canWalkHere(grid,x,y+1)) {
+    if(grid[x] && grid[x][y+1]) {
         ret.push(grid[x][y+1]);
     }
- 
+
     if (this.diagonal) {
- 
-            // Southwest
-        if(canWalkHere(grid,x-1,y-1)) {
+        // Southwest
+        if(grid[x-1] && grid[x-1][y-1]) {
             ret.push(grid[x-1][y-1]);
         }
-	 
+
         // Southeast
-	    if(canWalkHere(grid,x+1,y-1)) {
-	        ret.push(grid[x+1][y-1]);
-	    }
- 
+        if(grid[x+1] && grid[x+1][y-1]) {
+            ret.push(grid[x+1][y-1]);
+        }
+
         // Northwest
-        if(canWalkHere(grid,x-1,y+1)) {
+        if(grid[x-1] && grid[x-1][y+1]) {
             ret.push(grid[x-1][y+1]);
         }
- 
+
         // Northeast
-        if(canWalkHere(grid,x+1,y+1)) {
+        if(grid[x+1] && grid[x+1][y+1]) {
             ret.push(grid[x+1][y+1]);
         }
- 
     }
+    //console.log(ret);
     return ret;
 };
 
@@ -260,7 +260,11 @@ Graph.prototype.toString = function() {
 function GridNode(x, y, weight) {
     this.x = x;
     this.y = y;
-    this.weight = weight;
+    if(weight == true){
+    	this.weight = 0;
+    } else {
+    	this.weight = 1;
+    }
 }
 
 GridNode.prototype.toString = function() {
@@ -277,6 +281,7 @@ GridNode.prototype.getCost = function(fromNeighbor) {
 
 GridNode.prototype.isWall = function() {
     return this.weight === 0;
+    //return this.weight;
 };
 
 function BinaryHeap(scoreFunction){

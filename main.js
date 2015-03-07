@@ -53,7 +53,7 @@ function startGame(){
 	console.log(level);
 	map = new Map(level);
 	console.log("map loaded");
-	player = new Player();
+	player = new Player(300,300);
 	console.log("player loaded");
 	
 	healthMeter = new PIXI.Text(player.health);
