@@ -278,6 +278,7 @@ Map.prototype.update = function(up, down, left, right){
 	//moves tiles
 	for(i = 0; i < this.mapA.length; i++){
 		for(j = 0; j < this.mapA[i].length; j++){
+			//moveObject(this.mapA, this.mapA[i][j].position, playerSpeed, down, up, right, left);
 			if(up){
 				player.facing = "up";
 				this.mapA[i][j].position.y += playerSpeed;
@@ -323,7 +324,8 @@ Map.prototype.update = function(up, down, left, right){
 	
 	//move allies
 	for(var i = 0; i < this.allies.length; i++){
-		if(up){
+		moveObject(this.mapA, this.allies[i].sp.position, playerSpeed, down, up, right, left);
+		/*if(up){
 			this.allies[i].sp.position.y += playerSpeed;
 		}
 		if(down){
@@ -334,7 +336,7 @@ Map.prototype.update = function(up, down, left, right){
 		}
 		if(left){
 			this.allies[i].sp.position.x += playerSpeed;
-		}
+		}*/
 		//stops offscreen allies from being drawn
 		if(this.allies[i].sp.position.x < - spriteWidth || this.allies[i].sp.position.x > 700 || 
 									 	this.allies[i].sp.position.y < -spriteWidth || this.allies[i].sp.position.y > 700){
@@ -347,7 +349,8 @@ Map.prototype.update = function(up, down, left, right){
 	//moves agents with(in) the map (currently just enemies, but in the future might also be allies?)
 	for(i = 0; i < this.agents.length; i++){
 		//move agents with the tiles
-		if(up){
+		moveObject(this.mapA, this.agents[i].sp.position, playerSpeed, down, up, right, left);
+		/*if(up){
 			this.agents[i].sp.position.y += playerSpeed;
 		}
 		if(down){
@@ -358,7 +361,7 @@ Map.prototype.update = function(up, down, left, right){
 		}
 		if(left){
 			this.agents[i].sp.position.x += playerSpeed;
-		}
+		}*/
 		
 		//stops offscreen enemies from being drawn
 		if(this.agents[i].sp.position.x < - spriteWidth 
@@ -392,8 +395,8 @@ Map.prototype.update = function(up, down, left, right){
 				var nextX = this.agents[i].currentPath[0].x * spriteWidth;
 				var nextY = this.agents[i].currentPath[0].y * spriteWidth;
 				var nextPoint = new Object();
-				nextPoint.x = nextX;
-				nextPoint.y = nextY;
+				nextPoint.x = nextX + spriteWidth/2;
+				nextPoint.y = nextY + spriteWidth/2;
 				var curPos = this.agents[i].sp.position;
 				
 				console.log(nextPoint, curPos, distance(nextPoint, curPos));
@@ -403,18 +406,30 @@ Map.prototype.update = function(up, down, left, right){
 					this.agents[i].currentPath.shift();
 				} else {
 					console.log("moving towards" + nextPoint);
+					
+					moveObject(this.mapA, this.agents[i].sp.position, 
+							3, 
+							(nextPoint.y - curPos.y < 0), 
+							(nextPoint.y - curPos.y > 0), 
+							(nextPoint.x - curPos.x < 0), 
+							(nextPoint.x - curPos.x > 0));
+					/*
 					if(nextPoint.x - curPos.x > 0){
+						//right
 						this.agents[i].sp.position.x += 3;
 					}
 					if(nextPoint.x - curPos.x < 0){
+						//left
 						this.agents[i].sp.position.x -= 3;
 					}
 					if(nextPoint.y - curPos.y > 0){
+						//down
 						this.agents[i].sp.position.y += 3;
 					}
 					if(nextPoint.y - curPos.y < 0){
+						//up
 						this.agents[i].sp.position.y -= 3;
-					}
+					}*/
 				}
 				
 			}
@@ -448,7 +463,8 @@ Map.prototype.update = function(up, down, left, right){
 				this.enemiesToKill -= 1;
 				//console.log(this.enemiesToKill);
 			}else{
-				if(left){
+				moveObject(this.mapA, player.projectiles[i].position, playerSpeed, down, up, right, left);
+				/*if(left){
 					player.projectiles[i].position.x += playerSpeed; 
 				}
 				if(right){
@@ -459,7 +475,7 @@ Map.prototype.update = function(up, down, left, right){
 				}
 				if(down){
 					player.projectiles[i].position.y -= playerSpeed;
-				}
+				}*/
 			}
 		}
 	}
@@ -473,7 +489,8 @@ Map.prototype.update = function(up, down, left, right){
 			continue;
 		}
 		
-		if(left){
+		moveObject(this.mapA, this.items[i].position, playerSpeed, down, up, right, left);
+		/*if(left){
 			this.items[i].position.x += playerSpeed; 
 		}
 		if(right){
@@ -484,7 +501,7 @@ Map.prototype.update = function(up, down, left, right){
 		}
 		if(down){
 			this.items[i].position.y -= playerSpeed;
-		}
+		}*/
 		//stops offscreen health pack from being drawn
 		if(this.items[i].position.x < - spriteWidth || this.items[i].position.x > 700 || 
 									 	this.items[i].position.y < -spriteWidth || this.items[i].position.y > 700){
@@ -500,22 +517,6 @@ Map.prototype.update = function(up, down, left, right){
 
 function distance(p1, p2){
 	return Math.sqrt(Math.pow(p1.x - p2.x, 2)+Math.pow(p1.y - p2.y,2));
-}
-
-//returns tile i,j
-function getTile(mapy, x, y){
-	var i = x - mapy[0][0].position.x;
-	i = Math.floor(i/spriteWidth);
-	var j = y - mapy[0][0].position.y;
-	j = Math.floor(j/spriteWidth);
-	return [i, j];
-}
-
-function canWalkHere(mapA, x, y){
-	//return !(getTile(x,y).collision);
-	return ((mapA[x] != null) &&
-			(mapA[x][y] != null) &&
-			!mapA[x][y].isWall);
 }
 
 //takes 2 sprites, assuming their circles, and checks for collision
@@ -582,13 +583,31 @@ function scCollide(square, circle){
 	return false;
 }
 
+//returns tile i,j
+function getTile(mapy, x, y){
+	var i = x - mapy[0][0].position.x;
+	i = Math.floor(i/spriteWidth);
+	var j = y - mapy[0][0].position.y;
+	j = Math.floor(j/spriteWidth);
+	return [i, j];
+}
+
+function canWalkHere(mapA, x, y){
+	//return !(getTile(x,y).collision);
+	return ((mapA[x] != null) &&
+			(mapA[x][y] != null) &&
+			!mapA[x][y].isWall);
+}
+
 function updatePath(mapy, player, agent, graph){
 	var start = getTile(mapy, agent.sp.position.x,
 		   						   agent.sp.position.y);
+	if(!start) {agent.followPath([]); return;}
 	start = graph.grid[start[0]][start[1]];
 	console.log(start);
 	var end = getTile(mapy, player.sp.position.x,
 			 			 player.sp.position.y);
+	if(!end) {agent.followPath([]); return;}
 	end = graph.grid[end[0]][end[1]];
 	console.log(end);
 		   		
@@ -596,5 +615,41 @@ function updatePath(mapy, player, agent, graph){
 	if(path.length > 0) {
 		agent.followPath(path);
 		console.log(path);
+	}
+}
+
+function moveObject(mapA, position, amount, up, down, left, right){
+	
+	tile = getTile(mapA, position.x, position.y);
+	py = position.y + amount;
+	my = position.y - amount;
+	px = position.x + amount;
+	mx = position.x - amount;
+	
+	dTile = getTile(mapA, position.x, py);
+	uTile = getTile(mapA, position.x, my);
+	rTile = getTile(mapA, px, position.y);
+	lTile = getTile(mapA, mx, position.y);
+	
+	if(!tile) return;
+	if(down){
+		if(py < mapA.length*spriteWidth
+			&& canWalkHere(mapA, dTile[0], dTile[1]))
+		position.y += amount;
+	}
+	if(up){
+		if(position.y - amount > 0
+			&& canWalkHere(mapA, uTile[0], uTile[1]))
+		position.y -= amount;
+	}
+	if(left){
+		if(position.x - amount > 0
+			&& canWalkHere(mapA, lTile[0], lTile[1]))
+		position.x -= amount;
+	}
+	if(right){
+		if(position.x + amount < mapA.length*spriteWidth
+			&& canWalkHere(mapA, rTile[0], rTile[1]))
+		position.x += amount;
 	}
 }
