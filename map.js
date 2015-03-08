@@ -389,6 +389,7 @@ Map.prototype.update = function(up, down, left, right){
 				   || !inBounds(this.mapA, pth[0].x, pth[0].y)){
 					console.log("path outdated");
 					updatePath(this.mapA, player, this.agents[i], blah);
+					continue;
 				}
 				
 				
@@ -401,10 +402,14 @@ Map.prototype.update = function(up, down, left, right){
 				
 				console.log(nextPoint, curPos, distance(nextPoint, curPos));
 				if(!canWalkPos(this.mapA, nextPoint.x, nextPoint.y)){
-					console.log("cant walk here (at nextPoint)", nextPoint, this.agents[i].currentPath[0]);
-					this.agents[i].followPath([]);
-					console.log("removing ", nextPoint, this.agents[i].currentPath[0]);
-					this.agents[i].currentPath.shift();
+					console.log("cant walk here (at nextPoint), getting new path", 
+								nextPoint, 
+								getTile(this.mapA, nextPoint.x, nextPoint.y), 
+								this.agents[i].currentPath[0]);
+					//this.agents[i].followPath([]);
+					//console.log("removing ", nextPoint, this.agents[i].currentPath[0]);
+					//this.agents[i].currentPath.shift();
+					updatePath(this.mapA, player, this.agents[i], blah);
 					continue;
 				} 
 				if (distance(nextPoint, curPos) < spriteWidth/2){
@@ -669,4 +674,9 @@ function inBounds(map, x, y){
 	return ( ((x < xmax) && (x > -1))
 			 || ((y < ymax) && (y > -1))
 			);
+	/*tile = getTile(map, x, y);
+	return ((tile[0] < map.length)
+			&& (tile[0] > -1)
+			&& (tile[1] < map[0].length)
+			&& (tile[1] > -1));*/
 }
