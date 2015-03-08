@@ -37,16 +37,17 @@ var Map = function(level){
 					[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]];
 					
 		for(var i=0; i<map1.length; i++){
-			this.mapA.push([]);
+			//this.mapA.push([]);
+			this.mapA[i] = [];
 			for(j=0; j<map1[i].length; j++){
 				if(map1[i][j] == 0){
 					//wall
 					var sp = new PIXI.Sprite(PIXI.Texture.fromImage("images/assets/ground tile.png"));
-					this.mapA[i].push(sp);
+					this.mapA[i][j] = sp;
 					Object.defineProperty(this.mapA[i][j], 'isWall', {value: true});
 				} else {
 					var sp = new PIXI.Sprite(PIXI.Texture.fromImage("images/assets/ground.png"));
-					this.mapA[i].push(sp);
+					this.mapA[i][j] = sp;
 					Object.defineProperty(this.mapA[i][j], 'isWall', {value: false});
 				}
 			}
@@ -324,8 +325,8 @@ Map.prototype.update = function(up, down, left, right){
 	
 	//move allies
 	for(var i = 0; i < this.allies.length; i++){
-		moveObject(this.mapA, this.allies[i].sp.position, playerSpeed, down, up, right, left);
-		/*if(up){
+		//moveObject(this.mapA, this.allies[i].sp.position, playerSpeed, down, up, right, left);
+		if(up){
 			this.allies[i].sp.position.y += playerSpeed;
 		}
 		if(down){
@@ -336,7 +337,7 @@ Map.prototype.update = function(up, down, left, right){
 		}
 		if(left){
 			this.allies[i].sp.position.x += playerSpeed;
-		}*/
+		}
 		//stops offscreen allies from being drawn
 		if(this.allies[i].sp.position.x < - spriteWidth || this.allies[i].sp.position.x > 700 || 
 									 	this.allies[i].sp.position.y < -spriteWidth || this.allies[i].sp.position.y > 700){
@@ -349,19 +350,17 @@ Map.prototype.update = function(up, down, left, right){
 	//moves agents with(in) the map (currently just enemies, but in the future might also be allies?)
 	for(i = 0; i < this.agents.length; i++){
 		//move agents with the tiles
-		moveObject(this.mapA, this.agents[i].sp.position, playerSpeed, down, up, right, left);
-		/*if(up){
+		//moveObject(this.mapA, this.agents[i].sp.position, playerSpeed, down, up, right, left);
+		if(up){
 			this.agents[i].sp.position.y += playerSpeed;
-		}
-		if(down){
+		} else if(down){
 			this.agents[i].sp.position.y -= playerSpeed;
 		}
 		if(right){
 			this.agents[i].sp.position.x -= playerSpeed;
-		}
-		if(left){
+		} else if(left){
 			this.agents[i].sp.position.x += playerSpeed;
-		}*/
+		}
 		
 		//stops offscreen enemies from being drawn
 		if(this.agents[i].sp.position.x < - spriteWidth 
@@ -377,7 +376,7 @@ Map.prototype.update = function(up, down, left, right){
 		//player is in enemy sight/earshot/whatever
 		if(distance(player.sp.position, this.agents[i].sp.position) < 700){
 			//does the enemy already have a path?
-			var blah = new Graph(this.mapA);
+			var blah = new Graph(this.mapA, {diagonal: true});
 			//console.log(blah);
 			if(this.agents[i].currentPath.length == 0){
 				//no, so give it one
@@ -387,7 +386,9 @@ Map.prototype.update = function(up, down, left, right){
 				console.log(this.agents[i].currentPath);
 				var pth = this.agents[i].currentPath;
 				//path is not updated enough
-				if(distance(pth[pth.length-1], getTile(this.mapA, player.sp.position.x, player.sp.position.y)) > spriteWidth/2){
+				if(distance(pth[pth.length-1], getTile(this.mapA, player.sp.position.x, player.sp.position.y)) > spriteWidth/2
+				   || !inBounds(this.mapA, pth[0].x, pth[0].y)){
+					console.log("path outdated");
 					updatePath(this.mapA, player, this.agents[i], blah);
 				}
 				
@@ -400,33 +401,39 @@ Map.prototype.update = function(up, down, left, right){
 				var curPos = this.agents[i].sp.position;
 				
 				console.log(nextPoint, curPos, distance(nextPoint, curPos));
-				if(distance(nextPoint, curPos) < spriteWidth){
+				/*if(!canWalkPos(this.mapA, nextPoint.x, nextPoint.y)){
+					console.log("cant walk here (at nextPoint)", nextPoint, this.agents[i].currentPath[0]);
+					this.agents[i].followPath([]);
+					
+				} */
+				if (distance(nextPoint, curPos) < spriteWidth/2){
 					//close enough
-					console.log("removing " + nextPoint);
+					console.log("removing ", nextPoint, this.agents[i].currentPath[0]);
 					this.agents[i].currentPath.shift();
 				} else {
-					console.log("moving towards" + nextPoint);
+					console.log("moving towards", nextPoint);
 					
 					moveObject(this.mapA, this.agents[i].sp.position, 
-							3, 
+							1, 
 							(nextPoint.y - curPos.y < 0), 
 							(nextPoint.y - curPos.y > 0), 
 							(nextPoint.x - curPos.x < 0), 
 							(nextPoint.x - curPos.x > 0));
+					
+					
+					
 					/*
 					if(nextPoint.x - curPos.x > 0){
 						//right
 						this.agents[i].sp.position.x += 3;
-					}
-					if(nextPoint.x - curPos.x < 0){
+					} else if(nextPoint.x - curPos.x < 0){
 						//left
 						this.agents[i].sp.position.x -= 3;
 					}
 					if(nextPoint.y - curPos.y > 0){
 						//down
 						this.agents[i].sp.position.y += 3;
-					}
-					if(nextPoint.y - curPos.y < 0){
+					} else if(nextPoint.y - curPos.y < 0){
 						//up
 						this.agents[i].sp.position.y -= 3;
 					}*/
@@ -592,6 +599,9 @@ function getTile(mapy, x, y){
 	return [i, j];
 }
 
+function getTileObj(mapy, obj){
+	return getTile(mapy, obj.x, obj.y);
+}
 function canWalkHere(mapA, x, y){
 	//return !(getTile(x,y).collision);
 	return ((mapA[x] != null) &&
@@ -599,6 +609,10 @@ function canWalkHere(mapA, x, y){
 			!mapA[x][y].isWall);
 }
 
+function canWalkPos(map, x, y){
+	tile = getTile(map, x, y);
+	return canWalkHere(map,tile[0],tile[1]);
+}
 function updatePath(mapy, player, agent, graph){
 	var start = getTile(mapy, agent.sp.position.x,
 		   						   agent.sp.position.y);
@@ -611,7 +625,10 @@ function updatePath(mapy, player, agent, graph){
 	end = graph.grid[end[0]][end[1]];
 	console.log(end);
 		   		
-	var path = astar.search(graph, start, end);
+	var path = astar.search(graph, start, end, { heuristic: astar.heuristics.diagonal });
+	for(i=0;i<path.length;i++){
+		if(!canWalkHere(mapy, path[i].x, path[i].y)) { console.log("bad path");return;}
+	}
 	if(path.length > 0) {
 		agent.followPath(path);
 		console.log(path);
@@ -621,35 +638,69 @@ function updatePath(mapy, player, agent, graph){
 function moveObject(mapA, position, amount, up, down, left, right){
 	
 	tile = getTile(mapA, position.x, position.y);
-	py = position.y + amount;
-	my = position.y - amount;
-	px = position.x + amount;
-	mx = position.x - amount;
 	
-	dTile = getTile(mapA, position.x, py);
-	uTile = getTile(mapA, position.x, my);
-	rTile = getTile(mapA, px, position.y);
-	lTile = getTile(mapA, mx, position.y);
+	//check up and down for collision
+	if(up || down){
+	for(var i = tile[0] - 1; i <= tile[0] + 1; i++){
+		if(mapA[i][tile[1] - 1].isWall && scCollide(mapA[i][tile[1] - 1], player.sp)){
+			up = false;
+		}
+		if(mapA[i][tile[1] + 1].isWall && scCollide(mapA[i][tile[1] + 1], player.sp)){
+			down = false;
+		}
+	}}
+	
+	//checks left and right for collision
+	if(left || right){
+	for(var i = tile[1] - 1; i <= tile[1] + 1; i++){
+		if(mapA[tile[0] - 1][i].isWall && scCollide(mapA[tile[0] - 1][i], player.sp)){
+			//console.log("left");
+			left = false;
+		}
+		if(mapA[tile[0] + 1][i].isWall && scCollide(mapA[tile[0] + 1][i], player.sp)){
+			right = false;
+		}
+	}}
+	
+	
 	
 	if(!tile) return;
 	if(down){
+		
+		py = position.y + amount;
+		dTile = getTile(mapA, position.x, py);
 		if(py < mapA.length*spriteWidth
 			&& canWalkHere(mapA, dTile[0], dTile[1]))
 		position.y += amount;
-	}
-	if(up){
+	} else if(up){
+		
+		my = position.y - amount;
+		uTile = getTile(mapA, position.x, my);
 		if(position.y - amount > 0
 			&& canWalkHere(mapA, uTile[0], uTile[1]))
 		position.y -= amount;
 	}
 	if(left){
+		
+		mx = position.x - amount;
+		lTile = getTile(mapA, mx, position.y);
 		if(position.x - amount > 0
 			&& canWalkHere(mapA, lTile[0], lTile[1]))
 		position.x -= amount;
-	}
-	if(right){
+	} else if(right){
+		
+		px = position.x + amount;
+		rTile = getTile(mapA, px, position.y);
 		if(position.x + amount < mapA.length*spriteWidth
 			&& canWalkHere(mapA, rTile[0], rTile[1]))
 		position.x += amount;
 	}
+}
+
+function inBounds(map, x, y){
+	xmax = map.length * spriteWidth;
+	ymax = map[0].length * spriteWidth;
+	return ( ((x < xmax) && (x > -1))
+			 || ((y < ymax) && (y > -1))
+			);
 }
