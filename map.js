@@ -34,8 +34,7 @@ var Map = function(level){
 					[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
 					[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
 					[0,1,1,1,1,1,1,1,1,0,1,1,1,1,0],
-					[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]];
-					
+					[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]];					
 		for(var i=0; i<map1.length; i++){
 			//this.mapA.push([]);
 			this.mapA[i] = [];
@@ -316,7 +315,7 @@ Map.prototype.update = function(up, down, left, right){
 	
 	//spawn enemies
 	for(var i = 0; i < this.spawners.length; i++){
-		if(/*distance(player.sp.position, this.spawners[i].position) > 250 &&*/ this.agents.length < this.maxEnemies && this.enemiesToSpawn > 0){
+		if(distance(player.sp.position, this.spawners[i].position) > 250 && this.agents.length < this.maxEnemies && this.enemiesToSpawn > 0){
 			this.agents.push(new Enemy(this.spawners[i].position.x, this.spawners[i].position.y));
 			this.enemiesToSpawn -= 1;
 			//console.log(this.enemiesToSpawn);
@@ -376,7 +375,7 @@ Map.prototype.update = function(up, down, left, right){
 		//player is in enemy sight/earshot/whatever
 		if(distance(player.sp.position, this.agents[i].sp.position) < 700){
 			//does the enemy already have a path?
-			var blah = new Graph(this.mapA, {diagonal: true});
+			var blah = new Graph(this.mapA);
 			//console.log(blah);
 			if(this.agents[i].currentPath.length == 0){
 				//no, so give it one
@@ -401,20 +400,23 @@ Map.prototype.update = function(up, down, left, right){
 				var curPos = this.agents[i].sp.position;
 				
 				console.log(nextPoint, curPos, distance(nextPoint, curPos));
-				/*if(!canWalkPos(this.mapA, nextPoint.x, nextPoint.y)){
+				if(!canWalkPos(this.mapA, nextPoint.x, nextPoint.y)){
 					console.log("cant walk here (at nextPoint)", nextPoint, this.agents[i].currentPath[0]);
 					this.agents[i].followPath([]);
-					
-				} */
+					console.log("removing ", nextPoint, this.agents[i].currentPath[0]);
+					this.agents[i].currentPath.shift();
+					continue;
+				} 
 				if (distance(nextPoint, curPos) < spriteWidth/2){
 					//close enough
 					console.log("removing ", nextPoint, this.agents[i].currentPath[0]);
 					this.agents[i].currentPath.shift();
+					continue;
 				} else {
 					console.log("moving towards", nextPoint);
 					
-					moveObject(this.mapA, this.agents[i].sp.position, 
-							1, 
+					moveObject(this.mapA, this.agents[i].sp, 
+							3, 
 							(nextPoint.y - curPos.y < 0), 
 							(nextPoint.y - curPos.y > 0), 
 							(nextPoint.x - curPos.x < 0), 
@@ -470,8 +472,8 @@ Map.prototype.update = function(up, down, left, right){
 				this.enemiesToKill -= 1;
 				//console.log(this.enemiesToKill);
 			}else{
-				moveObject(this.mapA, player.projectiles[i].position, playerSpeed, down, up, right, left);
-				/*if(left){
+				//moveObject(this.mapA, player.projectiles[i].position, playerSpeed, down, up, right, left);
+				if(left){
 					player.projectiles[i].position.x += playerSpeed; 
 				}
 				if(right){
@@ -482,7 +484,7 @@ Map.prototype.update = function(up, down, left, right){
 				}
 				if(down){
 					player.projectiles[i].position.y -= playerSpeed;
-				}*/
+				}
 			}
 		}
 	}
@@ -496,8 +498,8 @@ Map.prototype.update = function(up, down, left, right){
 			continue;
 		}
 		
-		moveObject(this.mapA, this.items[i].position, playerSpeed, down, up, right, left);
-		/*if(left){
+		//moveObject(this.mapA, this.items[i].position, playerSpeed, down, up, right, left);
+		if(left){
 			this.items[i].position.x += playerSpeed; 
 		}
 		if(right){
@@ -508,7 +510,7 @@ Map.prototype.update = function(up, down, left, right){
 		}
 		if(down){
 			this.items[i].position.y -= playerSpeed;
-		}*/
+		}
 		//stops offscreen health pack from being drawn
 		if(this.items[i].position.x < - spriteWidth || this.items[i].position.x > 700 || 
 									 	this.items[i].position.y < -spriteWidth || this.items[i].position.y > 700){
@@ -625,7 +627,7 @@ function updatePath(mapy, player, agent, graph){
 	end = graph.grid[end[0]][end[1]];
 	console.log(end);
 		   		
-	var path = astar.search(graph, start, end, { heuristic: astar.heuristics.diagonal });
+	var path = astar.search(graph, start, end);
 	for(i=0;i<path.length;i++){
 		if(!canWalkHere(mapy, path[i].x, path[i].y)) { console.log("bad path");return;}
 	}
@@ -635,65 +637,29 @@ function updatePath(mapy, player, agent, graph){
 	}
 }
 
-function moveObject(mapA, position, amount, up, down, left, right){
-	
-	tile = getTile(mapA, position.x, position.y);
-	
-	//check up and down for collision
-	if(up || down){
-	for(var i = tile[0] - 1; i <= tile[0] + 1; i++){
-		if(mapA[i][tile[1] - 1].isWall && scCollide(mapA[i][tile[1] - 1], player.sp)){
-			up = false;
-		}
-		if(mapA[i][tile[1] + 1].isWall && scCollide(mapA[i][tile[1] + 1], player.sp)){
-			down = false;
-		}
-	}}
-	
-	//checks left and right for collision
-	if(left || right){
-	for(var i = tile[1] - 1; i <= tile[1] + 1; i++){
-		if(mapA[tile[0] - 1][i].isWall && scCollide(mapA[tile[0] - 1][i], player.sp)){
-			//console.log("left");
-			left = false;
-		}
-		if(mapA[tile[0] + 1][i].isWall && scCollide(mapA[tile[0] + 1][i], player.sp)){
-			right = false;
-		}
-	}}
-	
-	
-	
-	if(!tile) return;
+function checkWall(map, x, y){
+	tile = getTile(map, x, y);
+	return (map[tile[0]][tile[1]].isWall);
+}
+
+function moveObject(map, sp, amount, up, down, left, right){
 	if(down){
-		
-		py = position.y + amount;
-		dTile = getTile(mapA, position.x, py);
-		if(py < mapA.length*spriteWidth
-			&& canWalkHere(mapA, dTile[0], dTile[1]))
-		position.y += amount;
+		if(!checkWall(map, sp.position.x, sp.position.y+sp.height+amount)
+		   && inBounds(map, sp.position.x, sp.position.y+sp.height+amount))
+		sp.position.y += amount;
 	} else if(up){
-		
-		my = position.y - amount;
-		uTile = getTile(mapA, position.x, my);
-		if(position.y - amount > 0
-			&& canWalkHere(mapA, uTile[0], uTile[1]))
-		position.y -= amount;
+		if(!checkWall(map, sp.position.x, sp.position.y-amount)
+		   && inBounds(map, sp.position.x, sp.position.y-amount))
+		sp.position.y -= amount;
 	}
 	if(left){
-		
-		mx = position.x - amount;
-		lTile = getTile(mapA, mx, position.y);
-		if(position.x - amount > 0
-			&& canWalkHere(mapA, lTile[0], lTile[1]))
-		position.x -= amount;
+		if(!checkWall(map, sp.position.x-amount, sp.position.y)
+		   && inBounds(map, sp.position.x-amount, sp.position.y))
+		sp.position.x -= amount;
 	} else if(right){
-		
-		px = position.x + amount;
-		rTile = getTile(mapA, px, position.y);
-		if(position.x + amount < mapA.length*spriteWidth
-			&& canWalkHere(mapA, rTile[0], rTile[1]))
-		position.x += amount;
+		if(!checkWall(map, sp.position.x+sp.height+amount, sp.position.y)
+		   && inBounds(map, sp.position.x+sp.height+amount, sp.position.y))
+		sp.position.x += amount;
 	}
 }
 
