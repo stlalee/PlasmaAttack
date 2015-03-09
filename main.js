@@ -30,11 +30,20 @@ function initGame(){
 	renderer = new PIXI.WebGLRenderer(700, 700);//autoDetectRenderer(400, 300);
 	document.body.appendChild(renderer.view);
 	
-	var startButton = new PIXI.Sprite(PIXI.Texture.fromImage("images/oldMan.png"));
-	startButton.position.x = 50;
-	startButton.position.y = 50;
+	requestAnimFrame( update );
+	renderer.render(stage);
+	
+	var background = new PIXI.Sprite(PIXI.Texture.fromImage("images/static/title screen.png"));
+	background.position.x = 0;
+	background.position.y = 0;
+	stage.addChild(background);
+	
+	var startButton = new PIXI.Sprite(PIXI.Texture.fromImage("images/static/play button.png"));
+	startButton.position.x = 0;
+	startButton.position.y = 150;
 	startButton.interactive = true;
 	stage.addChild(startButton);
+	
 	
 	renderer.render(stage);
 	
@@ -44,6 +53,8 @@ function initGame(){
 		startGame();
 	};
 	console.log("stage should be rendered");
+	
+	
 }
 	
 function startGame(){

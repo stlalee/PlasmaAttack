@@ -231,6 +231,22 @@ Map.prototype.update = function(up, down, left, right){
 		}else{
 			this.allies[i].sp.visible = true;
 		}
+		
+		
+		//follow player
+		xdif = this.allies[i].sp.position.x - player.sp.position.x;
+		ydif = this.allies[i].sp.position.y - player.sp.position.y;
+		if(xdif > 0){
+			//ally is right of player
+			this.allies[i].sp.position.x -= playerSpeed;
+		} else if (xdif < 0){
+			this.allies[i].sp.position.x += playerSpeed;
+		}
+		if(ydif > 0){
+			this.allies[i].sp.position.y -= playerSpeed;
+		} else if(ydif < 0){
+			this.allies[i].sp.position.y += playerSpeed;
+		}
 	}
 	
 	//moves agents with(in) the map (currently just enemies, but in the future might also be allies?)
@@ -348,6 +364,18 @@ Map.prototype.update = function(up, down, left, right){
 			player.takeHit(5);
 			this.agents[i].rest();
 		}
+		for(var j=0;j<this.allies.length;j++){
+			if(cCollide(this.agents[i].sp, this.allies[j].sp)){
+				this.agents[i].takeHit(10);
+				this.agents.splice(i, 1);
+				this.enemiesToKill -= 1;
+				this.allies[j].takeHit(10);
+				this.allies.splice(j,1);
+				
+				this.allies.push(new Ally(this.agents[i].sp.position.x,this.agents[i].sp.position.y));
+			}
+		}
+		
 	}
 	
 	//check projectile collision with agents
