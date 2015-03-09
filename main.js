@@ -50,6 +50,7 @@ function initGame(){
 	startButton.mousedown = function(data){
 		console.log("mouse clicked");
 		stage.removeChild(startButton);
+		stage.removeChild(background);
 		startGame();
 	};
 	console.log("stage should be rendered");
