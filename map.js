@@ -4,8 +4,9 @@
 
 var spriteWidth = 75;
 var pLocation;
-var playerSpeed = 10;
+var playerSpeed = 7;
 var healthPackValue = 25;
+var map1;
 //var agents;
 
 //creates new map based on level given
@@ -20,168 +21,28 @@ var Map = function(level){
 		this.enemiesToSpawn = 5;
 		this.maxEnemies = 2;
 		
-		var map1 = [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-					[0,1,1,1,1,1,0,1,1,0,1,1,1,1,0],
-					[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
-					[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
-					[0,1,1,1,1,1,0,1,1,0,1,1,1,1,0],
-					[0,1,1,1,1,1,0,1,1,0,1,1,1,1,0],
-					[0,0,0,0,0,0,0,1,1,0,0,0,0,0,0],
-					[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
-					[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
-					[0,1,1,1,1,1,1,1,1,0,0,0,0,0,0],
-					[0,1,1,1,1,1,1,1,1,0,1,1,1,1,0],
-					[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
-					[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
-					[0,1,1,1,1,1,1,1,1,0,1,1,1,1,0],
-					[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]];					
-		for(var i=0; i<map1.length; i++){
-			//this.mapA.push([]);
-			this.mapA[i] = [];
-			for(j=0; j<map1[i].length; j++){
-				if(map1[i][j] == 0){
-					//wall
-					var sp = new PIXI.Sprite(PIXI.Texture.fromImage("images/assets/ground tile.png"));
-					this.mapA[i][j] = sp;
-					Object.defineProperty(this.mapA[i][j], 'isWall', {value: true});
-				} else {
-					var sp = new PIXI.Sprite(PIXI.Texture.fromImage("images/assets/ground.png"));
-					this.mapA[i][j] = sp;
-					Object.defineProperty(this.mapA[i][j], 'isWall', {value: false});
-				}
-			}
-		}
-		/*			
-		for(var i = 0; i < 15; i++){
-			this.mapA.push([]);
-			for(var j = 0; j < 15; j++){
-				this.mapA[i].push(new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/purple/purple mid.png")));
-				Object.defineProperty(this.mapA[i][j], 'isWall', {value: false});
-			}
-		}
-		for(var i = 0; i < 15; i++){
-			this.mapA[0][i] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-			Object.defineProperty(this.mapA[0][i], 'isWall', {value: true});
-			
-			this.mapA[14][i] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-			Object.defineProperty(this.mapA[14][i], 'isWall', {value: true});
-			
-			this.mapA[i][0] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-			Object.defineProperty(this.mapA[i][0], 'isWall', {value: true});
-			
-			this.mapA[i][14] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-			Object.defineProperty(this.mapA[i][14], 'isWall', {value: true});
-		}
-		//top right room
-		this.mapA[8][1] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[8][1], 'isWall', {value: true});
-		//mapA[10][2] = 1;
-		this.mapA[8][2] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[8][2], 'isWall', {value: true});
-		//mapA[10][5] = 1;
-		this.mapA[8][5] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[8][5], 'isWall', {value: true});
-		//mapA[10][6] = 1;
-		this.mapA[8][6] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[8][6], 'isWall', {value: true});
-		//mapA[11][6] = 1;
-		this.mapA[9][6] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[9][6], 'isWall', {value: true});
-		//mapA[12][6] = 1;
-		this.mapA[10][6] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[10][6], 'isWall', {value: true});
-		//map[13][6] = 1;
-		this.mapA[11][6] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[11][6], 'isWall', {value: true});
-		this.mapA[12][6] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[12][6], 'isWall', {value: true});
-		this.mapA[13][6] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[13][6], 'isWall', {value: true});
-		
-		//bottom right
-		this.mapA[13][9] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[13][9], 'isWall', {value: true});
-		//mapA[10][2] = 1;
-		this.mapA[12][9] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[12][9], 'isWall', {value: true});
-		//mapA[10][2] = 1;
-		this.mapA[11][9] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[11][9], 'isWall', {value: true});
-		//mapA[10][2] = 1;
-		this.mapA[10][9] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[10][9], 'isWall', {value: true});
-		//mapA[10][2] = 1;
-		this.mapA[9][9] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[9][9], 'isWall', {value: true});
-		//mapA[10][2] = 1;
-		this.mapA[6][9] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[6][9], 'isWall', {value: true});
-		//mapA[10][2] = 1;
-		this.mapA[6][10] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[6][10], 'isWall', {value: true});
-		//mapA[10][2] = 1;
-		this.mapA[6][11] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[6][11], 'isWall', {value: true});
-		//mapA[10][2] = 1;
-		this.mapA[6][12] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[6][12], 'isWall', {value: true});
-		//mapA[10][2] = 1;
-		this.mapA[6][13] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[6][13], 'isWall', {value: true});
-		
-		//top left
-		this.mapA[5][1] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[5][1], 'isWall', {value: true});
-		//mapA[10][2] = 1;
-		this.mapA[5][2] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[5][2], 'isWall', {value: true});
-		//mapA[10][5] = 1;
-		this.mapA[5][5] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[5][5], 'isWall', {value: true});
-		//mapA[10][6] = 1;
-		this.mapA[5][6] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[5][6], 'isWall', {value: true});
-		//mapA[11][6] = 1;
-		this.mapA[4][6] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[4][6], 'isWall', {value: true});
-		//mapA[12][6] = 1;
-		this.mapA[3][6] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[3][6], 'isWall', {value: true});
-		//map[13][6] = 1;
-		this.mapA[2][6] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[2][6], 'isWall', {value: true});
-		this.mapA[1][6] = new PIXI.Sprite(PIXI.Texture.fromImage("images/first level tiles/yellow/yellow mid.png"));
-		Object.defineProperty(this.mapA[1][6], 'isWall', {value: true});
-		*/
-		//map[2][2] = 0;
-		this.mapA[12][12] = new PIXI.Sprite(PIXI.Texture.fromImage("images/assets/wooden tile copy.png"));
-		Object.defineProperty(this.mapA[12][12], 'isWall', {value: false});
-		this.spawners.push(this.mapA[12][12]);
-		//map[2][12] = 0;
-		this.mapA[2][12] = new PIXI.Sprite(PIXI.Texture.fromImage("images/assets/wooden tile copy.png"));
-		Object.defineProperty(this.mapA[2][12], 'isWall', {value: false});
-		this.spawners.push(this.mapA[2][12]);
-		//map[2][12] = 0;
-		this.mapA[12][3] = new PIXI.Sprite(PIXI.Texture.fromImage("images/assets/wooden tile copy.png"));
-		Object.defineProperty(this.mapA[12][3], 'isWall', {value: false});
-		this.spawners.push(this.mapA[12][3]);
-		
-		for(var i = 0; i < 15; i++){
-			for(var j = 0; j < 15; j++){
-				this.mapA[i][j].position.x = i * spriteWidth;
-				this.mapA[i][j].position.y = j * spriteWidth;
-				stage.addChild(this.mapA[i][j]);
-				if((i * spriteWidth) <= (renderer.width/2) && (i * spriteWidth) >= ((renderer.width/2) - spriteWidth) 
-											&& (j * spriteWidth) <= (renderer.height/2) && (j * spriteWidth) >= ((renderer.height/2) - spriteWidth)){
-					pLocation = {x: i, y: j};
-				}
-			}
-		}
+		map1 = [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+				[0,1,1,1,1,1,0,1,1,0,1,1,1,1,0],
+				[0,1,1,1,1,1,1,1,1,1,1,1,2,1,0],
+				[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+				[0,1,1,1,1,1,0,1,1,0,1,1,1,1,0],
+				[0,1,1,1,1,1,0,1,1,0,1,1,1,1,0],
+				[0,0,0,0,0,0,0,1,1,0,0,0,0,0,0],
+				[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+				[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+				[0,1,1,1,1,1,1,0,0,0,0,0,0,0,0],
+				[0,1,1,1,1,1,1,0,1,1,1,1,1,1,0],
+				[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+				[0,1,2,1,1,1,1,1,1,1,1,2,1,1,0],
+				[0,1,1,1,1,1,1,0,1,1,1,1,1,1,0],
+				[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]];
 		
 		this.items.push(new PIXI.Sprite(PIXI.Texture.fromImage("images/health pack.png")));
 		this.items[0].position.x = 200;
 		this.items[0].position.y = 400;
-		stage.addChild(this.items[0]);
+		this.items.push(new PIXI.Sprite(PIXI.Texture.fromImage("images/health pack.png")));
+		this.items[1].position.x = 800;
+		this.items[1].position.y = 700;
 	}else if(level == 2){
 		this.agents = [];
 		this.allies = [];
@@ -192,40 +53,61 @@ var Map = function(level){
 		this.enemiesToSpawn = 10;
 		this.maxEnemies = 2;
 		
-		for(var i = 0; i < 10; i++){
-			this.mapA.push([]);
-			for(var j = 0; j < 10; j++){
-				this.mapA[i].push(new PIXI.Sprite(PIXI.Texture.fromImage("images/assets/ground.png")));
+		map1 = [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+				[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+				[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+				[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+				[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+				[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+				[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+				[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+				[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+				[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+				[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+				[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+				[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+				[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+				[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]];
+	
+	}	
+					
+	for(var i=0; i<map1.length; i++){
+		//this.mapA.push([]);
+		this.mapA[i] = [];
+		for(j=0; j<map1[i].length; j++){
+			if(map1[i][j] == 0){
+				//wall
+				var sp = new PIXI.Sprite(PIXI.Texture.fromImage("images/assets/ground tile.png"));
+				this.mapA[i][j] = sp;
+				Object.defineProperty(this.mapA[i][j], 'isWall', {value: true});
+			} else if(map1[i][j] == 1){
+				var sp = new PIXI.Sprite(PIXI.Texture.fromImage("images/assets/ground.png"));
+				this.mapA[i][j] = sp;
 				Object.defineProperty(this.mapA[i][j], 'isWall', {value: false});
-			}
-		}
-		
-		for(var i = 0; i < 10; i++){
-			this.mapA[0][i] = new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg"));
-			Object.defineProperty(this.mapA[0][i], 'isWall', {value: true});
-			
-			this.mapA[9][i] = new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg"));
-			Object.defineProperty(this.mapA[9][i], 'isWall', {value: true});
-			
-			this.mapA[i][0] = new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg"));
-			Object.defineProperty(this.mapA[i][0], 'isWall', {value: true});
-			
-			this.mapA[i][9] = new PIXI.Sprite(PIXI.Texture.fromImage("images/Untitled-1.jpg"));
-			Object.defineProperty(this.mapA[i][9], 'isWall', {value: true});
-		}
-		
-		for(var i = 0; i < 10; i++){
-			for(var j = 0; j < 10; j++){
-				this.mapA[i][j].position.x = i * spriteWidth;
-				this.mapA[i][j].position.y = j * spriteWidth;
-				stage.addChild(this.mapA[i][j]);
-				if((i * spriteWidth) <= (renderer.width/2) && (i * spriteWidth) >= ((renderer.width/2) - spriteWidth) 
-											&& (j * spriteWidth) <= (renderer.height/2) && (j * spriteWidth) >= ((renderer.height/2) - spriteWidth)){
-					pLocation = {x: i, y: j};
-				}
+			}else{
+				this.mapA[i][j] = new PIXI.Sprite(PIXI.Texture.fromImage("images/assets/wooden tile copy.png"));
+				Object.defineProperty(this.mapA[i][j], 'isWall', {value: false});
+				this.spawners.push(this.mapA[i][j]);
 			}
 		}
 	}
+			
+	for(var i = 0; i < 15; i++){
+		for(var j = 0; j < 15; j++){
+			this.mapA[i][j].position.x = i * spriteWidth;
+			this.mapA[i][j].position.y = j * spriteWidth;
+			stage.addChild(this.mapA[i][j]);
+			if((i * spriteWidth) <= (renderer.width/2) && (i * spriteWidth) >= ((renderer.width/2) - spriteWidth) 
+										&& (j * spriteWidth) <= (renderer.height/2) && (j * spriteWidth) >= ((renderer.height/2) - spriteWidth)){
+				pLocation = {x: i, y: j};
+			}
+		}
+	}
+	
+	for(var i = 0; i < this.items.length; i++){
+		stage.addChild(this.items[i]);
+	}
+		
 	console.log(this.mapA);
 };
 
@@ -253,10 +135,21 @@ Map.prototype.test = function(){
 
 //runs everytime we call update
 Map.prototype.update = function(up, down, left, right){
+	//update player location
+	for(i = 0; i < this.mapA.length; i++){
+		for(j = 0; j < this.mapA[i].length; j++){
+			if(this.mapA[i][j].position.x < (renderer.width/2) && this.mapA[i][j].position.x + spriteWidth + 1> (renderer.width/2) && 
+					this.mapA[i][j].position.y < (renderer.width/2) && this.mapA[i][j].position.y + spriteWidth > (renderer.width/2)){
+				pLocation = {x: i, y: j};
+				//this.mapA[i][j].visible = false;
+			}
+		}	
+	}
 	
 	//check up and down for collision
 	for(var i = pLocation.x - 1; i <= pLocation.x + 1; i++){
 		if(this.mapA[i][pLocation.y - 1].isWall && scCollide(this.mapA[i][pLocation.y - 1], player.sp)){
+			
 			up = false;
 		}
 		if(this.mapA[i][pLocation.y + 1].isWall && scCollide(this.mapA[i][pLocation.y + 1], player.sp)){
@@ -268,6 +161,7 @@ Map.prototype.update = function(up, down, left, right){
 	for(var i = pLocation.y - 1; i <= pLocation.y + 1; i++){
 		if(this.mapA[pLocation.x - 1][i].isWall && scCollide(this.mapA[pLocation.x - 1][i], player.sp)){
 			//console.log("left");
+			console.log("col: " + i);
 			left = false;
 		}
 		if(this.mapA[pLocation.x + 1][i].isWall && scCollide(this.mapA[pLocation.x + 1][i], player.sp)){
@@ -302,13 +196,6 @@ Map.prototype.update = function(up, down, left, right){
 				this.mapA[i][j].visible = false;
 			}else{
 				this.mapA[i][j].visible = true;
-			}
-			
-			//updates player location
-			if(this.mapA[i][j].position.x <= (renderer.width/2) && this.mapA[i][j].position.x > ((renderer.width/2) - spriteWidth) 
-							&& this.mapA[i][j].position.y <= (renderer.height/2) && this.mapA[i][j].position.y > ((renderer.height/2) - spriteWidth)){
-				pLocation = {x: i, y: j};
-				//this.mapA[i][j].visible = false;
 			}
 		}
 	}
@@ -542,18 +429,20 @@ function cCollide(sp1, sp2){
 
 //takes two sprites, assumes one is a square and one is a circle and checks for collision
 function scCollide(square, circle){
+	var give = 7;
+	var topGive = 0; 
 	var radius = circle.width/2;
 	var midPoint = {x: circle.position.x + (radius), y: circle.position.y + (radius)};
-	//console.log("start new col");
+	console.log("start new col");
 	
 	//checks if circle overlaps top or bottom edge of square
-	if(midPoint.x >= square.position.x && midPoint.x <= square.position.x + square.width){
-		if(midPoint.y - (square.position.y + square.height) < radius && midPoint.y - (square.position.y + square.height) > 0){
-			//console.log("line col top or bottom");
+	if(midPoint.x >= square.position.x && midPoint.x < square.position.x + square.width){
+		if(midPoint.y - (square.position.y + square.height) < radius - topGive && midPoint.y - (square.position.y + square.height) > 0){
+			console.log("line col top");
 			return true;
 		}
 		if(square.position.y - midPoint.y < radius && square.position.y - midPoint.y > 0){
-			//console.log("line col top or bottom");
+			console.log("line col bottom");
 			return true;
 		}
 	}
@@ -561,39 +450,39 @@ function scCollide(square, circle){
 	//check is circle is overlaps sides of square
 	if(midPoint.y >= square.position.y && midPoint.y <= square.position.y + square.height){
 		if(midPoint.x - (square.position.x + square.width) < radius && midPoint.x - (square.position.x + square.width) > 0){
-			//console.log("line col left or right");
+			console.log("line col left or right 1");
 			return true;
 		}
 		if(square.position.x - midPoint.x < radius && square.position.x - midPoint.x > 0){
-			//console.log("line col left or right");
+			console.log("line col left or right 2");
 			return true;
 		}
 	}
 	
 	//checks if circle overlaps a corner
-	if(Math.sqrt(Math.pow((square.position.x - midPoint.x),2) + Math.pow((square.position.y - midPoint.y), 2)) < radius -7){
-		//console.log("point col");
+	if(Math.sqrt(Math.pow((square.position.x - midPoint.x),2) + Math.pow((square.position.y - midPoint.y), 2)) < radius - give){
+		console.log("point col 1");
 		return true;
-	}else if(Math.sqrt(Math.pow((square.position.x + square.width - midPoint.x),2) + Math.pow((square.position.y - midPoint.y), 2)) < radius -7){
-		//console.log("point col");
+	}else if(Math.sqrt(Math.pow((square.position.x + square.width - midPoint.x),2) + Math.pow((square.position.y - midPoint.y), 2)) < radius - give){
+		console.log("point col 2");
 		return true;
-	}else if(Math.sqrt(Math.pow((square.position.x - midPoint.x),2) + Math.pow((square.position.y + square.height - midPoint.y), 2)) < radius -7){
-		//console.log("point col");
+	}else if(Math.sqrt(Math.pow((square.position.x - midPoint.x),2) + Math.pow((square.position.y + square.height - midPoint.y), 2)) < radius - give){
+		console.log("point col 3");
 		return true;
 	}else if(Math.sqrt(Math.pow((square.position.x + square.width - midPoint.x),2) + Math.pow((square.position.y + square.height - midPoint.y), 2)) 
-											< radius -7){
-		//console.log("point col");
+											< radius - give){
+		console.log("point col 4");
 		return true;
 	}
 	
 	//checks midpoint of circle doesnt overlap square
 	if((midPoint.x >= square.position.x && midPoint.x <= square.position.x + square.width) 
 								&& (midPoint.y >= square.position.y && midPoint.x <= square.position.y + square.height)){
-		//console.log("midpoint inside");
+		console.log("midpoint inside");
 		return true;
 	}
 	
-	//console.log("false");
+	console.log("false");
 	return false;
 }
 
