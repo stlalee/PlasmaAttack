@@ -232,21 +232,50 @@ Map.prototype.update = function(up, down, left, right){
 			this.allies[i].sp.visible = true;
 		}
 		
+		var bestdist = 100;
+		var num;
+		for(j=0;j<this.agents.length;j++){
+			dist = distance(this.allies[i].sp.position, this.agents[j].sp.position);
+			if(dist < bestdist) {
+				bestdist = dist;
+				num = j;
+			}
+		}
+		if (bestdist < 100) {
+			//attack enemy
+			xdif = this.allies[i].sp.position.x - this.agents[num].sp.position.x;
+			ydif = this.allies[i].sp.position.y - this.agents[num].sp.position.y;
+			moveObject(this.mapA, this.allies[i].sp, playerSpeed/3, ydif < 0, ydif > 0, xdif > 0, xdif < 0);
+			/*
+			if(xdif > 0){
+				//ally is right of enemy
+				this.allies[i].sp.position.x -= playerSpeed/2;
+			} else if (xdif < 0){
+				this.allies[i].sp.position.x += playerSpeed/2;
+			}
+			if(ydif > 0){
+				this.allies[i].sp.position.y -= playerSpeed/2;
+			} else if(ydif < 0){
+				this.allies[i].sp.position.y += playerSpeed/2;
+			}*/
+			
+		} else {
+			//follow player
+			xdif = this.allies[i].sp.position.x - player.sp.position.x;
+			ydif = this.allies[i].sp.position.y - player.sp.position.y;
+			if(xdif > 0){
+				//ally is right of player
+				this.allies[i].sp.position.x -= playerSpeed/2;
+			} else if (xdif < 0){
+				this.allies[i].sp.position.x += playerSpeed/2;
+			}
+			if(ydif > 0){
+				this.allies[i].sp.position.y -= playerSpeed/2;
+			} else if(ydif < 0){
+				this.allies[i].sp.position.y += playerSpeed/2;
+			}
+		}
 		
-		//follow player
-		xdif = this.allies[i].sp.position.x - player.sp.position.x;
-		ydif = this.allies[i].sp.position.y - player.sp.position.y;
-		if(xdif > 0){
-			//ally is right of player
-			this.allies[i].sp.position.x -= playerSpeed;
-		} else if (xdif < 0){
-			this.allies[i].sp.position.x += playerSpeed;
-		}
-		if(ydif > 0){
-			this.allies[i].sp.position.y -= playerSpeed;
-		} else if(ydif < 0){
-			this.allies[i].sp.position.y += playerSpeed;
-		}
 	}
 	
 	//moves agents with(in) the map (currently just enemies, but in the future might also be allies?)
@@ -565,23 +594,25 @@ function checkWall(map, x, y){
 }
 
 function moveObject(map, sp, amount, up, down, left, right){
-	if(down){
-		if(!checkWall(map, sp.position.x, sp.position.y+sp.height+amount)
-		   && inBounds(map, sp.position.x, sp.position.y+sp.height+amount))
-		sp.position.y += amount;
-	} else if(up){
-		if(!checkWall(map, sp.position.x, sp.position.y-amount)
-		   && inBounds(map, sp.position.x, sp.position.y-amount))
-		sp.position.y -= amount;
-	}
-	if(left){
-		if(!checkWall(map, sp.position.x-amount, sp.position.y)
-		   && inBounds(map, sp.position.x-amount, sp.position.y))
-		sp.position.x -= amount;
-	} else if(right){
-		if(!checkWall(map, sp.position.x+sp.height+amount, sp.position.y)
-		   && inBounds(map, sp.position.x+sp.height+amount, sp.position.y))
-		sp.position.x += amount;
+	for(i=0;i<amount;i++){
+		if(down){
+			if(!checkWall(map, sp.position.x, sp.position.y+sp.height+1)
+			   && inBounds(map, sp.position.x, sp.position.y+sp.height+1))
+			sp.position.y += 1;
+		} else if(up){
+			if(!checkWall(map, sp.position.x, sp.position.y-1)
+			   && inBounds(map, sp.position.x, sp.position.y-1))
+			sp.position.y -= 1;
+		}
+		if(left){
+			if(!checkWall(map, sp.position.x-1, sp.position.y)
+			   && inBounds(map, sp.position.x-1, sp.position.y))
+			sp.position.x -= 1;
+		} else if(right){
+			if(!checkWall(map, sp.position.x+sp.height+1, sp.position.y)
+			   && inBounds(map, sp.position.x+sp.height+1, sp.position.y))
+			sp.position.x += 1;
+		}
 	}
 }
 

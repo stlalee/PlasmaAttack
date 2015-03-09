@@ -81,6 +81,7 @@ function update(){
 	requestAnimFrame( update );
 	
 	if(!inMenu){
+		
 		if(youLost()){
 			inMenu = true;
 			loseScreen();
