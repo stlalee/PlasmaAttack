@@ -277,6 +277,7 @@ Map.prototype.update = function(up, down, left, right){
 			}
 		}
 		if(this.agents[i].health < 1){
+			this.allies.push(new Ally(this.agents[i].sp.position.x,this.agents[i].sp.position.y));
 			this.agents.splice(i, 1);
 			this.enemiesToKill -= 1;
 		}

@@ -79,7 +79,7 @@ Enemy.prototype.update = function(){
 	}
 	for(var i = 0; i < map.allies.length; i++){
 		if(distance(map.allies[i].sp, this.sp) < spriteWidth && cCollide(map.allies[i].sp, this.sp)){
-			if(map.agents[i].sp.position.x >= (this.sp.position.x + (spriteWidth/2)) && left > 0){
+			if(map.allies[i].sp.position.x >= (this.sp.position.x + (spriteWidth/2)) && left > 0){
 				left = 0;
 			}else if(map.allies[i].sp.position.x < (this.sp.position.x - (spriteWidth/2)) && left < 0){
 				left = 0;
