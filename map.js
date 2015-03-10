@@ -490,16 +490,16 @@ function scCollide(square, circle){
 	var topGive = 0; 
 	var radius = circle.width/2;
 	var midPoint = {x: circle.position.x + (radius), y: circle.position.y + (radius)};
-	console.log("start new col");
+	//console.log("start new col");
 	
 	//checks if circle overlaps top or bottom edge of square
 	if(midPoint.x >= square.position.x && midPoint.x < square.position.x + square.width){
 		if(midPoint.y - (square.position.y + square.height) < radius - topGive && midPoint.y - (square.position.y + square.height) > 0){
-			console.log("line col top");
+			//console.log("line col top");
 			return true;
 		}
 		if(square.position.y - midPoint.y < radius && square.position.y - midPoint.y > 0){
-			console.log("line col bottom");
+			//console.log("line col bottom");
 			return true;
 		}
 	}
@@ -507,35 +507,35 @@ function scCollide(square, circle){
 	//check is circle is overlaps sides of square
 	if(midPoint.y >= square.position.y && midPoint.y <= square.position.y + square.height){
 		if(midPoint.x - (square.position.x + square.width) < radius && midPoint.x - (square.position.x + square.width) > 0){
-			console.log("line col left or right 1");
+			//console.log("line col left or right 1");
 			return true;
 		}
 		if(square.position.x - midPoint.x < radius && square.position.x - midPoint.x > 0){
-			console.log("line col left or right 2");
+			//console.log("line col left or right 2");
 			return true;
 		}
 	}
 	
 	//checks if circle overlaps a corner
 	if(Math.sqrt(Math.pow((square.position.x - midPoint.x),2) + Math.pow((square.position.y - midPoint.y), 2)) < radius - give){
-		console.log("point col 1");
+		//console.log("point col 1");
 		return true;
 	}else if(Math.sqrt(Math.pow((square.position.x + square.width - midPoint.x),2) + Math.pow((square.position.y - midPoint.y), 2)) < radius - give){
-		console.log("point col 2");
+		//console.log("point col 2");
 		return true;
 	}else if(Math.sqrt(Math.pow((square.position.x - midPoint.x),2) + Math.pow((square.position.y + square.height - midPoint.y), 2)) < radius - give){
-		console.log("point col 3");
+		//console.log("point col 3");
 		return true;
 	}else if(Math.sqrt(Math.pow((square.position.x + square.width - midPoint.x),2) + Math.pow((square.position.y + square.height - midPoint.y), 2)) 
 											< radius - give){
-		console.log("point col 4");
+		//console.log("point col 4");
 		return true;
 	}
 	
 	//checks midpoint of circle doesnt overlap square
 	if((midPoint.x >= square.position.x && midPoint.x <= square.position.x + square.width) 
 								&& (midPoint.y >= square.position.y && midPoint.x <= square.position.y + square.height)){
-		console.log("midpoint inside");
+		//console.log("midpoint inside");
 		return true;
 	}
 	

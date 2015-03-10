@@ -7,7 +7,7 @@ var projectileLife = 30;
 var costToShoot = 10;
 
 var Player = function(x, y){
-	this.sp = new PIXI.Sprite(PIXI.Texture.fromImage("images/circle.png"));
+	this.sp = new PIXI.Sprite(PIXI.Texture.fromImage("images/characters/PNGs/Player.png"));
 	this.sp.position.x = x;
 	this.sp.position.y = y;
 	this.health = 100;

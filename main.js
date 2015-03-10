@@ -65,7 +65,7 @@ function startGame(){
 	console.log(level);
 	map = new Map(level);
 	console.log("map loaded");
-	player = new Player(315,315);
+	player = new Player(312.5,312.5);
 	console.log("player loaded");
 	
 	healthMeter = new PIXI.Text(player.health);
@@ -119,7 +119,7 @@ function youLost(){
 function resetGame(){
 	map.removeMap();
 	map = new Map(level);
-	player = new Player(315,315);
+	player = new Player(312.5,312.5);
 	console.log("resetGame");
 	inMenu = false;
 }
