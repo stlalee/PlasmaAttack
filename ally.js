@@ -61,7 +61,34 @@ Ally.prototype.update = function(){
 			}
 		}
 	}
-	
+	for(var i = 0; i < map.agents.length; i++){
+		if(distance(map.agents[i].sp, this.sp) < spriteWidth && cCollide(map.agents[i].sp, this.sp)){
+			if(map.agents[i].sp.position.x >= (this.sp.position.x + (spriteWidth/2)) && left > 0){
+				left = 0;
+			}else if(map.agents[i].sp.position.x < (this.sp.position.x - (spriteWidth/2)) && left < 0){
+				left = 0;
+			}
+			if(map.agents[i].sp.position.y >= (this.sp.position.y + (spriteWidth/2)) && up > 0){
+				up = 0;
+			}else if(map.agents[i].sp.position.y < (this.sp.position.y - (spriteWidth/2)) && up < 0){
+				up = 0;
+			}
+		}
+	}
+	for(var i = 0; i < map.allies.length; i++){
+		if(distance(map.allies[i].sp, this.sp) < spriteWidth && cCollide(map.allies[i].sp, this.sp)){
+			if(map.agents[i].sp.position.x >= (this.sp.position.x + (spriteWidth/2)) && left > 0){
+				left = 0;
+			}else if(map.allies[i].sp.position.x < (this.sp.position.x - (spriteWidth/2)) && left < 0){
+				left = 0;
+			}
+			if(map.allies[i].sp.position.y >= (this.sp.position.y + (spriteWidth/2)) && up > 0){
+				up = 0;
+			}else if(map.allies[i].sp.position.y < (this.sp.position.y - (spriteWidth/2)) && up < 0){
+				up = 0;
+			}
+		}
+	}
 	if(distance(player.sp, this.sp) < spriteWidth && cCollide(player.sp, this.sp)){
 		console.log("poop");
 		if(player.sp.position.x >= (this.sp.position.x + (spriteWidth/2)) && left > 0){
