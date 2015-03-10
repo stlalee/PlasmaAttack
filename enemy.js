@@ -63,6 +63,19 @@ Enemy.prototype.update = function(){
 			}
 		}
 	}
+	if(distance(player.sp, this.sp) < spriteWidth && cCollide(player.sp, this.sp)){
+		console.log("poop");
+		if(player.sp.position.x >= (this.sp.position.x + (spriteWidth/2)) && left > 0){
+			left = 0;
+		}else if(player.sp.position.x < (this.sp.position.x - (spriteWidth/2)) && left < 0){
+			left = 0;
+		}
+		if(player.sp.position.y >= (this.sp.position.y + (spriteWidth/2)) && up > 0){
+			up = 0;
+		}else if(player.sp.position.y < (this.sp.position.y - (spriteWidth/2)) && up < 0){
+			up = 0;
+		}
+	}
 	this.sp.position.x += left;
 	this.sp.position.y += up;
 };
