@@ -17,23 +17,23 @@ var Map = function(level){
 		this.mapA = [];
 		this.items = [];
 		this.spawners = [];
-		this.enemiesToKill = 5;
-		this.enemiesToSpawn = 5;
-		this.maxEnemies = 2;
+		this.enemiesToKill = 40;
+		this.enemiesToSpawn = 40;
+		this.maxEnemies = 3;
 		
 		map1 = [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 				[0,1,1,1,1,1,0,1,1,0,1,1,1,1,0],
-				[0,1,1,1,1,1,1,1,1,1,1,1,2,1,0],
-				[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
-				[0,1,1,1,1,1,0,1,1,0,1,1,1,1,0],
+				[0,1,1,3,1,1,1,1,1,1,1,3,1,1,0],
+				[0,1,1,3,1,1,1,1,1,1,1,1,1,1,0],
+				[0,1,1,1,1,1,0,1,1,0,1,1,3,1,0],
 				[0,1,1,1,1,1,0,1,1,0,1,1,1,1,0],
 				[0,0,0,0,0,0,0,1,1,0,0,0,0,0,0],
 				[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
-				[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+				[0,1,3,1,1,1,1,1,1,1,1,1,1,1,0],
 				[0,1,1,1,1,1,1,0,0,0,0,0,0,0,0],
 				[0,1,1,1,1,1,1,0,1,1,1,1,1,1,0],
-				[0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
-				[0,1,2,1,1,1,1,1,1,1,1,2,1,1,0],
+				[0,1,1,1,1,1,1,1,1,1,1,3,1,1,0],
+				[0,1,3,1,1,1,1,1,1,1,1,1,1,1,0],
 				[0,1,1,1,1,1,1,0,1,1,1,1,1,1,0],
 				[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]];
 		
@@ -138,8 +138,8 @@ Map.prototype.update = function(up, down, left, right){
 	//update player location
 	for(i = 0; i < this.mapA.length; i++){
 		for(j = 0; j < this.mapA[i].length; j++){
-			if(this.mapA[i][j].position.x < (renderer.width/2) && this.mapA[i][j].position.x + spriteWidth + 1> (renderer.width/2) && 
-					this.mapA[i][j].position.y < (renderer.width/2) && this.mapA[i][j].position.y + spriteWidth > (renderer.width/2)){
+			if(this.mapA[i][j].position.x < (renderer.width/2) && this.mapA[i][j].position.x + spriteWidth + 1>= (renderer.width/2) && 
+					this.mapA[i][j].position.y < (renderer.width/2) && this.mapA[i][j].position.y + spriteWidth >= (renderer.width/2)){
 				pLocation = {x: i, y: j};
 				//this.mapA[i][j].visible = false;
 			}
@@ -148,8 +148,7 @@ Map.prototype.update = function(up, down, left, right){
 	
 	//check up and down for collision
 	for(var i = pLocation.x - 1; i <= pLocation.x + 1; i++){
-		if(this.mapA[i][pLocation.y - 1].isWall && scCollide(this.mapA[i][pLocation.y - 1], player.sp)){
-			
+		if(this.mapA[i][pLocation.y - 1].isWall && scCollide(this.mapA[i][pLocation.y - 1], player.sp)){	
 			up = false;
 		}
 		if(this.mapA[i][pLocation.y + 1].isWall && scCollide(this.mapA[i][pLocation.y + 1], player.sp)){
@@ -161,7 +160,7 @@ Map.prototype.update = function(up, down, left, right){
 	for(var i = pLocation.y - 1; i <= pLocation.y + 1; i++){
 		if(this.mapA[pLocation.x - 1][i].isWall && scCollide(this.mapA[pLocation.x - 1][i], player.sp)){
 			//console.log("left");
-			console.log("col: " + i);
+			//console.log("col: " + i);
 			left = false;
 		}
 		if(this.mapA[pLocation.x + 1][i].isWall && scCollide(this.mapA[pLocation.x + 1][i], player.sp)){
@@ -231,160 +230,34 @@ Map.prototype.update = function(up, down, left, right){
 		}else{
 			this.allies[i].sp.visible = true;
 		}
-		
-		var bestdist = 100;
-		var num;
-		for(j=0;j<this.agents.length;j++){
-			dist = distance(this.allies[i].sp.position, this.agents[j].sp.position);
-			if(dist < bestdist) {
-				bestdist = dist;
-				num = j;
-			}
-		}
-		if (bestdist < 100) {
-			//attack enemy
-			xdif = this.allies[i].sp.position.x - this.agents[num].sp.position.x;
-			ydif = this.allies[i].sp.position.y - this.agents[num].sp.position.y;
-			moveObject(this.mapA, this.allies[i].sp, playerSpeed/3, ydif < 0, ydif > 0, xdif > 0, xdif < 0);
-			/*
-			if(xdif > 0){
-				//ally is right of enemy
-				this.allies[i].sp.position.x -= playerSpeed/2;
-			} else if (xdif < 0){
-				this.allies[i].sp.position.x += playerSpeed/2;
-			}
-			if(ydif > 0){
-				this.allies[i].sp.position.y -= playerSpeed/2;
-			} else if(ydif < 0){
-				this.allies[i].sp.position.y += playerSpeed/2;
-			}*/
-			
-		} else {
-			//follow player
-			xdif = this.allies[i].sp.position.x - player.sp.position.x;
-			ydif = this.allies[i].sp.position.y - player.sp.position.y;
-			if(xdif > 0){
-				//ally is right of player
-				this.allies[i].sp.position.x -= playerSpeed/2;
-			} else if (xdif < 0){
-				this.allies[i].sp.position.x += playerSpeed/2;
-			}
-			if(ydif > 0){
-				this.allies[i].sp.position.y -= playerSpeed/2;
-			} else if(ydif < 0){
-				this.allies[i].sp.position.y += playerSpeed/2;
-			}
-		}
-		
+		this.allies[i].update();
 	}
 	
-	//moves agents with(in) the map (currently just enemies, but in the future might also be allies?)
+	//move enemies
 	for(i = 0; i < this.agents.length; i++){
 		//move agents with the tiles
 		//moveObject(this.mapA, this.agents[i].sp.position, playerSpeed, down, up, right, left);
 		if(up){
 			this.agents[i].sp.position.y += playerSpeed;
-		} else if(down){
+		} 
+		if(down){
 			this.agents[i].sp.position.y -= playerSpeed;
 		}
 		if(right){
 			this.agents[i].sp.position.x -= playerSpeed;
-		} else if(left){
+		}
+		if(left){
 			this.agents[i].sp.position.x += playerSpeed;
 		}
+		this.agents[i].update();
 		
-		//stops offscreen enemies from being drawn
-		if(this.agents[i].sp.position.x < - spriteWidth 
-			|| this.agents[i].sp.position.x > 700 
-			|| this.agents[i].sp.position.y < -spriteWidth 
-			|| this.agents[i].sp.position.y > 700){
+		if(this.agents[i].sp.position.x < - spriteWidth || this.agents[i].sp.position.x > 700 || 
+									 	this.agents[i].sp.position.y < -spriteWidth || this.agents[i].sp.position.y > 700){
 			this.agents[i].sp.visible = false;
-		}
-		else {
+		}else{
 			this.agents[i].sp.visible = true;
 		}
-		
-		//player is in enemy sight/earshot/whatever
-		if(distance(player.sp.position, this.agents[i].sp.position) < 700){
-			//does the enemy already have a path?
-			var blah = new Graph(this.mapA);
-			//console.log(blah);
-			if(this.agents[i].currentPath.length == 0){
-				//no, so give it one
-				updatePath(this.mapA, player, this.agents[i], blah);
-			} else {
-				//agent has a path, try to follow it
-				console.log(this.agents[i].currentPath);
-				var pth = this.agents[i].currentPath;
-				//path is not updated enough
-				if(distance(pth[pth.length-1], getTile(this.mapA, player.sp.position.x, player.sp.position.y)) > spriteWidth/2
-				   || !inBounds(this.mapA, pth[0].x, pth[0].y)){
-					console.log("path outdated");
-					updatePath(this.mapA, player, this.agents[i], blah);
-					continue;
-				}
-				
-				
-				var nextX = this.agents[i].currentPath[0].x * spriteWidth;
-				var nextY = this.agents[i].currentPath[0].y * spriteWidth;
-				var nextPoint = new Object();
-				nextPoint.x = nextX + spriteWidth/2;
-				nextPoint.y = nextY + spriteWidth/2;
-				var curPos = this.agents[i].sp.position;
-				
-				console.log(nextPoint, curPos, distance(nextPoint, curPos));
-				if(!canWalkPos(this.mapA, nextPoint.x, nextPoint.y)){
-					console.log("cant walk here (at nextPoint), getting new path", 
-								nextPoint, 
-								getTile(this.mapA, nextPoint.x, nextPoint.y), 
-								this.agents[i].currentPath[0]);
-					//this.agents[i].followPath([]);
-					//console.log("removing ", nextPoint, this.agents[i].currentPath[0]);
-					//this.agents[i].currentPath.shift();
-					updatePath(this.mapA, player, this.agents[i], blah);
-					continue;
-				} 
-				if (distance(nextPoint, curPos) < spriteWidth/2){
-					//close enough
-					console.log("removing ", nextPoint, this.agents[i].currentPath[0]);
-					this.agents[i].currentPath.shift();
-					continue;
-				} else {
-					console.log("moving towards", nextPoint);
-					
-					moveObject(this.mapA, this.agents[i].sp, 
-							3, 
-							(nextPoint.y - curPos.y < 0), 
-							(nextPoint.y - curPos.y > 0), 
-							(nextPoint.x - curPos.x < 0), 
-							(nextPoint.x - curPos.x > 0));
-					
-					
-					
-					/*
-					if(nextPoint.x - curPos.x > 0){
-						//right
-						this.agents[i].sp.position.x += 3;
-					} else if(nextPoint.x - curPos.x < 0){
-						//left
-						this.agents[i].sp.position.x -= 3;
-					}
-					if(nextPoint.y - curPos.y > 0){
-						//down
-						this.agents[i].sp.position.y += 3;
-					} else if(nextPoint.y - curPos.y < 0){
-						//up
-						this.agents[i].sp.position.y -= 3;
-					}*/
-				}
-				
-			}
-		} else {
-			//player too far away
-			this.agents[i].currentPath = [];
-		}
 	}
-	console.log(this.agents);
 	
 	//naive collision check with enemies, take hit if colliding
 	for(var i = 0; i < this.agents.length; i++){
@@ -393,16 +266,19 @@ Map.prototype.update = function(up, down, left, right){
 			player.takeHit(5);
 			this.agents[i].rest();
 		}
-		for(var j=0;j<this.allies.length;j++){
+		for(var j = 0; j < this.allies.length; j++){
 			if(cCollide(this.agents[i].sp, this.allies[j].sp)){
-				this.agents[i].takeHit(10);
-				this.agents.splice(i, 1);
-				this.enemiesToKill -= 1;
-				this.allies[j].takeHit(10);
-				this.allies.splice(j,1);
-				
-				this.allies.push(new Ally(this.agents[i].sp.position.x,this.agents[i].sp.position.y));
+				this.agents[i].takeHit(1);
+				this.allies[j].takeHit(1);
+				if(this.allies[j].health < 1){
+					this.allies.splice(j, 1);
+				}
+				//this.allies.push(new Ally(this.agents[i].sp.position.x,this.agents[i].sp.position.y));
 			}
+		}
+		if(this.agents[i].health < 1){
+			this.agents.splice(i, 1);
+			this.enemiesToKill -= 1;
 		}
 		
 	}
@@ -414,7 +290,7 @@ Map.prototype.update = function(up, down, left, right){
 			if(!this.agents.ally && cCollide(player.projectiles[i], this.agents[j].sp)){
 				this.allies.push(new Ally(this.agents[j].sp.position.x,this.agents[j].sp.position.y));
 				stage.addChild(this.allies[this.allies.length - 1].sp);
-				this.agents[j].takeHit(10);
+				this.agents[j].takeHit(500);
 				this.agents.splice(j, 1);
 				stage.removeChild(player.projectiles[i]);
 				player.projectiles.splice(i,1);
@@ -539,7 +415,7 @@ function scCollide(square, circle){
 		return true;
 	}
 	
-	console.log("false");
+	//console.log("false");
 	return false;
 }
 

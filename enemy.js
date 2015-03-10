@@ -1,6 +1,9 @@
 /**
  * @author Connor McNeill
  */
+var enemySpeed = 1;
+var enemyEngage = 200;
+var enemyDamageTaken = 1;
 
 var Enemy = function(x, y){
 	this.ally = false;
@@ -8,8 +11,8 @@ var Enemy = function(x, y){
 	this.attackDelay = 1000; //in milliseconds
 	this.attackedLast = 0;
 	this.interval;
-	this.health = 10;
-	this.sp = new PIXI.Sprite(PIXI.Texture.fromImage("images/oldMan.png"));
+	this.health = 100;
+	this.sp = new PIXI.Sprite(PIXI.Texture.fromImage("images/characters/PNGs/Player.png"));
 	this.sp.position.x = x;
 	this.sp.position.y = y;
 	this.currentPath = [];
@@ -24,6 +27,59 @@ Map.prototype.Enemy = function(){
 Enemy.update = function(time){
 	this.attackedLast += time;
 };*/
+
+Enemy.prototype.update = function(){
+	var source = player;
+	var angle;
+	var up;
+	var left;
+	var dist;
+	
+	for(var i = 0; i < map.allies.length; i++){
+		dist = distance(map.allies[i].sp.position, this.sp.position);
+		if(dist < enemyEngage){
+			if(distance(source.sp.position, this.sp.position) > dist){
+				source = map.allies[i];
+			}
+		}
+	}
+
+	angle = getPlayerAngle(source, this);
+	up = getY(angle);
+	left = getX(angle);
+	for(var i = 0; i < map.mapA.length; i++){
+		for(var j = 0; j < map.mapA[i].length; j++){
+			if(map.mapA[i][j].isWall && distance(map.mapA[i][j].position, this.sp.position) > (spriteWidth/2)){
+				if(map.mapA[i][j].position.x >= (this.sp.position.x + (spriteWidth/2)) && left > 0 && scCollide(map.mapA[i][j], this.sp)){
+					left = 0;
+				}else if(map.mapA[i][j].position.x < (this.sp.position.x - (spriteWidth/2)) && left < 0 && scCollide(map.mapA[i][j], this.sp)){
+					left = 0;
+				}
+				if(map.mapA[i][j].position.y >= (this.sp.position.y + (spriteWidth/2)) && up > 0 && scCollide(map.mapA[i][j], this.sp)){
+					up = 0;
+				}else if(map.mapA[i][j].position.y < (this.sp.position.y - (spriteWidth/2)) && up < 0 && scCollide(map.mapA[i][j], this.sp)){
+					up = 0;
+				}
+			}
+		}
+	}
+	this.sp.position.x += left;
+	this.sp.position.y += up;
+};
+
+function getPlayerAngle(source, enemy){
+	var dx = source.sp.position.x - enemy.sp.position.x;
+	var dy = source.sp.position.y - enemy.sp.position.y;
+	return(Math.atan2(dy, dx));
+}
+
+function getY(angle){
+	return(Math.sin(angle)*enemySpeed);
+}
+
+function getX(angle){
+	return(Math.cos(angle)*enemySpeed);
+}
 
 Enemy.prototype.takeHit = function(x){
 	this.health -= x;
